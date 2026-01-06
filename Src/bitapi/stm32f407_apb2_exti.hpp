@@ -78,29 +78,29 @@ namespace Apb2::Exti::Imr
         return extract_bits_as<MrValue>(*p, intLine, 1);
     }
 
-    using Mr0 = Bits<MrValue, k_addr, 0, 1>;
-    using Mr1 = Bits<MrValue, k_addr, 1, 1>;
-    using Mr2 = Bits<MrValue, k_addr, 2, 1>;
-    using Mr3 = Bits<MrValue, k_addr, 3, 1>;
-    using Mr4 = Bits<MrValue, k_addr, 4, 1>;
-    using Mr5 = Bits<MrValue, k_addr, 5, 1>;
-    using Mr6 = Bits<MrValue, k_addr, 6, 1>;
-    using Mr7 = Bits<MrValue, k_addr, 7, 1>;
-    using Mr8 = Bits<MrValue, k_addr, 8, 1>;
-    using Mr9 = Bits<MrValue, k_addr, 9, 1>;
-    using Mr10 = Bits<MrValue, k_addr, 10, 1>;
-    using Mr11 = Bits<MrValue, k_addr, 11, 1>;
-    using Mr12 = Bits<MrValue, k_addr, 12, 1>;
-    using Mr13 = Bits<MrValue, k_addr, 13, 1>;
-    using Mr14 = Bits<MrValue, k_addr, 14, 1>;
-    using Mr15 = Bits<MrValue, k_addr, 15, 1>;
-    using Mr16 = Bits<MrValue, k_addr, 16, 1>;
-    using Mr17 = Bits<MrValue, k_addr, 17, 1>;
-    using Mr18 = Bits<MrValue, k_addr, 18, 1>;
-    using Mr19 = Bits<MrValue, k_addr, 19, 1>;
-    using Mr20 = Bits<MrValue, k_addr, 20, 1>;
-    using Mr21 = Bits<MrValue, k_addr, 21, 1>;
-    using Mr22 = Bits<MrValue, k_addr, 22, 1>;
+    using Mr0 = Bits<k_addr, 0, 1, MrValue>;
+    using Mr1 = Bits<k_addr, 1, 1, MrValue>;
+    using Mr2 = Bits<k_addr, 2, 1, MrValue>;
+    using Mr3 = Bits<k_addr, 3, 1, MrValue>;
+    using Mr4 = Bits<k_addr, 4, 1, MrValue>;
+    using Mr5 = Bits<k_addr, 5, 1, MrValue>;
+    using Mr6 = Bits<k_addr, 6, 1, MrValue>;
+    using Mr7 = Bits<k_addr, 7, 1, MrValue>;
+    using Mr8 = Bits<k_addr, 8, 1, MrValue>;
+    using Mr9 = Bits<k_addr, 9, 1, MrValue>;
+    using Mr10 = Bits<k_addr, 10, 1, MrValue>;
+    using Mr11 = Bits<k_addr, 11, 1, MrValue>;
+    using Mr12 = Bits<k_addr, 12, 1, MrValue>;
+    using Mr13 = Bits<k_addr, 13, 1, MrValue>;
+    using Mr14 = Bits<k_addr, 14, 1, MrValue>;
+    using Mr15 = Bits<k_addr, 15, 1, MrValue>;
+    using Mr16 = Bits<k_addr, 16, 1, MrValue>;
+    using Mr17 = Bits<k_addr, 17, 1, MrValue>;
+    using Mr18 = Bits<k_addr, 18, 1, MrValue>;
+    using Mr19 = Bits<k_addr, 19, 1, MrValue>;
+    using Mr20 = Bits<k_addr, 20, 1, MrValue>;
+    using Mr21 = Bits<k_addr, 21, 1, MrValue>;
+    using Mr22 = Bits<k_addr, 22, 1, MrValue>;
 } // namespace Apb2::Exti::Imr
 
 // EXTI Event Mask Register
@@ -127,29 +127,29 @@ namespace Apb2::Exti::Emr
         return extract_bits_as<MrValue>(*p, intLine, 1);
     }
 
-    using Mr0 = Bits<MrValue, k_addr, 0, 1>;
-    using Mr1 = Bits<MrValue, k_addr, 1, 1>;
-    using Mr2 = Bits<MrValue, k_addr, 2, 1>;
-    using Mr3 = Bits<MrValue, k_addr, 3, 1>;
-    using Mr4 = Bits<MrValue, k_addr, 4, 1>;
-    using Mr5 = Bits<MrValue, k_addr, 5, 1>;
-    using Mr6 = Bits<MrValue, k_addr, 6, 1>;
-    using Mr7 = Bits<MrValue, k_addr, 7, 1>;
-    using Mr8 = Bits<MrValue, k_addr, 8, 1>;
-    using Mr9 = Bits<MrValue, k_addr, 9, 1>;
-    using Mr10 = Bits<MrValue, k_addr, 10, 1>;
-    using Mr11 = Bits<MrValue, k_addr, 11, 1>;
-    using Mr12 = Bits<MrValue, k_addr, 12, 1>;
-    using Mr13 = Bits<MrValue, k_addr, 13, 1>;
-    using Mr14 = Bits<MrValue, k_addr, 14, 1>;
-    using Mr15 = Bits<MrValue, k_addr, 15, 1>;
-    using Mr16 = Bits<MrValue, k_addr, 16, 1>;
-    using Mr17 = Bits<MrValue, k_addr, 17, 1>;
-    using Mr18 = Bits<MrValue, k_addr, 18, 1>;
-    using Mr19 = Bits<MrValue, k_addr, 19, 1>;
-    using Mr20 = Bits<MrValue, k_addr, 20, 1>;
-    using Mr21 = Bits<MrValue, k_addr, 21, 1>;
-    using Mr22 = Bits<MrValue, k_addr, 22, 1>;
+    using Mr0 = Bits<k_addr, 0, 1, MrValue>;
+    using Mr1 = Bits<k_addr, 1, 1, MrValue>;
+    using Mr2 = Bits<k_addr, 2, 1, MrValue>;
+    using Mr3 = Bits<k_addr, 3, 1, MrValue>;
+    using Mr4 = Bits<k_addr, 4, 1, MrValue>;
+    using Mr5 = Bits<k_addr, 5, 1, MrValue>;
+    using Mr6 = Bits<k_addr, 6, 1, MrValue>;
+    using Mr7 = Bits<k_addr, 7, 1, MrValue>;
+    using Mr8 = Bits<k_addr, 8, 1, MrValue>;
+    using Mr9 = Bits<k_addr, 9, 1, MrValue>;
+    using Mr10 = Bits<k_addr, 10, 1, MrValue>;
+    using Mr11 = Bits<k_addr, 11, 1, MrValue>;
+    using Mr12 = Bits<k_addr, 12, 1, MrValue>;
+    using Mr13 = Bits<k_addr, 13, 1, MrValue>;
+    using Mr14 = Bits<k_addr, 14, 1, MrValue>;
+    using Mr15 = Bits<k_addr, 15, 1, MrValue>;
+    using Mr16 = Bits<k_addr, 16, 1, MrValue>;
+    using Mr17 = Bits<k_addr, 17, 1, MrValue>;
+    using Mr18 = Bits<k_addr, 18, 1, MrValue>;
+    using Mr19 = Bits<k_addr, 19, 1, MrValue>;
+    using Mr20 = Bits<k_addr, 20, 1, MrValue>;
+    using Mr21 = Bits<k_addr, 21, 1, MrValue>;
+    using Mr22 = Bits<k_addr, 22, 1, MrValue>;
 } // namespace Apb2::Exti::Emr
 
 // EXTI Rising Trigger Selection Register
@@ -176,29 +176,29 @@ namespace Apb2::Exti::Rtsr
         return extract_bits_as<TrValue>(*p, intLine, 1);
     }
 
-    using Tr0 = Bits<TrValue, k_addr, 0, 1>;
-    using Tr1 = Bits<TrValue, k_addr, 1, 1>;
-    using Tr2 = Bits<TrValue, k_addr, 2, 1>;
-    using Tr3 = Bits<TrValue, k_addr, 3, 1>;
-    using Tr4 = Bits<TrValue, k_addr, 4, 1>;
-    using Tr5 = Bits<TrValue, k_addr, 5, 1>;
-    using Tr6 = Bits<TrValue, k_addr, 6, 1>;
-    using Tr7 = Bits<TrValue, k_addr, 7, 1>;
-    using Tr8 = Bits<TrValue, k_addr, 8, 1>;
-    using Tr9 = Bits<TrValue, k_addr, 9, 1>;
-    using Tr10 = Bits<TrValue, k_addr, 10, 1>;
-    using Tr11 = Bits<TrValue, k_addr, 11, 1>;
-    using Tr12 = Bits<TrValue, k_addr, 12, 1>;
-    using Tr13 = Bits<TrValue, k_addr, 13, 1>;
-    using Tr14 = Bits<TrValue, k_addr, 14, 1>;
-    using Tr15 = Bits<TrValue, k_addr, 15, 1>;
-    using Tr16 = Bits<TrValue, k_addr, 16, 1>;
-    using Tr17 = Bits<TrValue, k_addr, 17, 1>;
-    using Tr18 = Bits<TrValue, k_addr, 18, 1>;
-    using Tr19 = Bits<TrValue, k_addr, 19, 1>;
-    using Tr20 = Bits<TrValue, k_addr, 20, 1>;
-    using Tr21 = Bits<TrValue, k_addr, 21, 1>;
-    using Tr22 = Bits<TrValue, k_addr, 22, 1>;
+    using Tr0 = Bits<k_addr, 0, 1, TrValue>;
+    using Tr1 = Bits<k_addr, 1, 1, TrValue>;
+    using Tr2 = Bits<k_addr, 2, 1, TrValue>;
+    using Tr3 = Bits<k_addr, 3, 1, TrValue>;
+    using Tr4 = Bits<k_addr, 4, 1, TrValue>;
+    using Tr5 = Bits<k_addr, 5, 1, TrValue>;
+    using Tr6 = Bits<k_addr, 6, 1, TrValue>;
+    using Tr7 = Bits<k_addr, 7, 1, TrValue>;
+    using Tr8 = Bits<k_addr, 8, 1, TrValue>;
+    using Tr9 = Bits<k_addr, 9, 1, TrValue>;
+    using Tr10 = Bits<k_addr, 10, 1, TrValue>;
+    using Tr11 = Bits<k_addr, 11, 1, TrValue>;
+    using Tr12 = Bits<k_addr, 12, 1, TrValue>;
+    using Tr13 = Bits<k_addr, 13, 1, TrValue>;
+    using Tr14 = Bits<k_addr, 14, 1, TrValue>;
+    using Tr15 = Bits<k_addr, 15, 1, TrValue>;
+    using Tr16 = Bits<k_addr, 16, 1, TrValue>;
+    using Tr17 = Bits<k_addr, 17, 1, TrValue>;
+    using Tr18 = Bits<k_addr, 18, 1, TrValue>;
+    using Tr19 = Bits<k_addr, 19, 1, TrValue>;
+    using Tr20 = Bits<k_addr, 20, 1, TrValue>;
+    using Tr21 = Bits<k_addr, 21, 1, TrValue>;
+    using Tr22 = Bits<k_addr, 22, 1, TrValue>;
 } // namespace Apb2::Exti::Rtsr
 
 // EXTI Falling Trigger Selection Register
@@ -225,29 +225,29 @@ namespace Apb2::Exti::Ftsr
         return extract_bits_as<TrValue>(*p, intLine, 1);
     }
 
-    using Tr0 = Bits<TrValue, k_addr, 0, 1>;
-    using Tr1 = Bits<TrValue, k_addr, 1, 1>;
-    using Tr2 = Bits<TrValue, k_addr, 2, 1>;
-    using Tr3 = Bits<TrValue, k_addr, 3, 1>;
-    using Tr4 = Bits<TrValue, k_addr, 4, 1>;
-    using Tr5 = Bits<TrValue, k_addr, 5, 1>;
-    using Tr6 = Bits<TrValue, k_addr, 6, 1>;
-    using Tr7 = Bits<TrValue, k_addr, 7, 1>;
-    using Tr8 = Bits<TrValue, k_addr, 8, 1>;
-    using Tr9 = Bits<TrValue, k_addr, 9, 1>;
-    using Tr10 = Bits<TrValue, k_addr, 10, 1>;
-    using Tr11 = Bits<TrValue, k_addr, 11, 1>;
-    using Tr12 = Bits<TrValue, k_addr, 12, 1>;
-    using Tr13 = Bits<TrValue, k_addr, 13, 1>;
-    using Tr14 = Bits<TrValue, k_addr, 14, 1>;
-    using Tr15 = Bits<TrValue, k_addr, 15, 1>;
-    using Tr16 = Bits<TrValue, k_addr, 16, 1>;
-    using Tr17 = Bits<TrValue, k_addr, 17, 1>;
-    using Tr18 = Bits<TrValue, k_addr, 18, 1>;
-    using Tr19 = Bits<TrValue, k_addr, 19, 1>;
-    using Tr20 = Bits<TrValue, k_addr, 20, 1>;
-    using Tr21 = Bits<TrValue, k_addr, 21, 1>;
-    using Tr22 = Bits<TrValue, k_addr, 22, 1>;
+    using Tr0 = Bits<k_addr, 0, 1, TrValue>;
+    using Tr1 = Bits<k_addr, 1, 1, TrValue>;
+    using Tr2 = Bits<k_addr, 2, 1, TrValue>;
+    using Tr3 = Bits<k_addr, 3, 1, TrValue>;
+    using Tr4 = Bits<k_addr, 4, 1, TrValue>;
+    using Tr5 = Bits<k_addr, 5, 1, TrValue>;
+    using Tr6 = Bits<k_addr, 6, 1, TrValue>;
+    using Tr7 = Bits<k_addr, 7, 1, TrValue>;
+    using Tr8 = Bits<k_addr, 8, 1, TrValue>;
+    using Tr9 = Bits<k_addr, 9, 1, TrValue>;
+    using Tr10 = Bits<k_addr, 10, 1, TrValue>;
+    using Tr11 = Bits<k_addr, 11, 1, TrValue>;
+    using Tr12 = Bits<k_addr, 12, 1, TrValue>;
+    using Tr13 = Bits<k_addr, 13, 1, TrValue>;
+    using Tr14 = Bits<k_addr, 14, 1, TrValue>;
+    using Tr15 = Bits<k_addr, 15, 1, TrValue>;
+    using Tr16 = Bits<k_addr, 16, 1, TrValue>;
+    using Tr17 = Bits<k_addr, 17, 1, TrValue>;
+    using Tr18 = Bits<k_addr, 18, 1, TrValue>;
+    using Tr19 = Bits<k_addr, 19, 1, TrValue>;
+    using Tr20 = Bits<k_addr, 20, 1, TrValue>;
+    using Tr21 = Bits<k_addr, 21, 1, TrValue>;
+    using Tr22 = Bits<k_addr, 22, 1, TrValue>;
 } // namespace Apb2::Exti::Ftsr
 
 // EXTI Software Interrupt Event Register
@@ -283,29 +283,29 @@ namespace Apb2::Exti::Swier
         return extract_bits_as<SwierValue>(*p, intLine, 1);
     }
 
-    using Swier0 = Bits<SwierValue, k_addr, 0, 1>;
-    using Swier1 = Bits<SwierValue, k_addr, 1, 1>;
-    using Swier2 = Bits<SwierValue, k_addr, 2, 1>;
-    using Swier3 = Bits<SwierValue, k_addr, 3, 1>;
-    using Swier4 = Bits<SwierValue, k_addr, 4, 1>;
-    using Swier5 = Bits<SwierValue, k_addr, 5, 1>;
-    using Swier6 = Bits<SwierValue, k_addr, 6, 1>;
-    using Swier7 = Bits<SwierValue, k_addr, 7, 1>;
-    using Swier8 = Bits<SwierValue, k_addr, 8, 1>;
-    using Swier9 = Bits<SwierValue, k_addr, 9, 1>;
-    using Swier10 = Bits<SwierValue, k_addr, 10, 1>;
-    using Swier11 = Bits<SwierValue, k_addr, 11, 1>;
-    using Swier12 = Bits<SwierValue, k_addr, 12, 1>;
-    using Swier13 = Bits<SwierValue, k_addr, 13, 1>;
-    using Swier14 = Bits<SwierValue, k_addr, 14, 1>;
-    using Swier15 = Bits<SwierValue, k_addr, 15, 1>;
-    using Swier16 = Bits<SwierValue, k_addr, 16, 1>;
-    using Swier17 = Bits<SwierValue, k_addr, 17, 1>;
-    using Swier18 = Bits<SwierValue, k_addr, 18, 1>;
-    using Swier19 = Bits<SwierValue, k_addr, 19, 1>;
-    using Swier20 = Bits<SwierValue, k_addr, 20, 1>;
-    using Swier21 = Bits<SwierValue, k_addr, 21, 1>;
-    using Swier22 = Bits<SwierValue, k_addr, 22, 1>;
+    using Swier0 = Bits<k_addr, 0, 1, SwierValue>;
+    using Swier1 = Bits<k_addr, 1, 1, SwierValue>;
+    using Swier2 = Bits<k_addr, 2, 1, SwierValue>;
+    using Swier3 = Bits<k_addr, 3, 1, SwierValue>;
+    using Swier4 = Bits<k_addr, 4, 1, SwierValue>;
+    using Swier5 = Bits<k_addr, 5, 1, SwierValue>;
+    using Swier6 = Bits<k_addr, 6, 1, SwierValue>;
+    using Swier7 = Bits<k_addr, 7, 1, SwierValue>;
+    using Swier8 = Bits<k_addr, 8, 1, SwierValue>;
+    using Swier9 = Bits<k_addr, 9, 1, SwierValue>;
+    using Swier10 = Bits<k_addr, 10, 1, SwierValue>;
+    using Swier11 = Bits<k_addr, 11, 1, SwierValue>;
+    using Swier12 = Bits<k_addr, 12, 1, SwierValue>;
+    using Swier13 = Bits<k_addr, 13, 1, SwierValue>;
+    using Swier14 = Bits<k_addr, 14, 1, SwierValue>;
+    using Swier15 = Bits<k_addr, 15, 1, SwierValue>;
+    using Swier16 = Bits<k_addr, 16, 1, SwierValue>;
+    using Swier17 = Bits<k_addr, 17, 1, SwierValue>;
+    using Swier18 = Bits<k_addr, 18, 1, SwierValue>;
+    using Swier19 = Bits<k_addr, 19, 1, SwierValue>;
+    using Swier20 = Bits<k_addr, 20, 1, SwierValue>;
+    using Swier21 = Bits<k_addr, 21, 1, SwierValue>;
+    using Swier22 = Bits<k_addr, 22, 1, SwierValue>;
 } // namespace Apb2::Exti::Swier
 
 // EXTI Pending Register
@@ -332,27 +332,27 @@ namespace Apb2::Exti::Pr
         Clear = 1,
     };
 
-    using Pr0 = Bits<PrValue, k_addr, 0, 1>;
-    using Pr1 = Bits<PrValue, k_addr, 1, 1>;
-    using Pr2 = Bits<PrValue, k_addr, 2, 1>;
-    using Pr3 = Bits<PrValue, k_addr, 3, 1>;
-    using Pr4 = Bits<PrValue, k_addr, 4, 1>;
-    using Pr5 = Bits<PrValue, k_addr, 5, 1>;
-    using Pr6 = Bits<PrValue, k_addr, 6, 1>;
-    using Pr7 = Bits<PrValue, k_addr, 7, 1>;
-    using Pr8 = Bits<PrValue, k_addr, 8, 1>;
-    using Pr9 = Bits<PrValue, k_addr, 9, 1>;
-    using Pr10 = Bits<PrValue, k_addr, 10, 1>;
-    using Pr11 = Bits<PrValue, k_addr, 11, 1>;
-    using Pr12 = Bits<PrValue, k_addr, 12, 1>;
-    using Pr13 = Bits<PrValue, k_addr, 13, 1>;
-    using Pr14 = Bits<PrValue, k_addr, 14, 1>;
-    using Pr15 = Bits<PrValue, k_addr, 15, 1>;
-    using Pr16 = Bits<PrValue, k_addr, 16, 1>;
-    using Pr17 = Bits<PrValue, k_addr, 17, 1>;
-    using Pr18 = Bits<PrValue, k_addr, 18, 1>;
-    using Pr19 = Bits<PrValue, k_addr, 19, 1>;
-    using Pr20 = Bits<PrValue, k_addr, 20, 1>;
-    using Pr21 = Bits<PrValue, k_addr, 21, 1>;
-    using Pr22 = Bits<PrValue, k_addr, 22, 1>;
+    using Pr0 = Bits<k_addr, 0, 1, PrValue>;
+    using Pr1 = Bits<k_addr, 1, 1, PrValue>;
+    using Pr2 = Bits<k_addr, 2, 1, PrValue>;
+    using Pr3 = Bits<k_addr, 3, 1, PrValue>;
+    using Pr4 = Bits<k_addr, 4, 1, PrValue>;
+    using Pr5 = Bits<k_addr, 5, 1, PrValue>;
+    using Pr6 = Bits<k_addr, 6, 1, PrValue>;
+    using Pr7 = Bits<k_addr, 7, 1, PrValue>;
+    using Pr8 = Bits<k_addr, 8, 1, PrValue>;
+    using Pr9 = Bits<k_addr, 9, 1, PrValue>;
+    using Pr10 = Bits<k_addr, 10, 1, PrValue>;
+    using Pr11 = Bits<k_addr, 11, 1, PrValue>;
+    using Pr12 = Bits<k_addr, 12, 1, PrValue>;
+    using Pr13 = Bits<k_addr, 13, 1, PrValue>;
+    using Pr14 = Bits<k_addr, 14, 1, PrValue>;
+    using Pr15 = Bits<k_addr, 15, 1, PrValue>;
+    using Pr16 = Bits<k_addr, 16, 1, PrValue>;
+    using Pr17 = Bits<k_addr, 17, 1, PrValue>;
+    using Pr18 = Bits<k_addr, 18, 1, PrValue>;
+    using Pr19 = Bits<k_addr, 19, 1, PrValue>;
+    using Pr20 = Bits<k_addr, 20, 1, PrValue>;
+    using Pr21 = Bits<k_addr, 21, 1, PrValue>;
+    using Pr22 = Bits<k_addr, 22, 1, PrValue>;
 } // namespace Apb2::Exti::Pr

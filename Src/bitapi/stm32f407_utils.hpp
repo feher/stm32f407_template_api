@@ -82,16 +82,16 @@ struct BitsWriteMixin
 };
 
 // Read-Only Bits.
-template <typename TValue, Address TVRegAddr, int TVBitPos, int TVBitCount>
+template <Address TVRegAddr, int TVBitPos, int TVBitCount, typename TValue>
 struct RoBits : public BitsBase<TVRegAddr, TVBitPos, TVBitCount>,
-                public BitsReadMixin<RoBits<TValue, TVRegAddr, TVBitPos, TVBitCount>, TValue>
+                public BitsReadMixin<RoBits<TVRegAddr, TVBitPos, TVBitCount, TValue>, TValue>
 {
 };
 
 // Write-Only Bits.
-template <typename TValue, Address TVRegAddr, int TVBitPos, int TVBitCount>
+template <Address TVRegAddr, int TVBitPos, int TVBitCount, typename TValue>
 struct WoBits : public BitsBase<TVRegAddr, TVBitPos, TVBitCount>,
-                public BitsWriteMixin<WoBits<TValue, TVRegAddr, TVBitPos, TVBitCount>, TValue>
+                public BitsWriteMixin<WoBits<TVRegAddr, TVBitPos, TVBitCount, TValue>, TValue>
 {
 };
 

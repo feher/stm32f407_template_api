@@ -170,37 +170,37 @@ namespace Ahb1::Gpio
                 }
 
                 // Output type for pin 0.
-                using Ot0 = Bits<GpioOutputType, k_addr, 0, 1>;
+                using Ot0 = Bits<k_addr, 0, 1, GpioOutputType>;
                 // Output type for pin 1.
-                using Ot1 = Bits<GpioOutputType, k_addr, 1, 1>;
+                using Ot1 = Bits<k_addr, 1, 1, GpioOutputType>;
                 // Output type for pin 2.
-                using Ot2 = Bits<GpioOutputType, k_addr, 2, 1>;
+                using Ot2 = Bits<k_addr, 2, 1, GpioOutputType>;
                 // Output type for pin 3.
-                using Ot3 = Bits<GpioOutputType, k_addr, 3, 1>;
+                using Ot3 = Bits<k_addr, 3, 1, GpioOutputType>;
                 // Output type for pin 4.
-                using Ot4 = Bits<GpioOutputType, k_addr, 4, 1>;
+                using Ot4 = Bits<k_addr, 4, 1, GpioOutputType>;
                 // Output type for pin 5.
-                using Ot5 = Bits<GpioOutputType, k_addr, 5, 1>;
+                using Ot5 = Bits<k_addr, 5, 1, GpioOutputType>;
                 // Output type for pin 6.
-                using Ot6 = Bits<GpioOutputType, k_addr, 6, 1>;
+                using Ot6 = Bits<k_addr, 6, 1, GpioOutputType>;
                 // Output type for pin 7.
-                using Ot7 = Bits<GpioOutputType, k_addr, 7, 1>;
+                using Ot7 = Bits<k_addr, 7, 1, GpioOutputType>;
                 // Output type for pin 8.
-                using Ot8 = Bits<GpioOutputType, k_addr, 8, 1>;
+                using Ot8 = Bits<k_addr, 8, 1, GpioOutputType>;
                 // Output type for pin 9.
-                using Ot9 = Bits<GpioOutputType, k_addr, 9, 1>;
+                using Ot9 = Bits<k_addr, 9, 1, GpioOutputType>;
                 // Output type for pin 10.
-                using Ot10 = Bits<GpioOutputType, k_addr, 10, 1>;
+                using Ot10 = Bits<k_addr, 10, 1, GpioOutputType>;
                 // Output type for pin 11.
-                using Ot11 = Bits<GpioOutputType, k_addr, 11, 1>;
+                using Ot11 = Bits<k_addr, 11, 1, GpioOutputType>;
                 // Output type for pin 12.
-                using Ot12 = Bits<GpioOutputType, k_addr, 12, 1>;
+                using Ot12 = Bits<k_addr, 12, 1, GpioOutputType>;
                 // Output type for pin 13.
-                using Ot13 = Bits<GpioOutputType, k_addr, 13, 1>;
+                using Ot13 = Bits<k_addr, 13, 1, GpioOutputType>;
                 // Output type for pin 14.
-                using Ot14 = Bits<GpioOutputType, k_addr, 14, 1>;
+                using Ot14 = Bits<k_addr, 14, 1, GpioOutputType>;
                 // Output type for pin 15.
-                using Ot15 = Bits<GpioOutputType, k_addr, 15, 1>;
+                using Ot15 = Bits<k_addr, 15, 1, GpioOutputType>;
             };
 
             // Output Speed Register.
@@ -230,37 +230,37 @@ namespace Ahb1::Gpio
                 }
 
                 // Output Speed Register bits for pin 0.
-                using Ospeedr0 = Bits<GpioOutputSpeed, k_addr, 0, 2>;
+                using Ospeedr0 = Bits<k_addr, 0, 2, GpioOutputSpeed>;
                 // Output Speed Register bits for pin 1.
-                using Ospeedr1 = Bits<GpioOutputSpeed, k_addr, 2, 2>;
+                using Ospeedr1 = Bits<k_addr, 2, 2, GpioOutputSpeed>;
                 // Output Speed Register bits for pin 2.
-                using Ospeedr2 = Bits<GpioOutputSpeed, k_addr, 4, 2>;
+                using Ospeedr2 = Bits<k_addr, 4, 2, GpioOutputSpeed>;
                 // Output Speed Register bits for pin 3.
-                using Ospeedr3 = Bits<GpioOutputSpeed, k_addr, 6, 2>;
+                using Ospeedr3 = Bits<k_addr, 6, 2, GpioOutputSpeed>;
                 // Output Speed Register bits for pin 4.
-                using Ospeedr4 = Bits<GpioOutputSpeed, k_addr, 8, 2>;
+                using Ospeedr4 = Bits<k_addr, 8, 2, GpioOutputSpeed>;
                 // Output Speed Register bits for pin 5.
-                using Ospeedr5 = Bits<GpioOutputSpeed, k_addr, 10, 2>;
+                using Ospeedr5 = Bits<k_addr, 10, 2, GpioOutputSpeed>;
                 // Output Speed Register bits for pin 6.
-                using Ospeedr6 = Bits<GpioOutputSpeed, k_addr, 12, 2>;
+                using Ospeedr6 = Bits<k_addr, 12, 2, GpioOutputSpeed>;
                 // Output Speed Register bits for pin 7.
-                using Ospeedr7 = Bits<GpioOutputSpeed, k_addr, 14, 2>;
+                using Ospeedr7 = Bits<k_addr, 14, 2, GpioOutputSpeed>;
                 // Output Speed Register bits for pin 8.
-                using Ospeedr8 = Bits<GpioOutputSpeed, k_addr, 16, 2>;
+                using Ospeedr8 = Bits<k_addr, 16, 2, GpioOutputSpeed>;
                 // Output Speed Register bits for pin 9.
-                using Ospeedr9 = Bits<GpioOutputSpeed, k_addr, 18, 2>;
+                using Ospeedr9 = Bits<k_addr, 18, 2, GpioOutputSpeed>;
                 // Output Speed Register bits for pin 10.
-                using Ospeedr10 = Bits<GpioOutputSpeed, k_addr, 20, 2>;
+                using Ospeedr10 = Bits<k_addr, 20, 2, GpioOutputSpeed>;
                 // Output Speed Register bits for pin 11.
-                using Ospeedr11 = Bits<GpioOutputSpeed, k_addr, 22, 2>;
+                using Ospeedr11 = Bits<k_addr, 22, 2, GpioOutputSpeed>;
                 // Output Speed Register bits for pin 12.
-                using Ospeedr12 = Bits<GpioOutputSpeed, k_addr, 24, 2>;
+                using Ospeedr12 = Bits<k_addr, 24, 2, GpioOutputSpeed>;
                 // Output Speed Register bits for pin 13.
-                using Ospeedr13 = Bits<GpioOutputSpeed, k_addr, 26, 2>;
+                using Ospeedr13 = Bits<k_addr, 26, 2, GpioOutputSpeed>;
                 // Output Speed Register bits for pin 14.
-                using Ospeedr14 = Bits<GpioOutputSpeed, k_addr, 28, 2>;
+                using Ospeedr14 = Bits<k_addr, 28, 2, GpioOutputSpeed>;
                 // Output Speed Register bits for pin 15.
-                using Ospeedr15 = Bits<GpioOutputSpeed, k_addr, 30, 2>;
+                using Ospeedr15 = Bits<k_addr, 30, 2, GpioOutputSpeed>;
             };
 
             // Pull Up/Down Register.
@@ -288,37 +288,37 @@ namespace Ahb1::Gpio
                 }
 
                 // Pull Up/Down Register bits for pin 0.
-                using Pupdr0 = Bits<GpioPupd, k_addr, 0, 2>;
+                using Pupdr0 = Bits<k_addr, 0, 2, GpioPupd>;
                 // Pull Up/Down Register bits for pin 1.
-                using Pupdr1 = Bits<GpioPupd, k_addr, 2, 2>;
+                using Pupdr1 = Bits<k_addr, 2, 2, GpioPupd>;
                 // Pull Up/Down Register bits for pin 2.
-                using Pupdr2 = Bits<GpioPupd, k_addr, 4, 2>;
+                using Pupdr2 = Bits<k_addr, 4, 2, GpioPupd>;
                 // Pull Up/Down Register bits for pin 3.
-                using Pupdr3 = Bits<GpioPupd, k_addr, 6, 2>;
+                using Pupdr3 = Bits<k_addr, 6, 2, GpioPupd>;
                 // Pull Up/Down Register bits for pin 4.
-                using Pupdr4 = Bits<GpioPupd, k_addr, 8, 2>;
+                using Pupdr4 = Bits<k_addr, 8, 2, GpioPupd>;
                 // Pull Up/Down Register bits for pin 5.
-                using Pupdr5 = Bits<GpioPupd, k_addr, 10, 2>;
+                using Pupdr5 = Bits<k_addr, 10, 2, GpioPupd>;
                 // Pull Up/Down Register bits for pin 6.
-                using Pupdr6 = Bits<GpioPupd, k_addr, 12, 2>;
+                using Pupdr6 = Bits<k_addr, 12, 2, GpioPupd>;
                 // Pull Up/Down Register bits for pin 7.
-                using Pupdr7 = Bits<GpioPupd, k_addr, 14, 2>;
+                using Pupdr7 = Bits<k_addr, 14, 2, GpioPupd>;
                 // Pull Up/Down Register bits for pin 8.
-                using Pupdr8 = Bits<GpioPupd, k_addr, 16, 2>;
+                using Pupdr8 = Bits<k_addr, 16, 2, GpioPupd>;
                 // Pull Up/Down Register bits for pin 9.
-                using Pupdr9 = Bits<GpioPupd, k_addr, 18, 2>;
+                using Pupdr9 = Bits<k_addr, 18, 2, GpioPupd>;
                 // Pull Up/Down Register bits for pin 10.
-                using Pupdr10 = Bits<GpioPupd, k_addr, 20, 2>;
+                using Pupdr10 = Bits<k_addr, 20, 2, GpioPupd>;
                 // Pull Up/Down Register bits for pin 11.
-                using Pupdr11 = Bits<GpioPupd, k_addr, 22, 2>;
+                using Pupdr11 = Bits<k_addr, 22, 2, GpioPupd>;
                 // Pull Up/Down Register bits for pin 12.
-                using Pupdr12 = Bits<GpioPupd, k_addr, 24, 2>;
+                using Pupdr12 = Bits<k_addr, 24, 2, GpioPupd>;
                 // Pull Up/Down Register bits for pin 13.
-                using Pupdr13 = Bits<GpioPupd, k_addr, 26, 2>;
+                using Pupdr13 = Bits<k_addr, 26, 2, GpioPupd>;
                 // Pull Up/Down Register bits for pin 14.
-                using Pupdr14 = Bits<GpioPupd, k_addr, 28, 2>;
+                using Pupdr14 = Bits<k_addr, 28, 2, GpioPupd>;
                 // Pull Up/Down Register bits for pin 15.
-                using Pupdr15 = Bits<GpioPupd, k_addr, 30, 2>;
+                using Pupdr15 = Bits<k_addr, 30, 2, GpioPupd>;
             };
 
             // Input Data Register.
@@ -338,7 +338,7 @@ namespace Ahb1::Gpio
             };
 
             // Output Data Register.
-            // using Odr = Bits<Word, k_baseAddr + 0x14, 0, 16>;
+            // using Odr = Bits<k_baseAddr + 0x14, 0, 16, Word>;
             struct Odr
             {
                 static constexpr Word k_offset = 0x14;
@@ -384,76 +384,76 @@ namespace Ahb1::Gpio
                 };
 
                 // Bit Set for pins 0-15.
-                using Bs = WoBits<Word, k_addr, 0, 16>;
+                using Bs = WoBits<k_addr, 0, 16, Word>;
 
                 // Bit Reset for pins 0-15.
-                using Br = WoBits<Word, k_addr, 16, 16>;
+                using Br = WoBits<k_addr, 16, 16, Word>;
 
                 // Bit Set for pin 0.
-                using Bs0 = WoBits<SValue, k_addr, 0, 1>;
+                using Bs0 = WoBits<k_addr, 0, 1, SValue>;
                 // Bit Set for pin 1.
-                using Bs1 = WoBits<SValue, k_addr, 1, 1>;
+                using Bs1 = WoBits<k_addr, 1, 1, SValue>;
                 // Bit Set for pin 2.
-                using Bs2 = WoBits<SValue, k_addr, 2, 1>;
+                using Bs2 = WoBits<k_addr, 2, 1, SValue>;
                 // Bit Set for pin 3.
-                using Bs3 = WoBits<SValue, k_addr, 3, 1>;
+                using Bs3 = WoBits<k_addr, 3, 1, SValue>;
                 // Bit Set for pin 4.
-                using Bs4 = WoBits<SValue, k_addr, 4, 1>;
+                using Bs4 = WoBits<k_addr, 4, 1, SValue>;
                 // Bit Set for pin 5.
-                using Bs5 = WoBits<SValue, k_addr, 5, 1>;
+                using Bs5 = WoBits<k_addr, 5, 1, SValue>;
                 // Bit Set for pin 6.
-                using Bs6 = WoBits<SValue, k_addr, 6, 1>;
+                using Bs6 = WoBits<k_addr, 6, 1, SValue>;
                 // Bit Set for pin 7.
-                using Bs7 = WoBits<SValue, k_addr, 7, 1>;
+                using Bs7 = WoBits<k_addr, 7, 1, SValue>;
                 // Bit Set for pin 8.
-                using Bs8 = WoBits<SValue, k_addr, 8, 1>;
+                using Bs8 = WoBits<k_addr, 8, 1, SValue>;
                 // Bit Set for pin 9.
-                using Bs9 = WoBits<SValue, k_addr, 9, 1>;
+                using Bs9 = WoBits<k_addr, 9, 1, SValue>;
                 // Bit Set for pin 10.
-                using Bs10 = WoBits<SValue, k_addr, 10, 1>;
+                using Bs10 = WoBits<k_addr, 10, 1, SValue>;
                 // Bit Set for pin 11.
-                using Bs11 = WoBits<SValue, k_addr, 11, 1>;
+                using Bs11 = WoBits<k_addr, 11, 1, SValue>;
                 // Bit Set for pin 12.
-                using Bs12 = WoBits<SValue, k_addr, 12, 1>;
+                using Bs12 = WoBits<k_addr, 12, 1, SValue>;
                 // Bit Set for pin 13.
-                using Bs13 = WoBits<SValue, k_addr, 13, 1>;
+                using Bs13 = WoBits<k_addr, 13, 1, SValue>;
                 // Bit Set for pin 14.
-                using Bs14 = WoBits<SValue, k_addr, 14, 1>;
+                using Bs14 = WoBits<k_addr, 14, 1, SValue>;
                 // Bit Set for pin 15.
-                using Bs15 = WoBits<SValue, k_addr, 15, 1>;
+                using Bs15 = WoBits<k_addr, 15, 1, SValue>;
 
                 // Bit Reset for pin 0.
-                using Br0 = WoBits<RValue, k_addr, 16, 1>;
+                using Br0 = WoBits<k_addr, 16, 1, RValue>;
                 // Bit Reset for pin 1.
-                using Br1 = WoBits<RValue, k_addr, 17, 1>;
+                using Br1 = WoBits<k_addr, 17, 1, RValue>;
                 // Bit Reset for pin 2.
-                using Br2 = WoBits<RValue, k_addr, 18, 1>;
+                using Br2 = WoBits<k_addr, 18, 1, RValue>;
                 // Bit Reset for pin 3.
-                using Br3 = WoBits<RValue, k_addr, 19, 1>;
+                using Br3 = WoBits<k_addr, 19, 1, RValue>;
                 // Bit Reset for pin 4.
-                using Br4 = WoBits<RValue, k_addr, 20, 1>;
+                using Br4 = WoBits<k_addr, 20, 1, RValue>;
                 // Bit Reset for pin 5.
-                using Br5 = WoBits<RValue, k_addr, 21, 1>;
+                using Br5 = WoBits<k_addr, 21, 1, RValue>;
                 // Bit Reset for pin 6.
-                using Br6 = WoBits<RValue, k_addr, 22, 1>;
+                using Br6 = WoBits<k_addr, 22, 1, RValue>;
                 // Bit Reset for pin 7.
-                using Br7 = WoBits<RValue, k_addr, 23, 1>;
+                using Br7 = WoBits<k_addr, 23, 1, RValue>;
                 // Bit Reset for pin 8.
-                using Br8 = WoBits<RValue, k_addr, 24, 1>;
+                using Br8 = WoBits<k_addr, 24, 1, RValue>;
                 // Bit Reset for pin 9.
-                using Br9 = WoBits<RValue, k_addr, 25, 1>;
+                using Br9 = WoBits<k_addr, 25, 1, RValue>;
                 // Bit Reset for pin 10.
-                using Br10 = WoBits<RValue, k_addr, 26, 1>;
+                using Br10 = WoBits<k_addr, 26, 1, RValue>;
                 // Bit Reset for pin 11.
-                using Br11 = WoBits<RValue, k_addr, 27, 1>;
+                using Br11 = WoBits<k_addr, 27, 1, RValue>;
                 // Bit Reset for pin 12.
-                using Br12 = WoBits<RValue, k_addr, 28, 1>;
+                using Br12 = WoBits<k_addr, 28, 1, RValue>;
                 // Bit Reset for pin 13.
-                using Br13 = WoBits<RValue, k_addr, 29, 1>;
+                using Br13 = WoBits<k_addr, 29, 1, RValue>;
                 // Bit Reset for pin 14.
-                using Br14 = WoBits<RValue, k_addr, 30, 1>;
+                using Br14 = WoBits<k_addr, 30, 1, RValue>;
                 // Bit Reset for pin 15.
-                using Br15 = WoBits<RValue, k_addr, 31, 1>;
+                using Br15 = WoBits<k_addr, 31, 1, RValue>;
             };
 
             // Configuration Lock Register.
@@ -463,40 +463,40 @@ namespace Ahb1::Gpio
                 static constexpr Address k_addr = k_baseAddr + k_offset;
 
                 // Lock Key.
-                using Lckk = RoBits<Word, k_addr, 16, 1>;
+                using Lckk = RoBits<k_addr, 16, 1, Word>;
 
                 // Port 0 lock bit.
-                using Lck0 = RoBits<Word, k_addr, 0, 1>;
+                using Lck0 = RoBits<k_addr, 0, 1, Word>;
                 // Port 1 lock bit.
-                using Lck1 = RoBits<Word, k_addr, 1, 1>;
+                using Lck1 = RoBits<k_addr, 1, 1, Word>;
                 // Port 2 lock bit.
-                using Lck2 = RoBits<Word, k_addr, 2, 1>;
+                using Lck2 = RoBits<k_addr, 2, 1, Word>;
                 // Port 3 lock bit.
-                using Lck3 = RoBits<Word, k_addr, 3, 1>;
+                using Lck3 = RoBits<k_addr, 3, 1, Word>;
                 // Port 4 lock bit.
-                using Lck4 = RoBits<Word, k_addr, 4, 1>;
+                using Lck4 = RoBits<k_addr, 4, 1, Word>;
                 // Port 5 lock bit.
-                using Lck5 = RoBits<Word, k_addr, 5, 1>;
+                using Lck5 = RoBits<k_addr, 5, 1, Word>;
                 // Port 6 lock bit.
-                using Lck6 = RoBits<Word, k_addr, 6, 1>;
+                using Lck6 = RoBits<k_addr, 6, 1, Word>;
                 // Port 7 lock bit.
-                using Lck7 = RoBits<Word, k_addr, 7, 1>;
+                using Lck7 = RoBits<k_addr, 7, 1, Word>;
                 // Port 8 lock bit.
-                using Lck8 = RoBits<Word, k_addr, 8, 1>;
+                using Lck8 = RoBits<k_addr, 8, 1, Word>;
                 // Port 9 lock bit.
-                using Lck9 = RoBits<Word, k_addr, 9, 1>;
+                using Lck9 = RoBits<k_addr, 9, 1, Word>;
                 // Port 10 lock bit.
-                using Lck10 = RoBits<Word, k_addr, 10, 1>;
+                using Lck10 = RoBits<k_addr, 10, 1, Word>;
                 // Port 11 lock bit.
-                using Lck11 = RoBits<Word, k_addr, 11, 1>;
+                using Lck11 = RoBits<k_addr, 11, 1, Word>;
                 // Port 12 lock bit.
-                using Lck12 = RoBits<Word, k_addr, 12, 1>;
+                using Lck12 = RoBits<k_addr, 12, 1, Word>;
                 // Port 13 lock bit.
-                using Lck13 = RoBits<Word, k_addr, 13, 1>;
+                using Lck13 = RoBits<k_addr, 13, 1, Word>;
                 // Port 14 lock bit.
-                using Lck14 = RoBits<Word, k_addr, 14, 1>;
+                using Lck14 = RoBits<k_addr, 14, 1, Word>;
                 // Port 15 lock bit.
-                using Lck15 = RoBits<Word, k_addr, 15, 1>;
+                using Lck15 = RoBits<k_addr, 15, 1, Word>;
             };
 
             // Pin0 alternate function values.
@@ -542,14 +542,14 @@ namespace Ahb1::Gpio
                     return extract_bits_as<GpioAltFunc>(*p, intPin << 2, 4);
                 }
 
-                using Afrl0 = Bits<Pin0AfValues, k_addr, 0, 4>;
-                using Afrl1 = Bits<Pin1AfValues, k_addr, 4, 4>;
-                using Afrl2 = Bits<Pin2AfValues, k_addr, 8, 4>;
-                using Afrl3 = Bits<Pin3AfValues, k_addr, 12, 4>;
-                using Afrl4 = Bits<Pin4AfValues, k_addr, 16, 4>;
-                using Afrl5 = Bits<Pin5AfValues, k_addr, 20, 4>;
-                using Afrl6 = Bits<Pin6AfValues, k_addr, 24, 4>;
-                using Afrl7 = Bits<Pin7AfValues, k_addr, 28, 4>;
+                using Afrl0 = Bits<k_addr, 0, 4, Pin0AfValues>;
+                using Afrl1 = Bits<k_addr, 4, 4, Pin1AfValues>;
+                using Afrl2 = Bits<k_addr, 8, 4, Pin2AfValues>;
+                using Afrl3 = Bits<k_addr, 12, 4, Pin3AfValues>;
+                using Afrl4 = Bits<k_addr, 16, 4, Pin4AfValues>;
+                using Afrl5 = Bits<k_addr, 20, 4, Pin5AfValues>;
+                using Afrl6 = Bits<k_addr, 24, 4, Pin6AfValues>;
+                using Afrl7 = Bits<k_addr, 28, 4, Pin7AfValues>;
             };
 
             // Alternate function register, high word.
@@ -576,14 +576,14 @@ namespace Ahb1::Gpio
                     return extract_bits_as<GpioAltFunc>(*p, (intPin - 8) << 2, 4);
                 }
 
-                using Afrh8 = Bits<Pin8AfValues, k_addr, 0, 4>;
-                using Afrh9 = Bits<Pin9AfValues, k_addr, 4, 4>;
-                using Afrh10 = Bits<Pin10AfValues, k_addr, 8, 4>;
-                using Afrh11 = Bits<Pin11AfValues, k_addr, 12, 4>;
-                using Afrh12 = Bits<Pin12AfValues, k_addr, 16, 4>;
-                using Afrh13 = Bits<Pin13AfValues, k_addr, 20, 4>;
-                using Afrh14 = Bits<Pin14AfValues, k_addr, 24, 4>;
-                using Afrh15 = Bits<Pin15AfValues, k_addr, 28, 4>;
+                using Afrh8 = Bits<k_addr, 0, 4, Pin8AfValues>;
+                using Afrh9 = Bits<k_addr, 4, 4, Pin9AfValues>;
+                using Afrh10 = Bits<k_addr, 8, 4, Pin10AfValues>;
+                using Afrh11 = Bits<k_addr, 12, 4, Pin11AfValues>;
+                using Afrh12 = Bits<k_addr, 16, 4, Pin12AfValues>;
+                using Afrh13 = Bits<k_addr, 20, 4, Pin13AfValues>;
+                using Afrh14 = Bits<k_addr, 24, 4, Pin14AfValues>;
+                using Afrh15 = Bits<k_addr, 28, 4, Pin15AfValues>;
             };
         };
 
