@@ -2,9 +2,10 @@
 
 #include "stm32f407_utils.hpp"
 
-namespace Apb1
+namespace Stm32f407::Apb1
 {
-    template <Address TVBaseAddr, Address TVEndAddr> struct I2cX
+    template <Address TVBaseAddr, Address TVEndAddr>
+    struct I2cX
     {
         static constexpr Address k_baseAddr = TVBaseAddr;
         static constexpr Address k_endAddr = TVEndAddr;
@@ -19,4 +20,4 @@ namespace Apb1
 
     // I2C controller 3.
     using I2c3 = I2cX<0x4000'5c00U, 0x4000'5fffU>;
-} // namespace Apb1
+} // namespace Stm32f407::Apb1

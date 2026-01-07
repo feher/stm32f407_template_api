@@ -5,6 +5,8 @@
 #include "Src/bitapi/stm32f407_ahb1_gpio.hpp"
 #include "Src/bitapi/stm32f407_ahb1_rcc.hpp"
 #include "Src/bitapi/stm32f407_apb2_exti.hpp"
+#include "Src/bitapi/stm32f407_apb2_syscfg.hpp"
+#include "Src/bitapi/stm32f407_core_nvic.hpp"
 #include "Src/bitapi/stm32f407_utils.hpp"
 
 namespace Driver
@@ -23,7 +25,7 @@ namespace Driver
         RisingAndFallingEdge
     };
 
-    template <typename TGpioPort, GpioPin TVPin>
+    template <typename TGpioPort, GpioPin TVPin, typename TSyscfgExticrBits>
     class GpioXPinY final
     {
     public:
@@ -113,22 +115,69 @@ namespace Driver
             return TGpioPort::Idr::get(TVPin);
         }
 
-        void setupInterrupt(GpioInterruptMode mode)
+        void configureInterruptMode(GpioInterruptMode mode, GpioPupd pupd)
         {
-            if (mode == GpioInterruptMode::RisingEdge)
+            // Set GPIO mode to input.
+            setMode(GpioMode::Input);
+
+            // Set pull-up/pull-down resistors.
+            setPupd(pupd);
+
+            // Configure the trigger of the interrupt.
+            constexpr auto line = extiLine();
+            switch (mode)
             {
-                // TODO how to know which Tx to use?
-                Apb2::Exti::Rtsr::Tr0::set(Apb2::Exti::TrValue::TriggerEnabled);
-                Apb2::Exti::Ftsr::Tr0::set(Apb2::Exti::TrValue::TriggerDisabled);
+            case GpioInterruptMode::RisingEdge:
+                Apb2::Exti::Rtsr::set(line, Apb2::Exti::TrValue::TriggerEnabled);
+                Apb2::Exti::Ftsr::set(line, Apb2::Exti::TrValue::TriggerDisabled);
+                break;
+            case GpioInterruptMode::FallingEdge:
+                Apb2::Exti::Rtsr::set(line, Apb2::Exti::TrValue::TriggerDisabled);
+                Apb2::Exti::Ftsr::set(line, Apb2::Exti::TrValue::TriggerEnabled);
+                break;
+            case GpioInterruptMode::RisingAndFallingEdge:
+                Apb2::Exti::Rtsr::set(line, Apb2::Exti::TrValue::TriggerEnabled);
+                Apb2::Exti::Ftsr::set(line, Apb2::Exti::TrValue::TriggerEnabled);
+                break;
             }
+
+            // Configure our GPIO port as the input for the EXTI line.
+            TSyscfgExticrBits::set(
+                static_cast<typename TSyscfgExticrBits::WriteValue>(static_cast<int>(TGpioPort::k_portIndex)));
+
+            // Unmask the EXTI line (i.e. enable interupts on it).
+            Apb2::Exti::Imr::set(line, Apb2::Exti::MrValue::NotMasked);
+
+            // Enable NVIC interrupt for the EXTI line.
+            constexpr auto irqNumber = extiIrqNumber();
+            Core::Nvic::Iser::set(irqNumber, Core::Nvic::IserWriteValue::Enable);
         }
 
     private:
-        void configureExtiRtsr()
+        // Get the EXTI line number for this GPIO pin.
+        static constexpr Apb2::Exti::LineNumber extiLine()
         {
-            if constexpr (TVPin == GpioPin::Pin0)
+            static_assert(Apb2::Exti::k_lineCount >= Ahb1::Gpio::k_pinCount);
+            return static_cast<Apb2::Exti::LineNumber>(static_cast<unsigned int>(TVPin));
+        }
+
+        // Get the NVIC IRQ number for the EXTI line.
+        static constexpr Core::Nvic::IrqNumber extiIrqNumber()
+        {
+            static_assert(Apb2::Exti::k_lineCount >= Ahb1::Gpio::k_pinCount);
+            const auto line = static_cast<unsigned int>(TVPin);
+            if (line <= 4)
             {
-                ;
+                return static_cast<Core::Nvic::IrqNumber>(static_cast<unsigned int>(Core::Nvic::IrqNumber::Exti0) +
+                                                          line);
+            }
+            else if (line <= 9)
+            {
+                return Core::Nvic::IrqNumber::Exti9_5;
+            }
+            else
+            {
+                return Core::Nvic::IrqNumber::Exti15_10;
             }
         }
     };
@@ -138,22 +187,22 @@ namespace Driver
     class GpioX final
     {
     public:
-        using Pin0 = GpioXPinY<TGpioPort, GpioPin::Pin0>;
-        using Pin1 = GpioXPinY<TGpioPort, GpioPin::Pin1>;
-        using Pin2 = GpioXPinY<TGpioPort, GpioPin::Pin2>;
-        using Pin3 = GpioXPinY<TGpioPort, GpioPin::Pin3>;
-        using Pin4 = GpioXPinY<TGpioPort, GpioPin::Pin4>;
-        using Pin5 = GpioXPinY<TGpioPort, GpioPin::Pin5>;
-        using Pin6 = GpioXPinY<TGpioPort, GpioPin::Pin6>;
-        using Pin7 = GpioXPinY<TGpioPort, GpioPin::Pin7>;
-        using Pin8 = GpioXPinY<TGpioPort, GpioPin::Pin8>;
-        using Pin9 = GpioXPinY<TGpioPort, GpioPin::Pin9>;
-        using Pin10 = GpioXPinY<TGpioPort, GpioPin::Pin10>;
-        using Pin11 = GpioXPinY<TGpioPort, GpioPin::Pin11>;
-        using Pin12 = GpioXPinY<TGpioPort, GpioPin::Pin12>;
-        using Pin13 = GpioXPinY<TGpioPort, GpioPin::Pin13>;
-        using Pin14 = GpioXPinY<TGpioPort, GpioPin::Pin14>;
-        using Pin15 = GpioXPinY<TGpioPort, GpioPin::Pin15>;
+        using Pin0 = GpioXPinY<TGpioPort, GpioPin::Pin0, Apb2::Syscfg::Exticr1::Exit0>;
+        using Pin1 = GpioXPinY<TGpioPort, GpioPin::Pin1, Apb2::Syscfg::Exticr1::Exit1>;
+        using Pin2 = GpioXPinY<TGpioPort, GpioPin::Pin2, Apb2::Syscfg::Exticr1::Exit2>;
+        using Pin3 = GpioXPinY<TGpioPort, GpioPin::Pin3, Apb2::Syscfg::Exticr1::Exit3>;
+        using Pin4 = GpioXPinY<TGpioPort, GpioPin::Pin4, Apb2::Syscfg::Exticr2::Exit4>;
+        using Pin5 = GpioXPinY<TGpioPort, GpioPin::Pin5, Apb2::Syscfg::Exticr2::Exit5>;
+        using Pin6 = GpioXPinY<TGpioPort, GpioPin::Pin6, Apb2::Syscfg::Exticr2::Exit6>;
+        using Pin7 = GpioXPinY<TGpioPort, GpioPin::Pin7, Apb2::Syscfg::Exticr2::Exit7>;
+        using Pin8 = GpioXPinY<TGpioPort, GpioPin::Pin8, Apb2::Syscfg::Exticr3::Exit8>;
+        using Pin9 = GpioXPinY<TGpioPort, GpioPin::Pin9, Apb2::Syscfg::Exticr3::Exit9>;
+        using Pin10 = GpioXPinY<TGpioPort, GpioPin::Pin10, Apb2::Syscfg::Exticr3::Exit10>;
+        using Pin11 = GpioXPinY<TGpioPort, GpioPin::Pin11, Apb2::Syscfg::Exticr3::Exit11>;
+        using Pin12 = GpioXPinY<TGpioPort, GpioPin::Pin12, Apb2::Syscfg::Exticr4::Exit12>;
+        using Pin13 = GpioXPinY<TGpioPort, GpioPin::Pin13, Apb2::Syscfg::Exticr4::Exit13>;
+        using Pin14 = GpioXPinY<TGpioPort, GpioPin::Pin14, Apb2::Syscfg::Exticr4::Exit14>;
+        using Pin15 = GpioXPinY<TGpioPort, GpioPin::Pin15, Apb2::Syscfg::Exticr4::Exit15>;
 
         GpioX()
         {

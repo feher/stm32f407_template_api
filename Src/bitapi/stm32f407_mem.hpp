@@ -2,7 +2,7 @@
 
 #include "stm32f407_utils.hpp"
 
-namespace Mem
+namespace Stm32f407::Mem
 {
     static constexpr Word k_flashSize = 1 * 1024 * 1024; // 1 MiB
     static constexpr Address k_flashBaseAddr = 0x0800'0000U;
@@ -21,4 +21,4 @@ namespace Mem
     static constexpr Word k_sram2Size = 16 * 1024; // 16 KiB
     static constexpr Address k_sram2BaseAddr = k_sram1EndAddr + 1;
     static constexpr Address k_sram2EndAddr = k_sram2BaseAddr + k_sram2Size - 1;
-} // namespace Mem
+} // namespace Stm32f407::Mem

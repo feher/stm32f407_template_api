@@ -3,16 +3,17 @@
 #include "stm32f407_utils.hpp"
 
 #include <cassert>
+#include <utility> // to_underlying
 
 // EXTernal Interrupt controller.
-namespace Apb2::Exti
+namespace Stm32f407::Apb2::Exti
 {
     static constexpr Address k_baseAddr = 0x4001'3C00U;
 
     static constexpr int k_lineCount = 23;
 
     // GPIO pin number.
-    enum class LineNumber : int
+    enum class LineNumber : unsigned int
     {
         Line0 = 0,
         Line1 = 1,
@@ -52,10 +53,10 @@ namespace Apb2::Exti
         TriggerDisabled = 0,
         TriggerEnabled = 1
     };
-} // namespace Apb2::Exti
+} // namespace Stm32f407::Apb2::Exti
 
 // EXTI Interrupt Mask Register
-namespace Apb2::Exti::Imr
+namespace Stm32f407::Apb2::Exti::Imr
 {
     static constexpr Word k_offset = 0x00;
     static constexpr Address k_addr = k_baseAddr + k_offset;
@@ -63,8 +64,8 @@ namespace Apb2::Exti::Imr
     // Set the interrupt masking on an EXTI line.
     static void set(LineNumber line, MrValue lineMask)
     {
-        const auto intLine = static_cast<int>(line);
-        assert(0 <= intLine && intLine <= k_lineCount);
+        const auto intLine = std::to_underlying(line);
+        assert(intLine <= k_lineCount);
         volatile Word* p = reinterpret_cast<Word*>(k_addr);
         *p = set_bits(*p, intLine, 1, lineMask);
     }
@@ -72,8 +73,8 @@ namespace Apb2::Exti::Imr
     // Get the interrupt masking on an EXTI line.
     static MrValue get(LineNumber line)
     {
-        const auto intLine = static_cast<int>(line);
-        assert(0 <= intLine && intLine <= k_lineCount);
+        const auto intLine = std::to_underlying(line);
+        assert(intLine <= k_lineCount);
         volatile Word* p = reinterpret_cast<Word*>(k_addr);
         return extract_bits_as<MrValue>(*p, intLine, 1);
     }
@@ -101,10 +102,10 @@ namespace Apb2::Exti::Imr
     using Mr20 = Bits<k_addr, 20, 1, MrValue>;
     using Mr21 = Bits<k_addr, 21, 1, MrValue>;
     using Mr22 = Bits<k_addr, 22, 1, MrValue>;
-} // namespace Apb2::Exti::Imr
+} // namespace Stm32f407::Apb2::Exti::Imr
 
 // EXTI Event Mask Register
-namespace Apb2::Exti::Emr
+namespace Stm32f407::Apb2::Exti::Emr
 {
     static constexpr Word k_offset = 0x04;
     static constexpr Address k_addr = k_baseAddr + k_offset;
@@ -150,10 +151,10 @@ namespace Apb2::Exti::Emr
     using Mr20 = Bits<k_addr, 20, 1, MrValue>;
     using Mr21 = Bits<k_addr, 21, 1, MrValue>;
     using Mr22 = Bits<k_addr, 22, 1, MrValue>;
-} // namespace Apb2::Exti::Emr
+} // namespace Stm32f407::Apb2::Exti::Emr
 
 // EXTI Rising Trigger Selection Register
-namespace Apb2::Exti::Rtsr
+namespace Stm32f407::Apb2::Exti::Rtsr
 {
     static constexpr Word k_offset = 0x08;
     static constexpr Address k_addr = k_baseAddr + k_offset;
@@ -199,10 +200,10 @@ namespace Apb2::Exti::Rtsr
     using Tr20 = Bits<k_addr, 20, 1, TrValue>;
     using Tr21 = Bits<k_addr, 21, 1, TrValue>;
     using Tr22 = Bits<k_addr, 22, 1, TrValue>;
-} // namespace Apb2::Exti::Rtsr
+} // namespace Stm32f407::Apb2::Exti::Rtsr
 
 // EXTI Falling Trigger Selection Register
-namespace Apb2::Exti::Ftsr
+namespace Stm32f407::Apb2::Exti::Ftsr
 {
     static constexpr Word k_offset = 0x0c;
     static constexpr Address k_addr = k_baseAddr + k_offset;
@@ -248,7 +249,7 @@ namespace Apb2::Exti::Ftsr
     using Tr20 = Bits<k_addr, 20, 1, TrValue>;
     using Tr21 = Bits<k_addr, 21, 1, TrValue>;
     using Tr22 = Bits<k_addr, 22, 1, TrValue>;
-} // namespace Apb2::Exti::Ftsr
+} // namespace Stm32f407::Apb2::Exti::Ftsr
 
 // EXTI Software Interrupt Event Register
 //
@@ -256,7 +257,7 @@ namespace Apb2::Exti::Ftsr
 // set at '0' sets the corresponding pending bit in the EXTI_PR register, thus resulting in an
 // interrupt request generation.
 // This bit is cleared by clearing the corresponding bit in EXTI_PR (by writing a 1 to the bit).
-namespace Apb2::Exti::Swier
+namespace Stm32f407::Apb2::Exti::Swier
 {
     static constexpr Word k_offset = 0x10;
     static constexpr Address k_addr = k_baseAddr + k_offset;
@@ -306,7 +307,7 @@ namespace Apb2::Exti::Swier
     using Swier20 = Bits<k_addr, 20, 1, SwierValue>;
     using Swier21 = Bits<k_addr, 21, 1, SwierValue>;
     using Swier22 = Bits<k_addr, 22, 1, SwierValue>;
-} // namespace Apb2::Exti::Swier
+} // namespace Stm32f407::Apb2::Exti::Swier
 
 // EXTI Pending Register
 //
@@ -314,45 +315,61 @@ namespace Apb2::Exti::Swier
 // 1: selected trigger request occurred
 // This bit is set when the selected edge event arrives on the external interrupt line.
 // This bit is cleared by programming it to ‘1’.
-namespace Apb2::Exti::Pr
+namespace Stm32f407::Apb2::Exti::Pr
 {
     static constexpr Word k_offset = 0x14;
     static constexpr Address k_addr = k_baseAddr + k_offset;
 
     // Pending Register value.
-    enum class PrValue : Word
+    enum class PrRead : Word
     {
         NotPending = 0,
         Pending = 1,
     };
 
     // Pending Register value.
-    enum class PrClearValue : Word
+    enum class PrWrite : Word
     {
         Clear = 1,
     };
 
-    using Pr0 = Bits<k_addr, 0, 1, PrValue>;
-    using Pr1 = Bits<k_addr, 1, 1, PrValue>;
-    using Pr2 = Bits<k_addr, 2, 1, PrValue>;
-    using Pr3 = Bits<k_addr, 3, 1, PrValue>;
-    using Pr4 = Bits<k_addr, 4, 1, PrValue>;
-    using Pr5 = Bits<k_addr, 5, 1, PrValue>;
-    using Pr6 = Bits<k_addr, 6, 1, PrValue>;
-    using Pr7 = Bits<k_addr, 7, 1, PrValue>;
-    using Pr8 = Bits<k_addr, 8, 1, PrValue>;
-    using Pr9 = Bits<k_addr, 9, 1, PrValue>;
-    using Pr10 = Bits<k_addr, 10, 1, PrValue>;
-    using Pr11 = Bits<k_addr, 11, 1, PrValue>;
-    using Pr12 = Bits<k_addr, 12, 1, PrValue>;
-    using Pr13 = Bits<k_addr, 13, 1, PrValue>;
-    using Pr14 = Bits<k_addr, 14, 1, PrValue>;
-    using Pr15 = Bits<k_addr, 15, 1, PrValue>;
-    using Pr16 = Bits<k_addr, 16, 1, PrValue>;
-    using Pr17 = Bits<k_addr, 17, 1, PrValue>;
-    using Pr18 = Bits<k_addr, 18, 1, PrValue>;
-    using Pr19 = Bits<k_addr, 19, 1, PrValue>;
-    using Pr20 = Bits<k_addr, 20, 1, PrValue>;
-    using Pr21 = Bits<k_addr, 21, 1, PrValue>;
-    using Pr22 = Bits<k_addr, 22, 1, PrValue>;
-} // namespace Apb2::Exti::Pr
+    static void set(LineNumber line, PrWrite value)
+    {
+        const auto intLine = static_cast<int>(line);
+        assert(0 <= intLine && intLine <= k_lineCount);
+        volatile Word* p = reinterpret_cast<Word*>(k_addr);
+        *p = set_bits(*p, intLine, 1, value);
+    }
+
+    static PrRead get(LineNumber line)
+    {
+        const auto intLine = static_cast<int>(line);
+        assert(0 <= intLine && intLine <= k_lineCount);
+        volatile Word* p = reinterpret_cast<Word*>(k_addr);
+        return extract_bits_as<PrRead>(*p, intLine, 1);
+    }
+
+    using Pr0 = Bits<k_addr, 0, 1, PrRead, PrWrite>;
+    using Pr1 = Bits<k_addr, 1, 1, PrRead, PrWrite>;
+    using Pr2 = Bits<k_addr, 2, 1, PrRead, PrWrite>;
+    using Pr3 = Bits<k_addr, 3, 1, PrRead, PrWrite>;
+    using Pr4 = Bits<k_addr, 4, 1, PrRead, PrWrite>;
+    using Pr5 = Bits<k_addr, 5, 1, PrRead, PrWrite>;
+    using Pr6 = Bits<k_addr, 6, 1, PrRead, PrWrite>;
+    using Pr7 = Bits<k_addr, 7, 1, PrRead, PrWrite>;
+    using Pr8 = Bits<k_addr, 8, 1, PrRead, PrWrite>;
+    using Pr9 = Bits<k_addr, 9, 1, PrRead, PrWrite>;
+    using Pr10 = Bits<k_addr, 10, 1, PrRead, PrWrite>;
+    using Pr11 = Bits<k_addr, 11, 1, PrRead, PrWrite>;
+    using Pr12 = Bits<k_addr, 12, 1, PrRead, PrWrite>;
+    using Pr13 = Bits<k_addr, 13, 1, PrRead, PrWrite>;
+    using Pr14 = Bits<k_addr, 14, 1, PrRead, PrWrite>;
+    using Pr15 = Bits<k_addr, 15, 1, PrRead, PrWrite>;
+    using Pr16 = Bits<k_addr, 16, 1, PrRead, PrWrite>;
+    using Pr17 = Bits<k_addr, 17, 1, PrRead, PrWrite>;
+    using Pr18 = Bits<k_addr, 18, 1, PrRead, PrWrite>;
+    using Pr19 = Bits<k_addr, 19, 1, PrRead, PrWrite>;
+    using Pr20 = Bits<k_addr, 20, 1, PrRead, PrWrite>;
+    using Pr21 = Bits<k_addr, 21, 1, PrRead, PrWrite>;
+    using Pr22 = Bits<k_addr, 22, 1, PrRead, PrWrite>;
+} // namespace Stm32f407::Apb2::Exti::Pr

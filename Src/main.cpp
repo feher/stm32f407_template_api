@@ -42,6 +42,8 @@ int main(void)
     // pin0.setOutputSpeed(GpioOutputSpeed::Low);
     pin0.setPupd(GpioPupd::NoPull);
 
+    pin0.configureInterruptMode(GpioInterruptMode::RisingAndFallingEdge, GpioPupd::NoPull);
+
     while (true)
     {
         if (pin0.readInput() == PinState::High)

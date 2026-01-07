@@ -2,9 +2,10 @@
 
 #include "stm32f407_utils.hpp"
 
-namespace Apb2
+namespace Stm32f407::Apb2
 {
-    template <Address TVBaseAddr, Address TVEndAddr> struct SpiX
+    template <Address TVBaseAddr, Address TVEndAddr>
+    struct SpiX
     {
         static constexpr Address k_baseAddr = TVBaseAddr;
         static constexpr Address k_endAddr = TVEndAddr;
@@ -13,4 +14,4 @@ namespace Apb2
 
     // SPI controller 1.
     using Spi2 = SpiX<0x4001'3000U, 0x4001'33ffU>;
-} // namespace Apb2
+} // namespace Stm32f407::Apb2

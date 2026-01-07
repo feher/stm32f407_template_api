@@ -3,10 +3,12 @@
 #include "stm32f407_utils.hpp"
 #include <cassert>
 
-namespace Ahb1::Gpio
+namespace Stm32f407::Ahb1::Gpio
 {
+    static constexpr int k_pinCount = 16;
+
     // GPIO pin number.
-    enum class GpioPin : int
+    enum class GpioPin : unsigned int
     {
         Pin0 = 0,
         Pin1 = 1,
@@ -23,11 +25,11 @@ namespace Ahb1::Gpio
         Pin12 = 12,
         Pin13 = 13,
         Pin14 = 14,
-        Pin15 = 15
+        Pin15 = k_pinCount - 1
     };
 
     // Generic alternate function values for GPIO port X pin Y.
-    enum class GpioAltFunc : Word
+    enum class GpioAltFunc : Common::Word
     {
         Af0 = 0b0000,
         Af1 = 0b0001,
@@ -48,7 +50,7 @@ namespace Ahb1::Gpio
     };
 
     // GPIO pin mode values.
-    enum class GpioMode : Word
+    enum class GpioMode : Common::Word
     {
         Input = 0b00,
         Output = 0b01,
@@ -57,14 +59,14 @@ namespace Ahb1::Gpio
     };
 
     // GPIO pin output type values.
-    enum class GpioOutputType : Word
+    enum class GpioOutputType : Common::Word
     {
         PushPull = 0,
         OpenDrain = 1
     };
 
     // GPIO pin output speed values.
-    enum class GpioOutputSpeed : Word
+    enum class GpioOutputSpeed : Common::Word
     {
         Low = 0b00,
         Medium = 0b01,
@@ -73,7 +75,7 @@ namespace Ahb1::Gpio
     };
 
     // GPIO pin pull up/down values.
-    enum class GpioPupd : Word
+    enum class GpioPupd : Common::Word
     {
         NoPull = 0b00,
         PullUp = 0b01,
@@ -82,125 +84,129 @@ namespace Ahb1::Gpio
 
     namespace detail
     {
-        template <Address baseAddr, typename TAfValues>
+        template <int TVIndex, Common::Address baseAddr, typename TAfValues>
         struct GpioX
         {
-            static constexpr Address k_baseAddr = baseAddr;
+            static constexpr int k_portIndex = TVIndex;
+            static constexpr Common::Address k_baseAddr = baseAddr;
 
             // Mode Register.
             struct Moder
             {
-                static constexpr Word k_offset = 0x00;
-                static constexpr Address k_addr = k_baseAddr + k_offset;
+                // static constexpr Common::Word k_offset = 0x00;
+                // static constexpr Common::Address k_addr = k_baseAddr + k_offset;
+                // static constexpr Common::Address k_addr = ModerBase_::k_regAddr;
 
-                // Set the mode of a pin.
-                static void set(GpioPin pin, GpioMode mode)
-                {
-                    const auto intPin = static_cast<int>(pin);
-                    assert(0 <= intPin && intPin <= 15);
-                    volatile Word* p = reinterpret_cast<Word*>(k_addr);
-                    *p = set_bits(*p, intPin << 1, 2, mode);
-                }
+                using Bits = Util::BitsRegister<k_baseAddr, 0x00, GpioPin, 2, GpioMode>;
 
-                // Get the mode of a pin.
-                static GpioMode get(GpioPin pin)
-                {
-                    const auto intPin = static_cast<int>(pin);
-                    assert(0 <= intPin && intPin <= 15);
-                    volatile Word* p = reinterpret_cast<Word*>(k_addr);
-                    return extract_bits_as<GpioMode>(*p, intPin << 1, 2);
-                }
+                // // Set the mode of a pin.
+                // static void set(GpioPin pin, GpioMode mode)
+                // {
+                //     const auto intPin = static_cast<int>(pin);
+                //     assert(0 <= intPin && intPin < k_pinCount);
+                //     volatile Common::Word* p = reinterpret_cast<Common::Word*>(k_addr);
+                //     *p = set_bits(*p, intPin << 1, 2, mode);
+                // }
+
+                // // Get the mode of a pin.
+                // static GpioMode get(GpioPin pin)
+                // {
+                //     const auto intPin = static_cast<int>(pin);
+                //     assert(0 <= intPin && intPin < k_pinCount);
+                //     volatile Common::Word* p = reinterpret_cast<Common::Word*>(k_addr);
+                //     return extract_bits_as<GpioMode>(*p, intPin << 1, 2);
+                // }
 
                 // Mode register bits for pin 0.
-                using Moder0 = Bits<k_addr, 0, 2, GpioMode>;
+                using Moder0 = Util::Bits<Bits::k_addr, 0, 2, GpioMode>;
                 // Mode register bits for pin 1.
-                using Moder1 = Bits<k_addr, 2, 2, GpioMode>;
+                using Moder1 = Util::Bits<Bits::k_addr, 2, 2, GpioMode>;
                 // Mode register bits for pin 2.
-                using Moder2 = Bits<k_addr, 4, 2, GpioMode>;
+                using Moder2 = Util::Bits<Bits::k_addr, 4, 2, GpioMode>;
                 // Mode register bits for pin 3.
-                using Moder3 = Bits<k_addr, 6, 2, GpioMode>;
+                using Moder3 = Util::Bits<Bits::k_addr, 6, 2, GpioMode>;
                 // Mode register bits for pin 4.
-                using Moder4 = Bits<k_addr, 8, 2, GpioMode>;
+                using Moder4 = Util::Bits<Bits::k_addr, 8, 2, GpioMode>;
                 // Mode register bits for pin 5.
-                using Moder5 = Bits<k_addr, 10, 2, GpioMode>;
+                using Moder5 = Util::Bits<Bits::k_addr, 10, 2, GpioMode>;
                 // Mode register bits for pin 6.
-                using Moder6 = Bits<k_addr, 12, 2, GpioMode>;
+                using Moder6 = Util::Bits<Bits::k_addr, 12, 2, GpioMode>;
                 // Mode register bits for pin 7.
-                using Moder7 = Bits<k_addr, 14, 2, GpioMode>;
+                using Moder7 = Util::Bits<Bits::k_addr, 14, 2, GpioMode>;
                 // Mode register bits for pin 8.
-                using Moder8 = Bits<k_addr, 16, 2, GpioMode>;
+                using Moder8 = Util::Bits<Bits::k_addr, 16, 2, GpioMode>;
                 // Mode register bits for pin 9.
-                using Moder9 = Bits<k_addr, 18, 2, GpioMode>;
+                using Moder9 = Util::Bits<Bits::k_addr, 18, 2, GpioMode>;
                 // Mode register bits for pin 10.
-                using Moder10 = Bits<k_addr, 20, 2, GpioMode>;
+                using Moder10 = Util::Bits<Bits::k_addr, 20, 2, GpioMode>;
                 // Mode register bits for pin 11.
-                using Moder11 = Bits<k_addr, 22, 2, GpioMode>;
+                using Moder11 = Util::Bits<Bits::k_addr, 22, 2, GpioMode>;
                 // Mode register bits for pin 12.
-                using Moder12 = Bits<k_addr, 24, 2, GpioMode>;
+                using Moder12 = Util::Bits<Bits::k_addr, 24, 2, GpioMode>;
                 // Mode register bits for pin 13.
-                using Moder13 = Bits<k_addr, 26, 2, GpioMode>;
+                using Moder13 = Util::Bits<Bits::k_addr, 26, 2, GpioMode>;
                 // Mode register bits for pin 14.
-                using Moder14 = Bits<k_addr, 28, 2, GpioMode>;
+                using Moder14 = Util::Bits<Bits::k_addr, 28, 2, GpioMode>;
                 // Mode register bits for pin 15.
-                using Moder15 = Bits<k_addr, 30, 2, GpioMode>;
+                using Moder15 = Util::Bits<Bits::k_addr, 30, 2, GpioMode>;
             };
 
             // Output Type Register.
             struct Otyper
             {
-                static constexpr Word k_offset = 0x04;
-                static constexpr Address k_addr = k_baseAddr + k_offset;
+                static constexpr Common::Word k_offset = 0x04;
+                static constexpr Common::Address k_addr = k_baseAddr + k_offset;
 
                 // Set the output type of a pin.
                 static void set(GpioPin pin, GpioOutputType outputType)
                 {
                     const auto intPin = static_cast<int>(pin);
-                    assert(0 <= intPin && intPin <= 15);
-                    volatile Word* p = reinterpret_cast<Word*>(k_addr);
-                    *p = set_bits(*p, intPin, 1, outputType);
+                    assert(0 <= intPin && intPin < k_pinCount);
+                    volatile Common::Word* p = reinterpret_cast<Common::Word*>(k_addr);
+                    *p = Util::set_bits(*p, intPin, 1, outputType);
                 }
 
                 // Get the output type of a pin.
                 static GpioOutputType get(GpioPin pin)
                 {
                     const auto intPin = static_cast<int>(pin);
-                    assert(0 <= intPin && intPin <= 15);
-                    volatile Word* p = reinterpret_cast<Word*>(k_addr);
-                    return extract_bits_as<GpioOutputType>(*p, intPin, 1);
+                    assert(0 <= intPin && intPin < k_pinCount);
+                    volatile Common::Word* p = reinterpret_cast<Common::Word*>(k_addr);
+                    return Util::extract_bits_as<GpioOutputType>(*p, intPin, 1);
                 }
 
                 // Output type for pin 0.
-                using Ot0 = Bits<k_addr, 0, 1, GpioOutputType>;
+                using Ot0 = Util::Bits<k_addr, 0, 1, GpioOutputType>;
                 // Output type for pin 1.
-                using Ot1 = Bits<k_addr, 1, 1, GpioOutputType>;
+                using Ot1 = Util::Bits<k_addr, 1, 1, GpioOutputType>;
                 // Output type for pin 2.
-                using Ot2 = Bits<k_addr, 2, 1, GpioOutputType>;
+                using Ot2 = Util::Bits<k_addr, 2, 1, GpioOutputType>;
                 // Output type for pin 3.
-                using Ot3 = Bits<k_addr, 3, 1, GpioOutputType>;
+                using Ot3 = Util::Bits<k_addr, 3, 1, GpioOutputType>;
                 // Output type for pin 4.
-                using Ot4 = Bits<k_addr, 4, 1, GpioOutputType>;
+                using Ot4 = Util::Bits<k_addr, 4, 1, GpioOutputType>;
                 // Output type for pin 5.
-                using Ot5 = Bits<k_addr, 5, 1, GpioOutputType>;
+                using Ot5 = Util::Bits<k_addr, 5, 1, GpioOutputType>;
                 // Output type for pin 6.
-                using Ot6 = Bits<k_addr, 6, 1, GpioOutputType>;
+                using Ot6 = Util::Bits<k_addr, 6, 1, GpioOutputType>;
                 // Output type for pin 7.
-                using Ot7 = Bits<k_addr, 7, 1, GpioOutputType>;
+                using Ot7 = Util::Bits<k_addr, 7, 1, GpioOutputType>;
                 // Output type for pin 8.
-                using Ot8 = Bits<k_addr, 8, 1, GpioOutputType>;
+                using Ot8 = Util::Bits<k_addr, 8, 1, GpioOutputType>;
                 // Output type for pin 9.
-                using Ot9 = Bits<k_addr, 9, 1, GpioOutputType>;
+                using Ot9 = Util::Bits<k_addr, 9, 1, GpioOutputType>;
                 // Output type for pin 10.
-                using Ot10 = Bits<k_addr, 10, 1, GpioOutputType>;
+                using Ot10 = Util::Bits<k_addr, 10, 1, GpioOutputType>;
                 // Output type for pin 11.
-                using Ot11 = Bits<k_addr, 11, 1, GpioOutputType>;
+                using Ot11 = Util::Bits<k_addr, 11, 1, GpioOutputType>;
                 // Output type for pin 12.
-                using Ot12 = Bits<k_addr, 12, 1, GpioOutputType>;
+                using Ot12 = Util::Bits<k_addr, 12, 1, GpioOutputType>;
                 // Output type for pin 13.
-                using Ot13 = Bits<k_addr, 13, 1, GpioOutputType>;
+                using Ot13 = Util::Bits<k_addr, 13, 1, GpioOutputType>;
                 // Output type for pin 14.
-                using Ot14 = Bits<k_addr, 14, 1, GpioOutputType>;
+                using Ot14 = Util::Bits<k_addr, 14, 1, GpioOutputType>;
                 // Output type for pin 15.
-                using Ot15 = Bits<k_addr, 15, 1, GpioOutputType>;
+                using Ot15 = Util::Bits<k_addr, 15, 1, GpioOutputType>;
             };
 
             // Output Speed Register.
@@ -208,295 +214,295 @@ namespace Ahb1::Gpio
             // (i.e. this is not the frequency of the signal).
             struct Ospeedr
             {
-                static constexpr Word k_offset = 0x08;
-                static constexpr Address k_addr = k_baseAddr + k_offset;
+                static constexpr Common::Word k_offset = 0x08;
+                static constexpr Common::Address k_addr = k_baseAddr + k_offset;
 
                 // Set the output speed of a pin.
                 static void set(GpioPin pin, GpioOutputSpeed outputSpeed)
                 {
                     const auto intPin = static_cast<int>(pin);
-                    assert(0 <= intPin && intPin <= 15);
-                    volatile Word* p = reinterpret_cast<Word*>(k_addr);
-                    *p = set_bits(*p, intPin << 1, 2, outputSpeed);
+                    assert(0 <= intPin && intPin < k_pinCount);
+                    volatile Common::Word* p = reinterpret_cast<Common::Word*>(k_addr);
+                    *p = Util::set_bits(*p, intPin << 1, 2, outputSpeed);
                 }
 
                 // Get the output speed of a pin.
                 static GpioOutputSpeed get(GpioPin pin)
                 {
                     const auto intPin = static_cast<int>(pin);
-                    assert(0 <= intPin && intPin <= 15);
-                    volatile Word* p = reinterpret_cast<Word*>(k_addr);
-                    return extract_bits_as<GpioOutputSpeed>(*p, intPin << 1, 2);
+                    assert(0 <= intPin && intPin < k_pinCount);
+                    volatile Common::Word* p = reinterpret_cast<Common::Word*>(k_addr);
+                    return Util::extract_bits_as<GpioOutputSpeed>(*p, intPin << 1, 2);
                 }
 
                 // Output Speed Register bits for pin 0.
-                using Ospeedr0 = Bits<k_addr, 0, 2, GpioOutputSpeed>;
+                using Ospeedr0 = Util::Bits<k_addr, 0, 2, GpioOutputSpeed>;
                 // Output Speed Register bits for pin 1.
-                using Ospeedr1 = Bits<k_addr, 2, 2, GpioOutputSpeed>;
+                using Ospeedr1 = Util::Bits<k_addr, 2, 2, GpioOutputSpeed>;
                 // Output Speed Register bits for pin 2.
-                using Ospeedr2 = Bits<k_addr, 4, 2, GpioOutputSpeed>;
+                using Ospeedr2 = Util::Bits<k_addr, 4, 2, GpioOutputSpeed>;
                 // Output Speed Register bits for pin 3.
-                using Ospeedr3 = Bits<k_addr, 6, 2, GpioOutputSpeed>;
+                using Ospeedr3 = Util::Bits<k_addr, 6, 2, GpioOutputSpeed>;
                 // Output Speed Register bits for pin 4.
-                using Ospeedr4 = Bits<k_addr, 8, 2, GpioOutputSpeed>;
+                using Ospeedr4 = Util::Bits<k_addr, 8, 2, GpioOutputSpeed>;
                 // Output Speed Register bits for pin 5.
-                using Ospeedr5 = Bits<k_addr, 10, 2, GpioOutputSpeed>;
+                using Ospeedr5 = Util::Bits<k_addr, 10, 2, GpioOutputSpeed>;
                 // Output Speed Register bits for pin 6.
-                using Ospeedr6 = Bits<k_addr, 12, 2, GpioOutputSpeed>;
+                using Ospeedr6 = Util::Bits<k_addr, 12, 2, GpioOutputSpeed>;
                 // Output Speed Register bits for pin 7.
-                using Ospeedr7 = Bits<k_addr, 14, 2, GpioOutputSpeed>;
+                using Ospeedr7 = Util::Bits<k_addr, 14, 2, GpioOutputSpeed>;
                 // Output Speed Register bits for pin 8.
-                using Ospeedr8 = Bits<k_addr, 16, 2, GpioOutputSpeed>;
+                using Ospeedr8 = Util::Bits<k_addr, 16, 2, GpioOutputSpeed>;
                 // Output Speed Register bits for pin 9.
-                using Ospeedr9 = Bits<k_addr, 18, 2, GpioOutputSpeed>;
+                using Ospeedr9 = Util::Bits<k_addr, 18, 2, GpioOutputSpeed>;
                 // Output Speed Register bits for pin 10.
-                using Ospeedr10 = Bits<k_addr, 20, 2, GpioOutputSpeed>;
+                using Ospeedr10 = Util::Bits<k_addr, 20, 2, GpioOutputSpeed>;
                 // Output Speed Register bits for pin 11.
-                using Ospeedr11 = Bits<k_addr, 22, 2, GpioOutputSpeed>;
+                using Ospeedr11 = Util::Bits<k_addr, 22, 2, GpioOutputSpeed>;
                 // Output Speed Register bits for pin 12.
-                using Ospeedr12 = Bits<k_addr, 24, 2, GpioOutputSpeed>;
+                using Ospeedr12 = Util::Bits<k_addr, 24, 2, GpioOutputSpeed>;
                 // Output Speed Register bits for pin 13.
-                using Ospeedr13 = Bits<k_addr, 26, 2, GpioOutputSpeed>;
+                using Ospeedr13 = Util::Bits<k_addr, 26, 2, GpioOutputSpeed>;
                 // Output Speed Register bits for pin 14.
-                using Ospeedr14 = Bits<k_addr, 28, 2, GpioOutputSpeed>;
+                using Ospeedr14 = Util::Bits<k_addr, 28, 2, GpioOutputSpeed>;
                 // Output Speed Register bits for pin 15.
-                using Ospeedr15 = Bits<k_addr, 30, 2, GpioOutputSpeed>;
+                using Ospeedr15 = Util::Bits<k_addr, 30, 2, GpioOutputSpeed>;
             };
 
             // Pull Up/Down Register.
             struct Pupdr
             {
-                static constexpr Word k_offset = 0x0c;
-                static constexpr Address k_addr = k_baseAddr + k_offset;
+                static constexpr Common::Word k_offset = 0x0c;
+                static constexpr Common::Address k_addr = k_baseAddr + k_offset;
 
                 // Set the pull up/down configuration of a pin.
                 static void set(GpioPin pin, GpioPupd pupd)
                 {
                     const auto intPin = static_cast<int>(pin);
-                    assert(0 <= intPin && intPin <= 15);
-                    volatile Word* p = reinterpret_cast<Word*>(k_addr);
-                    *p = set_bits(*p, intPin << 1, 2, pupd);
+                    assert(0 <= intPin && intPin < k_pinCount);
+                    volatile Common::Word* p = reinterpret_cast<Common::Word*>(k_addr);
+                    *p = Util::set_bits(*p, intPin << 1, 2, pupd);
                 }
 
                 // Get the pull up/down configuration of a pin.
                 static GpioPupd get(GpioPin pin)
                 {
                     const auto intPin = static_cast<int>(pin);
-                    assert(0 <= intPin && intPin <= 15);
-                    volatile Word* p = reinterpret_cast<Word*>(k_addr);
-                    return extract_bits_as<GpioPupd>(*p, intPin << 1, 2);
+                    assert(0 <= intPin && intPin < k_pinCount);
+                    volatile Common::Word* p = reinterpret_cast<Common::Word*>(k_addr);
+                    return Util::extract_bits_as<GpioPupd>(*p, intPin << 1, 2);
                 }
 
                 // Pull Up/Down Register bits for pin 0.
-                using Pupdr0 = Bits<k_addr, 0, 2, GpioPupd>;
+                using Pupdr0 = Util::Bits<k_addr, 0, 2, GpioPupd>;
                 // Pull Up/Down Register bits for pin 1.
-                using Pupdr1 = Bits<k_addr, 2, 2, GpioPupd>;
+                using Pupdr1 = Util::Bits<k_addr, 2, 2, GpioPupd>;
                 // Pull Up/Down Register bits for pin 2.
-                using Pupdr2 = Bits<k_addr, 4, 2, GpioPupd>;
+                using Pupdr2 = Util::Bits<k_addr, 4, 2, GpioPupd>;
                 // Pull Up/Down Register bits for pin 3.
-                using Pupdr3 = Bits<k_addr, 6, 2, GpioPupd>;
+                using Pupdr3 = Util::Bits<k_addr, 6, 2, GpioPupd>;
                 // Pull Up/Down Register bits for pin 4.
-                using Pupdr4 = Bits<k_addr, 8, 2, GpioPupd>;
+                using Pupdr4 = Util::Bits<k_addr, 8, 2, GpioPupd>;
                 // Pull Up/Down Register bits for pin 5.
-                using Pupdr5 = Bits<k_addr, 10, 2, GpioPupd>;
+                using Pupdr5 = Util::Bits<k_addr, 10, 2, GpioPupd>;
                 // Pull Up/Down Register bits for pin 6.
-                using Pupdr6 = Bits<k_addr, 12, 2, GpioPupd>;
+                using Pupdr6 = Util::Bits<k_addr, 12, 2, GpioPupd>;
                 // Pull Up/Down Register bits for pin 7.
-                using Pupdr7 = Bits<k_addr, 14, 2, GpioPupd>;
+                using Pupdr7 = Util::Bits<k_addr, 14, 2, GpioPupd>;
                 // Pull Up/Down Register bits for pin 8.
-                using Pupdr8 = Bits<k_addr, 16, 2, GpioPupd>;
+                using Pupdr8 = Util::Bits<k_addr, 16, 2, GpioPupd>;
                 // Pull Up/Down Register bits for pin 9.
-                using Pupdr9 = Bits<k_addr, 18, 2, GpioPupd>;
+                using Pupdr9 = Util::Bits<k_addr, 18, 2, GpioPupd>;
                 // Pull Up/Down Register bits for pin 10.
-                using Pupdr10 = Bits<k_addr, 20, 2, GpioPupd>;
+                using Pupdr10 = Util::Bits<k_addr, 20, 2, GpioPupd>;
                 // Pull Up/Down Register bits for pin 11.
-                using Pupdr11 = Bits<k_addr, 22, 2, GpioPupd>;
+                using Pupdr11 = Util::Bits<k_addr, 22, 2, GpioPupd>;
                 // Pull Up/Down Register bits for pin 12.
-                using Pupdr12 = Bits<k_addr, 24, 2, GpioPupd>;
+                using Pupdr12 = Util::Bits<k_addr, 24, 2, GpioPupd>;
                 // Pull Up/Down Register bits for pin 13.
-                using Pupdr13 = Bits<k_addr, 26, 2, GpioPupd>;
+                using Pupdr13 = Util::Bits<k_addr, 26, 2, GpioPupd>;
                 // Pull Up/Down Register bits for pin 14.
-                using Pupdr14 = Bits<k_addr, 28, 2, GpioPupd>;
+                using Pupdr14 = Util::Bits<k_addr, 28, 2, GpioPupd>;
                 // Pull Up/Down Register bits for pin 15.
-                using Pupdr15 = Bits<k_addr, 30, 2, GpioPupd>;
+                using Pupdr15 = Util::Bits<k_addr, 30, 2, GpioPupd>;
             };
 
             // Input Data Register.
             struct Idr
             {
-                static constexpr Word k_offset = 0x10;
-                static constexpr Address k_addr = k_baseAddr + k_offset;
+                static constexpr Common::Word k_offset = 0x10;
+                static constexpr Common::Address k_addr = k_baseAddr + k_offset;
 
                 // Get the input state of a pin.
                 static PinState get(GpioPin pin)
                 {
                     const auto intPin = static_cast<int>(pin);
-                    assert(0 <= intPin && intPin <= 15);
-                    volatile Word* p = reinterpret_cast<Word*>(k_addr);
-                    return extract_bits_as<PinState>(*p, intPin, 1);
+                    assert(0 <= intPin && intPin < k_pinCount);
+                    volatile Common::Word* p = reinterpret_cast<Common::Word*>(k_addr);
+                    return Util::extract_bits_as<Common::PinState>(*p, intPin, 1);
                 }
             };
 
             // Output Data Register.
-            // using Odr = Bits<k_baseAddr + 0x14, 0, 16, Word>;
+            // using Odr = Util::Bits<k_baseAddr + 0x14, 0, 16, Common::Word>;
             struct Odr
             {
-                static constexpr Word k_offset = 0x14;
-                static constexpr Address k_addr = k_baseAddr + k_offset;
+                static constexpr Common::Word k_offset = 0x14;
+                static constexpr Common::Address k_addr = k_baseAddr + k_offset;
 
                 // Set the output state of a pin.
                 static void set(GpioPin pin, PinState state)
                 {
                     const auto intPin = static_cast<int>(pin);
-                    assert(0 <= intPin && intPin <= 15);
-                    volatile Word* p = reinterpret_cast<Word*>(k_addr);
-                    *p = set_bits(*p, intPin, 1, state);
+                    assert(0 <= intPin && intPin < k_pinCount);
+                    volatile Common::Word* p = reinterpret_cast<Common::Word*>(k_addr);
+                    *p = Util::set_bits(*p, intPin, 1, state);
                 }
 
                 // Get the output state of a pin.
                 static PinState get(GpioPin pin)
                 {
                     const auto intPin = static_cast<int>(pin);
-                    assert(0 <= intPin && intPin <= 15);
-                    volatile Word* p = reinterpret_cast<Word*>(k_addr);
-                    return extract_bits_as<PinState>(*p, intPin, 1);
+                    assert(0 <= intPin && intPin < k_pinCount);
+                    volatile Common::Word* p = reinterpret_cast<Common::Word*>(k_addr);
+                    return Util::extract_bits_as<Common::PinState>(*p, intPin, 1);
                 }
             };
 
             // Bit Set/Reset Register.
             struct Bsrr
             {
-                static constexpr Word k_offset = 0x18;
-                static constexpr Address k_addr = k_baseAddr + k_offset;
+                static constexpr Common::Word k_offset = 0x18;
+                static constexpr Common::Address k_addr = k_baseAddr + k_offset;
 
                 // Set values.
-                enum class SValue : Word
+                enum class SValue : Common::Word
                 {
                     NoAction = 0b0,
                     Set = 0b1
                 };
 
                 // Reset values.
-                enum class RValue : Word
+                enum class RValue : Common::Word
                 {
                     NoAction = 0b0,
                     Reset = 0b1
                 };
 
                 // Bit Set for pins 0-15.
-                using Bs = WoBits<k_addr, 0, 16, Word>;
+                using Bs = Util::WoBits<k_addr, 0, 16, Common::Word>;
 
                 // Bit Reset for pins 0-15.
-                using Br = WoBits<k_addr, 16, 16, Word>;
+                using Br = Util::WoBits<k_addr, 16, 16, Common::Word>;
 
                 // Bit Set for pin 0.
-                using Bs0 = WoBits<k_addr, 0, 1, SValue>;
+                using Bs0 = Util::WoBits<k_addr, 0, 1, SValue>;
                 // Bit Set for pin 1.
-                using Bs1 = WoBits<k_addr, 1, 1, SValue>;
+                using Bs1 = Util::WoBits<k_addr, 1, 1, SValue>;
                 // Bit Set for pin 2.
-                using Bs2 = WoBits<k_addr, 2, 1, SValue>;
+                using Bs2 = Util::WoBits<k_addr, 2, 1, SValue>;
                 // Bit Set for pin 3.
-                using Bs3 = WoBits<k_addr, 3, 1, SValue>;
+                using Bs3 = Util::WoBits<k_addr, 3, 1, SValue>;
                 // Bit Set for pin 4.
-                using Bs4 = WoBits<k_addr, 4, 1, SValue>;
+                using Bs4 = Util::WoBits<k_addr, 4, 1, SValue>;
                 // Bit Set for pin 5.
-                using Bs5 = WoBits<k_addr, 5, 1, SValue>;
+                using Bs5 = Util::WoBits<k_addr, 5, 1, SValue>;
                 // Bit Set for pin 6.
-                using Bs6 = WoBits<k_addr, 6, 1, SValue>;
+                using Bs6 = Util::WoBits<k_addr, 6, 1, SValue>;
                 // Bit Set for pin 7.
-                using Bs7 = WoBits<k_addr, 7, 1, SValue>;
+                using Bs7 = Util::WoBits<k_addr, 7, 1, SValue>;
                 // Bit Set for pin 8.
-                using Bs8 = WoBits<k_addr, 8, 1, SValue>;
+                using Bs8 = Util::WoBits<k_addr, 8, 1, SValue>;
                 // Bit Set for pin 9.
-                using Bs9 = WoBits<k_addr, 9, 1, SValue>;
+                using Bs9 = Util::WoBits<k_addr, 9, 1, SValue>;
                 // Bit Set for pin 10.
-                using Bs10 = WoBits<k_addr, 10, 1, SValue>;
+                using Bs10 = Util::WoBits<k_addr, 10, 1, SValue>;
                 // Bit Set for pin 11.
-                using Bs11 = WoBits<k_addr, 11, 1, SValue>;
+                using Bs11 = Util::WoBits<k_addr, 11, 1, SValue>;
                 // Bit Set for pin 12.
-                using Bs12 = WoBits<k_addr, 12, 1, SValue>;
+                using Bs12 = Util::WoBits<k_addr, 12, 1, SValue>;
                 // Bit Set for pin 13.
-                using Bs13 = WoBits<k_addr, 13, 1, SValue>;
+                using Bs13 = Util::WoBits<k_addr, 13, 1, SValue>;
                 // Bit Set for pin 14.
-                using Bs14 = WoBits<k_addr, 14, 1, SValue>;
+                using Bs14 = Util::WoBits<k_addr, 14, 1, SValue>;
                 // Bit Set for pin 15.
-                using Bs15 = WoBits<k_addr, 15, 1, SValue>;
+                using Bs15 = Util::WoBits<k_addr, 15, 1, SValue>;
 
                 // Bit Reset for pin 0.
-                using Br0 = WoBits<k_addr, 16, 1, RValue>;
+                using Br0 = Util::WoBits<k_addr, 16, 1, RValue>;
                 // Bit Reset for pin 1.
-                using Br1 = WoBits<k_addr, 17, 1, RValue>;
+                using Br1 = Util::WoBits<k_addr, 17, 1, RValue>;
                 // Bit Reset for pin 2.
-                using Br2 = WoBits<k_addr, 18, 1, RValue>;
+                using Br2 = Util::WoBits<k_addr, 18, 1, RValue>;
                 // Bit Reset for pin 3.
-                using Br3 = WoBits<k_addr, 19, 1, RValue>;
+                using Br3 = Util::WoBits<k_addr, 19, 1, RValue>;
                 // Bit Reset for pin 4.
-                using Br4 = WoBits<k_addr, 20, 1, RValue>;
+                using Br4 = Util::WoBits<k_addr, 20, 1, RValue>;
                 // Bit Reset for pin 5.
-                using Br5 = WoBits<k_addr, 21, 1, RValue>;
+                using Br5 = Util::WoBits<k_addr, 21, 1, RValue>;
                 // Bit Reset for pin 6.
-                using Br6 = WoBits<k_addr, 22, 1, RValue>;
+                using Br6 = Util::WoBits<k_addr, 22, 1, RValue>;
                 // Bit Reset for pin 7.
-                using Br7 = WoBits<k_addr, 23, 1, RValue>;
+                using Br7 = Util::WoBits<k_addr, 23, 1, RValue>;
                 // Bit Reset for pin 8.
-                using Br8 = WoBits<k_addr, 24, 1, RValue>;
+                using Br8 = Util::WoBits<k_addr, 24, 1, RValue>;
                 // Bit Reset for pin 9.
-                using Br9 = WoBits<k_addr, 25, 1, RValue>;
+                using Br9 = Util::WoBits<k_addr, 25, 1, RValue>;
                 // Bit Reset for pin 10.
-                using Br10 = WoBits<k_addr, 26, 1, RValue>;
+                using Br10 = Util::WoBits<k_addr, 26, 1, RValue>;
                 // Bit Reset for pin 11.
-                using Br11 = WoBits<k_addr, 27, 1, RValue>;
+                using Br11 = Util::WoBits<k_addr, 27, 1, RValue>;
                 // Bit Reset for pin 12.
-                using Br12 = WoBits<k_addr, 28, 1, RValue>;
+                using Br12 = Util::WoBits<k_addr, 28, 1, RValue>;
                 // Bit Reset for pin 13.
-                using Br13 = WoBits<k_addr, 29, 1, RValue>;
+                using Br13 = Util::WoBits<k_addr, 29, 1, RValue>;
                 // Bit Reset for pin 14.
-                using Br14 = WoBits<k_addr, 30, 1, RValue>;
+                using Br14 = Util::WoBits<k_addr, 30, 1, RValue>;
                 // Bit Reset for pin 15.
-                using Br15 = WoBits<k_addr, 31, 1, RValue>;
+                using Br15 = Util::WoBits<k_addr, 31, 1, RValue>;
             };
 
             // Configuration Lock Register.
             struct Lckr
             {
-                static constexpr Word k_offset = 0x1c;
-                static constexpr Address k_addr = k_baseAddr + k_offset;
+                static constexpr Common::Word k_offset = 0x1c;
+                static constexpr Common::Address k_addr = k_baseAddr + k_offset;
 
                 // Lock Key.
-                using Lckk = RoBits<k_addr, 16, 1, Word>;
+                using Lckk = Util::RoBits<k_addr, 16, 1, Common::Word>;
 
                 // Port 0 lock bit.
-                using Lck0 = RoBits<k_addr, 0, 1, Word>;
+                using Lck0 = Util::RoBits<k_addr, 0, 1, Common::Word>;
                 // Port 1 lock bit.
-                using Lck1 = RoBits<k_addr, 1, 1, Word>;
+                using Lck1 = Util::RoBits<k_addr, 1, 1, Common::Word>;
                 // Port 2 lock bit.
-                using Lck2 = RoBits<k_addr, 2, 1, Word>;
+                using Lck2 = Util::RoBits<k_addr, 2, 1, Common::Word>;
                 // Port 3 lock bit.
-                using Lck3 = RoBits<k_addr, 3, 1, Word>;
+                using Lck3 = Util::RoBits<k_addr, 3, 1, Common::Word>;
                 // Port 4 lock bit.
-                using Lck4 = RoBits<k_addr, 4, 1, Word>;
+                using Lck4 = Util::RoBits<k_addr, 4, 1, Common::Word>;
                 // Port 5 lock bit.
-                using Lck5 = RoBits<k_addr, 5, 1, Word>;
+                using Lck5 = Util::RoBits<k_addr, 5, 1, Common::Word>;
                 // Port 6 lock bit.
-                using Lck6 = RoBits<k_addr, 6, 1, Word>;
+                using Lck6 = Util::RoBits<k_addr, 6, 1, Common::Word>;
                 // Port 7 lock bit.
-                using Lck7 = RoBits<k_addr, 7, 1, Word>;
+                using Lck7 = Util::RoBits<k_addr, 7, 1, Common::Word>;
                 // Port 8 lock bit.
-                using Lck8 = RoBits<k_addr, 8, 1, Word>;
+                using Lck8 = Util::RoBits<k_addr, 8, 1, Common::Word>;
                 // Port 9 lock bit.
-                using Lck9 = RoBits<k_addr, 9, 1, Word>;
+                using Lck9 = Util::RoBits<k_addr, 9, 1, Common::Word>;
                 // Port 10 lock bit.
-                using Lck10 = RoBits<k_addr, 10, 1, Word>;
+                using Lck10 = Util::RoBits<k_addr, 10, 1, Common::Word>;
                 // Port 11 lock bit.
-                using Lck11 = RoBits<k_addr, 11, 1, Word>;
+                using Lck11 = Util::RoBits<k_addr, 11, 1, Common::Word>;
                 // Port 12 lock bit.
-                using Lck12 = RoBits<k_addr, 12, 1, Word>;
+                using Lck12 = Util::RoBits<k_addr, 12, 1, Common::Word>;
                 // Port 13 lock bit.
-                using Lck13 = RoBits<k_addr, 13, 1, Word>;
+                using Lck13 = Util::RoBits<k_addr, 13, 1, Common::Word>;
                 // Port 14 lock bit.
-                using Lck14 = RoBits<k_addr, 14, 1, Word>;
+                using Lck14 = Util::RoBits<k_addr, 14, 1, Common::Word>;
                 // Port 15 lock bit.
-                using Lck15 = RoBits<k_addr, 15, 1, Word>;
+                using Lck15 = Util::RoBits<k_addr, 15, 1, Common::Word>;
             };
 
             // Pin0 alternate function values.
@@ -521,16 +527,16 @@ namespace Ahb1::Gpio
             // Alternate function register, low word.
             struct Afrl
             {
-                static constexpr Word k_offset = 0x20;
-                static constexpr Address k_addr = k_baseAddr + k_offset;
+                static constexpr Common::Word k_offset = 0x20;
+                static constexpr Common::Address k_addr = k_baseAddr + k_offset;
 
                 // Set the alternate function of pins 0-7.
                 static void set(GpioPin pin, GpioAltFunc altFunction)
                 {
                     const auto intPin = static_cast<int>(pin);
                     assert(0 <= intPin && intPin <= 7);
-                    volatile Word* p = reinterpret_cast<Word*>(k_addr);
-                    *p = set_bits(*p, intPin << 2, 4, altFunction);
+                    volatile Common::Word* p = reinterpret_cast<Common::Word*>(k_addr);
+                    *p = Util::set_bits(*p, intPin << 2, 4, altFunction);
                 }
 
                 // Get the alternate function of pins 0-7.
@@ -538,57 +544,57 @@ namespace Ahb1::Gpio
                 {
                     const auto intPin = static_cast<int>(pin);
                     assert(0 <= intPin && intPin <= 7);
-                    volatile Word* p = reinterpret_cast<Word*>(k_addr);
-                    return extract_bits_as<GpioAltFunc>(*p, intPin << 2, 4);
+                    volatile Common::Word* p = reinterpret_cast<Common::Word*>(k_addr);
+                    return Util::extract_bits_as<GpioAltFunc>(*p, intPin << 2, 4);
                 }
 
-                using Afrl0 = Bits<k_addr, 0, 4, Pin0AfValues>;
-                using Afrl1 = Bits<k_addr, 4, 4, Pin1AfValues>;
-                using Afrl2 = Bits<k_addr, 8, 4, Pin2AfValues>;
-                using Afrl3 = Bits<k_addr, 12, 4, Pin3AfValues>;
-                using Afrl4 = Bits<k_addr, 16, 4, Pin4AfValues>;
-                using Afrl5 = Bits<k_addr, 20, 4, Pin5AfValues>;
-                using Afrl6 = Bits<k_addr, 24, 4, Pin6AfValues>;
-                using Afrl7 = Bits<k_addr, 28, 4, Pin7AfValues>;
+                using Afrl0 = Util::Bits<k_addr, 0, 4, Pin0AfValues>;
+                using Afrl1 = Util::Bits<k_addr, 4, 4, Pin1AfValues>;
+                using Afrl2 = Util::Bits<k_addr, 8, 4, Pin2AfValues>;
+                using Afrl3 = Util::Bits<k_addr, 12, 4, Pin3AfValues>;
+                using Afrl4 = Util::Bits<k_addr, 16, 4, Pin4AfValues>;
+                using Afrl5 = Util::Bits<k_addr, 20, 4, Pin5AfValues>;
+                using Afrl6 = Util::Bits<k_addr, 24, 4, Pin6AfValues>;
+                using Afrl7 = Util::Bits<k_addr, 28, 4, Pin7AfValues>;
             };
 
             // Alternate function register, high word.
             struct Afrh
             {
-                static constexpr Word k_offset = 0x24;
-                static constexpr Address k_addr = k_baseAddr + k_offset;
+                static constexpr Common::Word k_offset = 0x24;
+                static constexpr Common::Address k_addr = k_baseAddr + k_offset;
 
                 // Set the alternate function of pins 8-15.
                 static void set(GpioPin pin, GpioAltFunc altFunction)
                 {
                     const auto intPin = static_cast<int>(pin);
-                    assert(8 <= intPin && intPin <= 15);
-                    volatile Word* p = reinterpret_cast<Word*>(k_addr);
-                    *p = set_bits(*p, (intPin - 8) << 2, 4, altFunction);
+                    assert(8 <= intPin && intPin < k_pinCount);
+                    volatile Common::Word* p = reinterpret_cast<Common::Word*>(k_addr);
+                    *p = Util::set_bits(*p, (intPin - 8) << 2, 4, altFunction);
                 }
 
                 // Get the alternate function of pins 8-15.
                 static GpioAltFunc get(GpioPin pin)
                 {
                     const auto intPin = static_cast<int>(pin);
-                    assert(8 <= intPin && intPin <= 15);
-                    volatile Word* p = reinterpret_cast<Word*>(k_addr);
-                    return extract_bits_as<GpioAltFunc>(*p, (intPin - 8) << 2, 4);
+                    assert(8 <= intPin && intPin < k_pinCount);
+                    volatile Common::Word* p = reinterpret_cast<Common::Word*>(k_addr);
+                    return Util::extract_bits_as<GpioAltFunc>(*p, (intPin - 8) << 2, 4);
                 }
 
-                using Afrh8 = Bits<k_addr, 0, 4, Pin8AfValues>;
-                using Afrh9 = Bits<k_addr, 4, 4, Pin9AfValues>;
-                using Afrh10 = Bits<k_addr, 8, 4, Pin10AfValues>;
-                using Afrh11 = Bits<k_addr, 12, 4, Pin11AfValues>;
-                using Afrh12 = Bits<k_addr, 16, 4, Pin12AfValues>;
-                using Afrh13 = Bits<k_addr, 20, 4, Pin13AfValues>;
-                using Afrh14 = Bits<k_addr, 24, 4, Pin14AfValues>;
-                using Afrh15 = Bits<k_addr, 28, 4, Pin15AfValues>;
+                using Afrh8 = Util::Bits<k_addr, 0, 4, Pin8AfValues>;
+                using Afrh9 = Util::Bits<k_addr, 4, 4, Pin9AfValues>;
+                using Afrh10 = Util::Bits<k_addr, 8, 4, Pin10AfValues>;
+                using Afrh11 = Util::Bits<k_addr, 12, 4, Pin11AfValues>;
+                using Afrh12 = Util::Bits<k_addr, 16, 4, Pin12AfValues>;
+                using Afrh13 = Util::Bits<k_addr, 20, 4, Pin13AfValues>;
+                using Afrh14 = Util::Bits<k_addr, 24, 4, Pin14AfValues>;
+                using Afrh15 = Util::Bits<k_addr, 28, 4, Pin15AfValues>;
             };
         };
 
         // Alternate function values for GPIO port A pin 0.
-        enum class GpioA0AltFunc : Word
+        enum class GpioA0AltFunc : Common::Word
         {
             Af0_Na = 0,
             Af1_Tim2_Ch1_Etr = 1,
@@ -609,7 +615,7 @@ namespace Ahb1::Gpio
         };
 
         // Alternate function values for GPIO port A pin 8.
-        enum class GpioA8AltFunc : Word
+        enum class GpioA8AltFunc : Common::Word
         {
             Af0_Mco1 = 0,
             Af1_Tim1_Ch1 = 1,
@@ -630,7 +636,7 @@ namespace Ahb1::Gpio
         };
 
         // Alternate function values for GPIO port C pin 6.
-        enum class GpioC6AltFunc : Word
+        enum class GpioC6AltFunc : Common::Word
         {
             Af0_Na = 0,
             Af1_Na = 1,
@@ -651,7 +657,7 @@ namespace Ahb1::Gpio
         };
 
         // Alternate function values for GPIO port C pin 9.
-        enum class GpioC9AltFunc : Word
+        enum class GpioC9AltFunc : Common::Word
         {
             Af0_Mco2 = 0,
             Af1_Na = 1,
@@ -712,35 +718,35 @@ namespace Ahb1::Gpio
     } // namespace detail
 
     // GPIO port A.
-    using GpioA = detail::GpioX<0x4002'0000U, detail::GpioAAfValues>;
+    using GpioA = detail::GpioX<0, 0x4002'0000U, detail::GpioAAfValues>;
 
     // GPIO port B.
-    using GpioB = detail::GpioX<0x4002'0400U, detail::GpioXAfValues>;
+    using GpioB = detail::GpioX<1, 0x4002'0400U, detail::GpioXAfValues>;
 
     // GPIO port C.
-    using GpioC = detail::GpioX<0x4002'0800U, detail::GpioCAfValues>;
+    using GpioC = detail::GpioX<2, 0x4002'0800U, detail::GpioCAfValues>;
 
     // GPIO port D.
-    using GpioD = detail::GpioX<0x4002'0c00U, detail::GpioXAfValues>;
+    using GpioD = detail::GpioX<3, 0x4002'0c00U, detail::GpioXAfValues>;
 
     // GPIO port E.
-    using GpioE = detail::GpioX<0x4002'1000U, detail::GpioXAfValues>;
+    using GpioE = detail::GpioX<4, 0x4002'1000U, detail::GpioXAfValues>;
 
     // GPIO port F.
-    using GpioF = detail::GpioX<0x4002'1400U, detail::GpioXAfValues>;
+    using GpioF = detail::GpioX<5, 0x4002'1400U, detail::GpioXAfValues>;
 
     // GPIO port G.
-    using GpioG = detail::GpioX<0x4002'1800U, detail::GpioXAfValues>;
+    using GpioG = detail::GpioX<6, 0x4002'1800U, detail::GpioXAfValues>;
 
     // GPIO port H.
-    using GpioH = detail::GpioX<0x4002'1c00U, detail::GpioXAfValues>;
+    using GpioH = detail::GpioX<7, 0x4002'1c00U, detail::GpioXAfValues>;
 
     // GPIO port I.
-    using GpioI = detail::GpioX<0x4002'2000U, detail::GpioXAfValues>;
+    using GpioI = detail::GpioX<8, 0x4002'2000U, detail::GpioXAfValues>;
 
     // GPIO port J.
-    using GpioJ = detail::GpioX<0x4002'2400U, detail::GpioXAfValues>;
+    using GpioJ = detail::GpioX<9, 0x4002'2400U, detail::GpioXAfValues>;
 
     // GPIO port K.
-    using GpioK = detail::GpioX<0x4002'2800U, detail::GpioXAfValues>;
-} // namespace Ahb1::Gpio
+    using GpioK = detail::GpioX<10, 0x4002'2800U, detail::GpioXAfValues>;
+} // namespace Stm32f407::Ahb1::Gpio

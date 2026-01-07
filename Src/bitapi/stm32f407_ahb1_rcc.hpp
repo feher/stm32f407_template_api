@@ -3,7 +3,7 @@
 #include "stm32f407_utils.hpp"
 
 // Reset and Clock Control.
-namespace Ahb1::Rcc
+namespace Stm32f407::Ahb1::Rcc
 {
     static constexpr Address k_baseAddr = 0x4002'3800U;
 
@@ -201,4 +201,4 @@ namespace Ahb1::Rcc
         // Bit to enable System Configuration peripheral.
         using SysCfgEn = Bits<k_addr, 14, 1, Word>;
     } // namespace Apb2Enr
-} // namespace Ahb1::Rcc
+} // namespace Stm32f407::Ahb1::Rcc
