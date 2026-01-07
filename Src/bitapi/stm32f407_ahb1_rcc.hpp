@@ -1,17 +1,18 @@
 #pragma once
 
+#include "stm32f407_ahb1.hpp"
 #include "stm32f407_utils.hpp"
 
 // Reset and Clock Control.
 namespace Stm32f407::Ahb1::Rcc
 {
-    static constexpr Common::Address k_baseAddr = 0x4002'3800U;
+    static constexpr Common::Address k_addr = Ahb1::k_addr + 0x3800U;
 
     // Control register.
     namespace Cr
     {
         static constexpr Common::Word k_offset = 0x00;
-        static constexpr Common::Address k_addr = k_baseAddr + k_offset;
+        static constexpr Common::Address k_addr = Rcc::k_addr + k_offset;
         using HseOn = Util::Bits<k_addr, 16, 1, Common::Word>;
         using HseRdy = Util::Bits<k_addr, 16, 1, Common::Word>;
     } // namespace Cr
@@ -20,7 +21,7 @@ namespace Stm32f407::Ahb1::Rcc
     namespace Cfgr
     {
         static constexpr Common::Word k_offset = 0x08;
-        static constexpr Common::Address k_addr = k_baseAddr + k_offset;
+        static constexpr Common::Address k_addr = Rcc::k_addr + k_offset;
 
         // Generic MCO prescaler (divider) value.
         enum class McoXPreValue : Common::Word
@@ -73,7 +74,7 @@ namespace Stm32f407::Ahb1::Rcc
     namespace Ahb1Rstr
     {
         static constexpr Common::Word k_offset = 0x10;
-        static constexpr Common::Address k_addr = k_baseAddr + k_offset;
+        static constexpr Common::Address k_addr = Rcc::k_addr + k_offset;
 
         // Bit to reset GPIO port A.
         using GpioARst = Util::Bits<k_addr, 0, 1, Common::ResetBit>;
@@ -113,7 +114,7 @@ namespace Stm32f407::Ahb1::Rcc
     namespace Ahb1Enr
     {
         static constexpr Common::Word k_offset = 0x30;
-        static constexpr Common::Address k_addr = k_baseAddr + k_offset;
+        static constexpr Common::Address k_addr = Rcc::k_addr + k_offset;
 
         // Bit to enable GPIO port A.
         using GpioAEn = Util::Bits<k_addr, 0, 1, Common::EnDi>;
@@ -153,7 +154,7 @@ namespace Stm32f407::Ahb1::Rcc
     namespace Apb1Enr
     {
         static constexpr Common::Word k_offset = 0x40;
-        static constexpr Common::Address k_addr = k_baseAddr + k_offset;
+        static constexpr Common::Address k_addr = Rcc::k_addr + k_offset;
 
         // Bit to enable SPI controller #2.
         using Spi2En = Util::Bits<k_addr, 14, 1, Common::Word>;
@@ -187,7 +188,7 @@ namespace Stm32f407::Ahb1::Rcc
     namespace Apb2Enr
     {
         static constexpr Common::Word k_offset = 0x44;
-        static constexpr Common::Address k_addr = k_baseAddr + k_offset;
+        static constexpr Common::Address k_addr = Rcc::k_addr + k_offset;
 
         // Bit to enable USART controller #1.
         using Usart1En = Util::Bits<k_addr, 4, 1, Common::Word>;

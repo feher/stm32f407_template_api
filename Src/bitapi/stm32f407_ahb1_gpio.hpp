@@ -1,6 +1,8 @@
 #pragma once
 
+#include "stm32f407_ahb1.hpp"
 #include "stm32f407_utils.hpp"
+
 #include <cassert>
 
 namespace Stm32f407::Ahb1::Gpio
@@ -565,35 +567,35 @@ namespace Stm32f407::Ahb1::Gpio
     } // namespace detail
 
     // GPIO port A.
-    using GpioA = detail::GpioX<0, 0x4002'0000U, detail::GpioAAfValues>;
+    using GpioA = detail::GpioX<0, k_addr + 0x0000U, detail::GpioAAfValues>;
 
     // GPIO port B.
-    using GpioB = detail::GpioX<1, 0x4002'0400U, detail::GpioXAfValues>;
+    using GpioB = detail::GpioX<1, k_addr + 0x0400U, detail::GpioXAfValues>;
 
     // GPIO port C.
-    using GpioC = detail::GpioX<2, 0x4002'0800U, detail::GpioCAfValues>;
+    using GpioC = detail::GpioX<2, k_addr + 0x0800U, detail::GpioCAfValues>;
 
     // GPIO port D.
-    using GpioD = detail::GpioX<3, 0x4002'0c00U, detail::GpioXAfValues>;
+    using GpioD = detail::GpioX<3, k_addr + 0x0c00U, detail::GpioXAfValues>;
 
     // GPIO port E.
-    using GpioE = detail::GpioX<4, 0x4002'1000U, detail::GpioXAfValues>;
+    using GpioE = detail::GpioX<4, k_addr + 0x1000U, detail::GpioXAfValues>;
 
     // GPIO port F.
-    using GpioF = detail::GpioX<5, 0x4002'1400U, detail::GpioXAfValues>;
+    using GpioF = detail::GpioX<5, k_addr + 0x1400U, detail::GpioXAfValues>;
 
     // GPIO port G.
-    using GpioG = detail::GpioX<6, 0x4002'1800U, detail::GpioXAfValues>;
+    using GpioG = detail::GpioX<6, k_addr + 0x1800U, detail::GpioXAfValues>;
 
     // GPIO port H.
-    using GpioH = detail::GpioX<7, 0x4002'1c00U, detail::GpioXAfValues>;
+    using GpioH = detail::GpioX<7, k_addr + 0x1c00U, detail::GpioXAfValues>;
 
     // GPIO port I.
-    using GpioI = detail::GpioX<8, 0x4002'2000U, detail::GpioXAfValues>;
+    using GpioI = detail::GpioX<8, k_addr + 0x2000U, detail::GpioXAfValues>;
 
     // GPIO port J.
-    using GpioJ = detail::GpioX<9, 0x4002'2400U, detail::GpioXAfValues>;
+    using GpioJ = detail::GpioX<9, k_addr + 0x2400U, detail::GpioXAfValues>;
 
     // GPIO port K.
-    using GpioK = detail::GpioX<10, 0x4002'2800U, detail::GpioXAfValues>;
+    using GpioK = detail::GpioX<10, k_addr + 0x2800U, detail::GpioXAfValues>;
 } // namespace Stm32f407::Ahb1::Gpio

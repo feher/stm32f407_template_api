@@ -1,5 +1,6 @@
 #pragma once
 
+#include "stm32f407_mem.hpp"
 #include "stm32f407_utils.hpp"
 
 #include <cassert>
@@ -9,9 +10,9 @@
 // Advanced High performance Bus 2.
 namespace Stm32f407::Core::Nvic
 {
-    static constexpr Common::Address k_baseAddr = 0xe000'e000U;
-    static constexpr Common::Address k_endAddr = 0xe000'ef00U;
-    static constexpr Common::Word k_memSize = k_endAddr - k_baseAddr + 1;
+    static constexpr Common::Address k_addr = Mem::k_corePeripheralsBaseAddr + 0xe100U;
+    static constexpr Common::Address k_endAddr = Mem::k_corePeripheralsBaseAddr + 0xe4efU;
+    static constexpr Common::Word k_memSize = k_endAddr - k_addr + 1;
 
     static constexpr int k_irqCount = 82;
 
@@ -47,10 +48,6 @@ namespace Stm32f407::Core::Nvic
         Uart5 = 53
     };
 
-} // namespace Stm32f407::Core::Nvic
-
-namespace Stm32f407::Core::Nvic
-{
     enum class IserReadValue : Common::Word
     {
         Disabled = 0,
@@ -64,7 +61,7 @@ namespace Stm32f407::Core::Nvic
     };
 
     // Interrupt Set-Enable Registers.
-    using Iser = Util::BitsRegister<k_baseAddr, 0x100, IrqNumber, 1, IserReadValue, IserWriteValue>;
+    using Iser = Util::BitsRegister<k_addr, 0x100 - 0x100, IrqNumber, 1, IserReadValue, IserWriteValue>;
 
     enum class IcerReadValue : Common::Word
     {
@@ -79,7 +76,7 @@ namespace Stm32f407::Core::Nvic
     };
 
     // Interrupt Clear-Enable Registers.
-    using Icer = Util::BitsRegister<k_baseAddr, 0x180, IrqNumber, 1, IcerReadValue, IcerWriteValue>;
+    using Icer = Util::BitsRegister<k_addr, 0x180 - 0x100, IrqNumber, 1, IcerReadValue, IcerWriteValue>;
 
     enum class IsprReadValue : Common::Word
     {
@@ -94,7 +91,7 @@ namespace Stm32f407::Core::Nvic
     };
 
     // Interrupt Set-Pending Registers.
-    using Ispr = Util::BitsRegister<k_baseAddr, 0x200, IrqNumber, 1, IsprReadValue, IsprWriteValue>;
+    using Ispr = Util::BitsRegister<k_addr, 0x200 - 0x100, IrqNumber, 1, IsprReadValue, IsprWriteValue>;
 
     enum class IcprReadValue : Common::Word
     {
@@ -109,7 +106,7 @@ namespace Stm32f407::Core::Nvic
     };
 
     // Interrupt Clear-Pending Registers.
-    using Icpr = Util::BitsRegister<k_baseAddr, 0x280, IrqNumber, 1, IcprReadValue, IcprWriteValue>;
+    using Icpr = Util::BitsRegister<k_addr, 0x280 - 0x100, IrqNumber, 1, IcprReadValue, IcprWriteValue>;
 
     enum class IabrReadValue : Common::Word
     {
@@ -118,7 +115,7 @@ namespace Stm32f407::Core::Nvic
     };
 
     // Interrupt Active-Bit Registers.
-    using Iabr = Util::BitsRegister<k_baseAddr, 0x300, IrqNumber, 1, IabrReadValue, void>;
+    using Iabr = Util::BitsRegister<k_addr, 0x300 - 0x100, IrqNumber, 1, IabrReadValue, void>;
 
 } // namespace Stm32f407::Core::Nvic
 

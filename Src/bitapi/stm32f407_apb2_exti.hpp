@@ -1,14 +1,13 @@
 #pragma once
 
-#include "stm32f407_utils.hpp"
+#include "stm32f407_apb2.hpp"
 
 #include <cassert>
-#include <utility> // to_underlying
 
 // EXTernal Interrupt controller.
 namespace Stm32f407::Apb2::Exti
 {
-    static constexpr Common::Address k_baseAddr = 0x4001'3C00U;
+    static constexpr Common::Address k_addr = Apb2::k_addr + 0x3C00U;
 
     static constexpr int k_lineCount = 23;
 
@@ -58,7 +57,7 @@ namespace Stm32f407::Apb2::Exti
 // EXTI Interrupt Mask Register
 namespace Stm32f407::Apb2::Exti::Imr
 {
-    using Bits = Util::BitsRegister<k_baseAddr, 0x00, LineNumber, 1, MrValue>;
+    using Bits = Util::BitsRegister<k_addr, 0x00, LineNumber, 1, MrValue>;
 
     using Mr0 = Util::Bits<Bits::k_addr, 0, 1, MrValue>;
     using Mr1 = Util::Bits<Bits::k_addr, 1, 1, MrValue>;
@@ -88,7 +87,7 @@ namespace Stm32f407::Apb2::Exti::Imr
 // EXTI Event Mask Register
 namespace Stm32f407::Apb2::Exti::Emr
 {
-    using Bits = Util::BitsRegister<k_baseAddr, 0x04, LineNumber, 1, MrValue>;
+    using Bits = Util::BitsRegister<k_addr, 0x04, LineNumber, 1, MrValue>;
 
     using Mr0 = Util::Bits<Bits::k_addr, 0, 1, MrValue>;
     using Mr1 = Util::Bits<Bits::k_addr, 1, 1, MrValue>;
@@ -118,7 +117,7 @@ namespace Stm32f407::Apb2::Exti::Emr
 // EXTI Rising Trigger Selection Register
 namespace Stm32f407::Apb2::Exti::Rtsr
 {
-    using Bits = Util::BitsRegister<k_baseAddr, 0x08, LineNumber, 1, TrValue>;
+    using Bits = Util::BitsRegister<k_addr, 0x08, LineNumber, 1, TrValue>;
 
     using Tr0 = Util::Bits<Bits::k_addr, 0, 1, TrValue>;
     using Tr1 = Util::Bits<Bits::k_addr, 1, 1, TrValue>;
@@ -148,7 +147,7 @@ namespace Stm32f407::Apb2::Exti::Rtsr
 // EXTI Falling Trigger Selection Register
 namespace Stm32f407::Apb2::Exti::Ftsr
 {
-    using Bits = Util::BitsRegister<k_baseAddr, 0x0c, LineNumber, 1, TrValue>;
+    using Bits = Util::BitsRegister<k_addr, 0x0c, LineNumber, 1, TrValue>;
 
     using Tr0 = Util::Bits<Bits::k_addr, 0, 1, TrValue>;
     using Tr1 = Util::Bits<Bits::k_addr, 1, 1, TrValue>;
@@ -189,7 +188,7 @@ namespace Stm32f407::Apb2::Exti::Swier
         TriggerInterrupt = 1
     };
 
-    using Bits = Util::BitsRegister<k_baseAddr, 0x10, LineNumber, 1, SwierValue>;
+    using Bits = Util::BitsRegister<k_addr, 0x10, LineNumber, 1, SwierValue>;
 
     using Swier0 = Util::Bits<Bits::k_addr, 0, 1, SwierValue>;
     using Swier1 = Util::Bits<Bits::k_addr, 1, 1, SwierValue>;
@@ -237,7 +236,7 @@ namespace Stm32f407::Apb2::Exti::Pr
         Clear = 1,
     };
 
-    using Bits = Util::BitsRegister<k_baseAddr, 0x14, LineNumber, 1, PrRead, PrWrite>;
+    using Bits = Util::BitsRegister<k_addr, 0x14, LineNumber, 1, PrRead, PrWrite>;
 
     using Pr0 = Util::Bits<Bits::k_addr, 0, 1, PrRead, PrWrite>;
     using Pr1 = Util::Bits<Bits::k_addr, 1, 1, PrRead, PrWrite>;

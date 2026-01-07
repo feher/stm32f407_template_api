@@ -1,17 +1,21 @@
 #pragma once
 
+#include "stm32f407_apb2.hpp"
 #include "stm32f407_utils.hpp"
 
-namespace Stm32f407::Apb2
+namespace Stm32f407::Apb2::details
 {
     template <Common::Address TVBaseAddr, Common::Address TVEndAddr>
     struct SpiX
     {
-        static constexpr Common::Address k_baseAddr = TVBaseAddr;
+        static constexpr Common::Address k_addr = TVBaseAddr;
         static constexpr Common::Address k_endAddr = TVEndAddr;
-        static constexpr Common::Word k_memSize = k_endAddr - k_baseAddr + 1;
+        static constexpr Common::Word k_memSize = k_endAddr - k_addr + 1;
     };
+} // namespace Stm32f407::Apb2::details
 
+namespace Stm32f407::Apb2
+{
     // SPI controller 1.
-    using Spi2 = SpiX<0x4001'3000U, 0x4001'33ffU>;
+    using Spi1 = details::SpiX<k_addr + 0x3000U, k_addr + 0x33ffU>;
 } // namespace Stm32f407::Apb2
