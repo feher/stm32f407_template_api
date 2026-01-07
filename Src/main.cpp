@@ -23,7 +23,8 @@
 #include "drivers/gpio.hpp"
 #include "drivers/util.hpp"
 
-using namespace Driver;
+using namespace Stm32f407::Driver;
+using namespace Stm32f407;
 
 int main(void)
 {
@@ -42,22 +43,22 @@ int main(void)
     // pin0.setOutputSpeed(GpioOutputSpeed::Low);
     pin0.setPupd(GpioPupd::NoPull);
 
-    pin0.configureInterruptMode(GpioInterruptMode::RisingAndFallingEdge, GpioPupd::NoPull);
+    // pin0.configureInterruptMode(GpioInterruptMode::RisingAndFallingEdge, GpioPupd::NoPull);
 
     while (true)
     {
-        if (pin0.readInput() == PinState::High)
+        if (pin0.readInput() == Common::PinState::High)
         {
-            if (pin12.readOutput() == PinState::Low)
+            if (pin12.readOutput() == Common::PinState::Low)
             {
-                pin12.writeOutput(PinState::High);
+                pin12.writeOutput(Common::PinState::High);
             }
         }
         else
         {
-            if (pin12.readOutput() == PinState::High)
+            if (pin12.readOutput() == Common::PinState::High)
             {
-                pin12.writeOutput(PinState::Low);
+                pin12.writeOutput(Common::PinState::Low);
             }
         }
     }

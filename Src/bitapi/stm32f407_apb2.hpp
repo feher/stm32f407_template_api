@@ -8,7 +8,7 @@
 // Advanced Peripheral Bus 2.
 namespace Stm32f407::Apb2
 {
-    static constexpr Address k_baseAddr = 0x4001'0000U;
-    static constexpr Address k_endAddr = 0x4001'6bffU;
-    static constexpr Word k_memSize = k_endAddr - k_baseAddr + 1;
+    static constexpr Common::Address k_baseAddr = 0x4001'0000U;
+    static constexpr Common::Address k_endAddr = 0x4001'6bffU;
+    static constexpr Common::Word k_memSize = k_endAddr - k_baseAddr + 1;
 } // namespace Stm32f407::Apb2

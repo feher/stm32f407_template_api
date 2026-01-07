@@ -113,8 +113,9 @@ namespace Stm32f407::Util
         static constexpr Common::Word k_offset = TVOffset;
         static constexpr Common::Address k_addr = TVBaseAddr + k_offset;
 
-        static void set(TBitsEnum bitsNum, TWriteValue value)
-            requires(!std::is_void_v<TWriteValue>)
+        template <typename T = TWriteValue>
+            requires(!std::is_void_v<T>)
+        static void set(TBitsEnum bitsNum, T value)
         {
             const auto intBitsNum = std::to_underlying(bitsNum);
             // assert(intIrq < k_irqCount);

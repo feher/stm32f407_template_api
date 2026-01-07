@@ -4,12 +4,12 @@
 
 namespace Stm32f407::Apb1
 {
-    template <Address TVBaseAddr, Address TVEndAddr>
+    template <Common::Address TVBaseAddr, Common::Address TVEndAddr>
     struct SpiX
     {
-        static constexpr Address k_baseAddr = TVBaseAddr;
-        static constexpr Address k_endAddr = TVEndAddr;
-        static constexpr Word k_memSize = k_endAddr - k_baseAddr + 1;
+        static constexpr Common::Address k_baseAddr = TVBaseAddr;
+        static constexpr Common::Address k_endAddr = TVEndAddr;
+        static constexpr Common::Word k_memSize = k_endAddr - k_baseAddr + 1;
     };
 
     // SPI controller 2.
