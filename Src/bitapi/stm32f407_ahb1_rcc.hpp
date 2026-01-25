@@ -4,7 +4,7 @@
 #include "stm32f407_utils.hpp"
 
 // Reset and Clock Control.
-namespace Stm32f407::Ahb1::Rcc
+namespace Stm32f407::Bitapi::Ahb1::Rcc
 {
     static constexpr Common::Address k_addr = Ahb1::k_addr + 0x3800U;
 
@@ -13,15 +13,125 @@ namespace Stm32f407::Ahb1::Rcc
     {
         static constexpr Common::Word k_offset = 0x00;
         static constexpr Common::Address k_addr = Rcc::k_addr + k_offset;
-        using HseOn = Util::Bits<k_addr, 16, 1, Common::Word>;
-        using HseRdy = Util::Bits<k_addr, 16, 1, Common::Word>;
+        using HsiOn = Util::Bits<k_addr, 0, 1, Common::OffOn>;
+        using HsiRdy = Util::RoBits<k_addr, 1, 1, Common::ReadyFlag>;
+        using HseOn = Util::Bits<k_addr, 16, 1, Common::OffOn>;
+        using HseRdy = Util::RoBits<k_addr, 17, 1, Common::ReadyFlag>;
     } // namespace Cr
+
+    // PLL configuration register.
+    namespace PllCfgr
+    {
+        static constexpr Common::Word k_offset = 0x04;
+        static constexpr Common::Address k_addr = Rcc::k_addr + k_offset;
+
+        enum class PllSrcValue
+        {
+            // HSI clock selected as PLL and PLLI2S clock entry.
+            Hsi = 0b0,
+            // HSE oscillator clock selected as PLL and PLLI2S clock entry.
+            Hse = 0b1
+        };
+
+        // Main PLL (PLL) and audio PLL (PLLI2S) entry clock source.
+        using PllSrc = Util::Bits<k_addr, 22, 1, PllSrcValue>;
+    } // namespace PllCfgr
 
     // Configuration register.
     namespace Cfgr
     {
         static constexpr Common::Word k_offset = 0x08;
         static constexpr Common::Address k_addr = Rcc::k_addr + k_offset;
+
+        enum class SwValue : Common::Word
+        {
+            Hsi = 0b00,
+            Hse = 0b01,
+            Pll = 0b10
+        };
+
+        // System clock switch.
+        using Sw = Util::Bits<k_addr, 0, 2, SwValue>;
+
+        enum class HPreValue : Common::Word
+        {
+            Div1 = 0,
+            Div2 = 0b1000,
+            Div4 = 0b1001,
+            Div8 = 0b1010,
+            Div16 = 0b1011,
+            Div64 = 0b1100,
+            Div128 = 0b1101,
+            Div256 = 0b1110,
+            Div512 = 0b1111
+        };
+
+        constexpr HPreValue intToHPre(unsigned int i)
+        {
+            switch (i)
+            {
+            case 1:
+                return HPreValue::Div1;
+            case 2:
+                return HPreValue::Div2;
+            case 4:
+                return HPreValue::Div4;
+            case 8:
+                return HPreValue::Div8;
+            case 16:
+                return HPreValue::Div16;
+            case 64:
+                return HPreValue::Div64;
+            case 128:
+                return HPreValue::Div128;
+            case 256:
+                return HPreValue::Div256;
+            case 512:
+                return HPreValue::Div512;
+            default:
+                return HPreValue::Div1;
+            }
+        }
+
+        // AHB prescaler.
+        using HPre = Util::Bits<k_addr, 4, 4, HPreValue>;
+
+        enum class PPreXValue : Common::Word
+        {
+            Div1 = 0b000,
+            Div2 = 0b100,
+            Div4 = 0b101,
+            Div8 = 0b110,
+            Div16 = 0b111,
+        };
+
+        constexpr PPreXValue intToPPre(unsigned int i)
+        {
+            switch (i)
+            {
+            case 1:
+                return PPreXValue::Div1;
+            case 2:
+                return PPreXValue::Div2;
+            case 4:
+                return PPreXValue::Div4;
+            case 8:
+                return PPreXValue::Div8;
+            case 16:
+                return PPreXValue::Div16;
+            default:
+                return PPreXValue::Div1;
+            }
+        }
+
+        using PPre1Value = PPreXValue;
+        using PPre2Value = PPreXValue;
+
+        // APB Low speed prescaler (APB1).
+        using PPre1 = Util::Bits<k_addr, 10, 3, PPre1Value>;
+
+        // APB high-speed prescaler (APB2).
+        using PPre2 = Util::Bits<k_addr, 13, 3, PPre2Value>;
 
         // Generic MCO prescaler (divider) value.
         enum class McoXPreValue : Common::Word
@@ -110,6 +220,24 @@ namespace Stm32f407::Ahb1::Rcc
         using GpioKRst = Util::Bits<k_addr, 10, 1, Common::ResetBit>;
     }; // namespace Ahb1Rstr
 
+    namespace Apb1Rstr
+    {
+        static constexpr Common::Word k_offset = 0x20;
+        static constexpr Common::Address k_addr = Rcc::k_addr + k_offset;
+
+        // TIM2 reset bit.
+        using Tim2Rst = Util::Bits<k_addr, 0, 1, Common::ResetBit>;
+
+        // TIM3 reset bit.
+        using Tim3Rst = Util::Bits<k_addr, 1, 1, Common::ResetBit>;
+
+        // TIM4 reset bit.
+        using Tim4Rst = Util::Bits<k_addr, 2, 1, Common::ResetBit>;
+
+        // TIM5 reset bit.
+        using Tim5Rst = Util::Bits<k_addr, 3, 1, Common::ResetBit>;
+    } // namespace Apb1Rstr
+
     // Peripheral-enable register for Advanced High speed Bus #1.
     namespace Ahb1Enr
     {
@@ -117,37 +245,37 @@ namespace Stm32f407::Ahb1::Rcc
         static constexpr Common::Address k_addr = Rcc::k_addr + k_offset;
 
         // Bit to enable GPIO port A.
-        using GpioAEn = Util::Bits<k_addr, 0, 1, Common::EnDi>;
+        using GpioAEn = Util::Bits<k_addr, 0, 1, Common::DiEn>;
 
         // Bit to enable GPIO port B.
-        using GpioBEn = Util::Bits<k_addr, 1, 1, Common::EnDi>;
+        using GpioBEn = Util::Bits<k_addr, 1, 1, Common::DiEn>;
 
         // Bit to enable GPIO port C.
-        using GpioCEn = Util::Bits<k_addr, 2, 1, Common::EnDi>;
+        using GpioCEn = Util::Bits<k_addr, 2, 1, Common::DiEn>;
 
         // Bit to enable GPIO port D.
-        using GpioDEn = Util::Bits<k_addr, 3, 1, Common::EnDi>;
+        using GpioDEn = Util::Bits<k_addr, 3, 1, Common::DiEn>;
 
         // Bit to enable GPIO port E.
-        using GpioEEn = Util::Bits<k_addr, 4, 1, Common::EnDi>;
+        using GpioEEn = Util::Bits<k_addr, 4, 1, Common::DiEn>;
 
         // Bit to enable GPIO port F.
-        using GpioFEn = Util::Bits<k_addr, 5, 1, Common::EnDi>;
+        using GpioFEn = Util::Bits<k_addr, 5, 1, Common::DiEn>;
 
         // Bit to enable GPIO port G.
-        using GpioGEn = Util::Bits<k_addr, 6, 1, Common::EnDi>;
+        using GpioGEn = Util::Bits<k_addr, 6, 1, Common::DiEn>;
 
         // Bit to enable GPIO port H.
-        using GpioHEn = Util::Bits<k_addr, 7, 1, Common::EnDi>;
+        using GpioHEn = Util::Bits<k_addr, 7, 1, Common::DiEn>;
 
         // Bit to enable GPIO port I.
-        using GpioIEn = Util::Bits<k_addr, 8, 1, Common::EnDi>;
+        using GpioIEn = Util::Bits<k_addr, 8, 1, Common::DiEn>;
 
         // Bit to enable GPIO port J.
-        using GpioJEn = Util::Bits<k_addr, 9, 1, Common::EnDi>;
+        using GpioJEn = Util::Bits<k_addr, 9, 1, Common::DiEn>;
 
         // Bit to enable GPIO port K.
-        using GpioKEn = Util::Bits<k_addr, 10, 1, Common::EnDi>;
+        using GpioKEn = Util::Bits<k_addr, 10, 1, Common::DiEn>;
     } // namespace Ahb1Enr
 
     // Peripheral-enable register for Advanced Peripheral Bus #1.
@@ -156,32 +284,62 @@ namespace Stm32f407::Ahb1::Rcc
         static constexpr Common::Word k_offset = 0x40;
         static constexpr Common::Address k_addr = Rcc::k_addr + k_offset;
 
+        // TIM2 clock enable.
+        using Tim2En = Util::Bits<k_addr, 0, 1, Common::DiEn>;
+
+        // TIM3 clock enable.
+        using Tim3En = Util::Bits<k_addr, 1, 1, Common::DiEn>;
+
+        // TIM4 clock enable.
+        using Tim4En = Util::Bits<k_addr, 2, 1, Common::DiEn>;
+
+        // TIM5 clock enable.
+        using Tim5En = Util::Bits<k_addr, 3, 1, Common::DiEn>;
+
+        // TIM6 clock enable.
+        using Tim6En = Util::Bits<k_addr, 4, 1, Common::DiEn>;
+
+        // TIM7 clock enable.
+        using Tim7En = Util::Bits<k_addr, 5, 1, Common::DiEn>;
+
+        // TIM12 clock enable.
+        using Tim12En = Util::Bits<k_addr, 6, 1, Common::DiEn>;
+
+        // TIM13 clock enable.
+        using Tim13En = Util::Bits<k_addr, 7, 1, Common::DiEn>;
+
+        // TIM14 clock enable.
+        using Tim14En = Util::Bits<k_addr, 8, 1, Common::DiEn>;
+
+        // Window watchdog clock enable.
+        using WwdgEn = Util::Bits<k_addr, 11, 1, Common::DiEn>;
+
         // Bit to enable SPI controller #2.
-        using Spi2En = Util::Bits<k_addr, 14, 1, Common::Word>;
+        using Spi2En = Util::Bits<k_addr, 14, 1, Common::DiEn>;
 
         // Bit to enable SPI controller #3.
-        using Spi3En = Util::Bits<k_addr, 15, 1, Common::Word>;
+        using Spi3En = Util::Bits<k_addr, 15, 1, Common::DiEn>;
 
         // Bit to enable USART controller #2.
-        using Usart2En = Util::Bits<k_addr, 17, 1, Common::Word>;
+        using Usart2En = Util::Bits<k_addr, 17, 1, Common::DiEn>;
 
         // Bit to enable USART controller #3.
-        using Usart3En = Util::Bits<k_addr, 18, 1, Common::Word>;
+        using Usart3En = Util::Bits<k_addr, 18, 1, Common::DiEn>;
 
         // Bit to enable UART controller #4.
-        using Uart4En = Util::Bits<k_addr, 19, 1, Common::Word>;
+        using Uart4En = Util::Bits<k_addr, 19, 1, Common::DiEn>;
 
         // Bit to enable UART controller #5.
-        using Uart5En = Util::Bits<k_addr, 20, 1, Common::Word>;
+        using Uart5En = Util::Bits<k_addr, 20, 1, Common::DiEn>;
 
         // Bit to enable I2C controller #1.
-        using I2c1En = Util::Bits<k_addr, 21, 1, Common::Word>;
+        using I2c1En = Util::Bits<k_addr, 21, 1, Common::DiEn>;
 
         // Bit to enable I2C controller #2.
-        using I2c2En = Util::Bits<k_addr, 22, 1, Common::Word>;
+        using I2c2En = Util::Bits<k_addr, 22, 1, Common::DiEn>;
 
         // Bit to enable I2C controller #3.
-        using I2c3En = Util::Bits<k_addr, 23, 1, Common::Word>;
+        using I2c3En = Util::Bits<k_addr, 23, 1, Common::DiEn>;
     } // namespace Apb1Enr
 
     // Peripheral-enable register for Advanced Peripheral Bus #2.
@@ -191,15 +349,15 @@ namespace Stm32f407::Ahb1::Rcc
         static constexpr Common::Address k_addr = Rcc::k_addr + k_offset;
 
         // Bit to enable USART controller #1.
-        using Usart1En = Util::Bits<k_addr, 4, 1, Common::Word>;
+        using Usart1En = Util::Bits<k_addr, 4, 1, Common::DiEn>;
 
         // Bit to enable USART controller #6.
-        using Usart6En = Util::Bits<k_addr, 5, 1, Common::Word>;
+        using Usart6En = Util::Bits<k_addr, 5, 1, Common::DiEn>;
 
         // Bit to enable SPI controller #1.
-        using Spi1En = Util::Bits<k_addr, 12, 1, Common::Word>;
+        using Spi1En = Util::Bits<k_addr, 12, 1, Common::DiEn>;
 
         // Bit to enable System Configuration peripheral.
-        using SysCfgEn = Util::Bits<k_addr, 14, 1, Common::Word>;
+        using SysCfgEn = Util::Bits<k_addr, 14, 1, Common::DiEn>;
     } // namespace Apb2Enr
-} // namespace Stm32f407::Ahb1::Rcc
+} // namespace Stm32f407::Bitapi::Ahb1::Rcc

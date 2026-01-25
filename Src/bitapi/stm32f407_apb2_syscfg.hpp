@@ -4,7 +4,7 @@
 #include "stm32f407_utils.hpp"
 
 // System Configuration Controller.
-namespace Stm32f407::Apb2::Syscfg
+namespace Stm32f407::Bitapi::Apb2::Syscfg
 {
     static constexpr Common::Address k_addr = Apb2::k_addr + 0x3800U;
     static constexpr Common::Address k_endAddr = 0x4001'3bffU;
@@ -36,13 +36,13 @@ namespace Stm32f407::Apb2::Syscfg
         GpioG = 0b0110,
         GpioH = 0b0111
     };
-} // namespace Stm32f407::Apb2::Syscfg
+} // namespace Stm32f407::Bitapi::Apb2::Syscfg
 
 // SYSCFG External Interrupt Configuration Register 1.
 //
 // These bits are written by software to select the source input for the EXTIx
 // external interrupt.
-namespace Stm32f407::Apb2::Syscfg::Exticr1
+namespace Stm32f407::Bitapi::Apb2::Syscfg::Exticr1
 {
     static constexpr Common::Word k_offset = 0x08;
     static constexpr Common::Address k_addr = Syscfg::k_addr + k_offset;
@@ -51,13 +51,13 @@ namespace Stm32f407::Apb2::Syscfg::Exticr1
     using Exit1 = Util::Bits<k_addr, 4, 4, ExtiGpioAI>;
     using Exit2 = Util::Bits<k_addr, 8, 4, ExtiGpioAI>;
     using Exit3 = Util::Bits<k_addr, 12, 4, ExtiGpioAI>;
-} // namespace Stm32f407::Apb2::Syscfg::Exticr1
+} // namespace Stm32f407::Bitapi::Apb2::Syscfg::Exticr1
 
 // SYSCFG External Interrupt Configuration Register 2.
 //
 // These bits are written by software to select the source input for the EXTIx
 // external interrupt.
-namespace Stm32f407::Apb2::Syscfg::Exticr2
+namespace Stm32f407::Bitapi::Apb2::Syscfg::Exticr2
 {
     static constexpr Common::Word k_offset = 0x0c;
     static constexpr Common::Address k_addr = Syscfg::k_addr + k_offset;
@@ -66,13 +66,13 @@ namespace Stm32f407::Apb2::Syscfg::Exticr2
     using Exit5 = Util::Bits<k_addr, 4, 4, ExtiGpioAI>;
     using Exit6 = Util::Bits<k_addr, 8, 4, ExtiGpioAI>;
     using Exit7 = Util::Bits<k_addr, 12, 4, ExtiGpioAI>;
-} // namespace Stm32f407::Apb2::Syscfg::Exticr2
+} // namespace Stm32f407::Bitapi::Apb2::Syscfg::Exticr2
 
 // SYSCFG External Interrupt Configuration Register 3.
 //
 // These bits are written by software to select the source input for the EXTIx
 // external interrupt.
-namespace Stm32f407::Apb2::Syscfg::Exticr3
+namespace Stm32f407::Bitapi::Apb2::Syscfg::Exticr3
 {
     static constexpr Common::Word k_offset = 0x10;
     static constexpr Common::Address k_addr = Syscfg::k_addr + k_offset;
@@ -81,7 +81,7 @@ namespace Stm32f407::Apb2::Syscfg::Exticr3
     using Exit9 = Util::Bits<k_addr, 4, 4, ExtiGpioAI>;
     using Exit10 = Util::Bits<k_addr, 8, 4, ExtiGpioAI>;
     using Exit11 = Util::Bits<k_addr, 12, 4, ExtiGpioAI>;
-} // namespace Stm32f407::Apb2::Syscfg::Exticr3
+} // namespace Stm32f407::Bitapi::Apb2::Syscfg::Exticr3
 
 // SYSCFG External Interrupt Configuration Register 4.
 //
@@ -89,7 +89,7 @@ namespace Stm32f407::Apb2::Syscfg::Exticr3
 // external interrupt.
 //
 // GPIO port I is not used.
-namespace Stm32f407::Apb2::Syscfg::Exticr4
+namespace Stm32f407::Bitapi::Apb2::Syscfg::Exticr4
 {
     static constexpr Common::Word k_offset = 0x14;
     static constexpr Common::Address k_addr = Syscfg::k_addr + k_offset;
@@ -98,4 +98,4 @@ namespace Stm32f407::Apb2::Syscfg::Exticr4
     using Exit13 = Util::Bits<k_addr, 4, 4, ExtiGpioAH>;
     using Exit14 = Util::Bits<k_addr, 8, 4, ExtiGpioAH>;
     using Exit15 = Util::Bits<k_addr, 12, 4, ExtiGpioAH>;
-} // namespace Stm32f407::Apb2::Syscfg::Exticr4
+} // namespace Stm32f407::Bitapi::Apb2::Syscfg::Exticr4

@@ -5,7 +5,7 @@
 #include <cassert>
 
 // EXTernal Interrupt controller.
-namespace Stm32f407::Apb2::Exti
+namespace Stm32f407::Bitapi::Apb2::Exti
 {
     static constexpr Common::Address k_addr = Apb2::k_addr + 0x3C00U;
 
@@ -52,10 +52,10 @@ namespace Stm32f407::Apb2::Exti
         TriggerDisabled = 0,
         TriggerEnabled = 1
     };
-} // namespace Stm32f407::Apb2::Exti
+} // namespace Stm32f407::Bitapi::Apb2::Exti
 
 // EXTI Interrupt Mask Register
-namespace Stm32f407::Apb2::Exti::Imr
+namespace Stm32f407::Bitapi::Apb2::Exti::Imr
 {
     using Bits = Util::BitsRegister<k_addr, 0x00, LineNumber, 1, MrValue>;
 
@@ -82,10 +82,10 @@ namespace Stm32f407::Apb2::Exti::Imr
     using Mr20 = Util::Bits<Bits::k_addr, 20, 1, MrValue>;
     using Mr21 = Util::Bits<Bits::k_addr, 21, 1, MrValue>;
     using Mr22 = Util::Bits<Bits::k_addr, 22, 1, MrValue>;
-} // namespace Stm32f407::Apb2::Exti::Imr
+} // namespace Stm32f407::Bitapi::Apb2::Exti::Imr
 
 // EXTI Event Mask Register
-namespace Stm32f407::Apb2::Exti::Emr
+namespace Stm32f407::Bitapi::Apb2::Exti::Emr
 {
     using Bits = Util::BitsRegister<k_addr, 0x04, LineNumber, 1, MrValue>;
 
@@ -112,10 +112,10 @@ namespace Stm32f407::Apb2::Exti::Emr
     using Mr20 = Util::Bits<Bits::k_addr, 20, 1, MrValue>;
     using Mr21 = Util::Bits<Bits::k_addr, 21, 1, MrValue>;
     using Mr22 = Util::Bits<Bits::k_addr, 22, 1, MrValue>;
-} // namespace Stm32f407::Apb2::Exti::Emr
+} // namespace Stm32f407::Bitapi::Apb2::Exti::Emr
 
 // EXTI Rising Trigger Selection Register
-namespace Stm32f407::Apb2::Exti::Rtsr
+namespace Stm32f407::Bitapi::Apb2::Exti::Rtsr
 {
     using Bits = Util::BitsRegister<k_addr, 0x08, LineNumber, 1, TrValue>;
 
@@ -142,10 +142,10 @@ namespace Stm32f407::Apb2::Exti::Rtsr
     using Tr20 = Util::Bits<Bits::k_addr, 20, 1, TrValue>;
     using Tr21 = Util::Bits<Bits::k_addr, 21, 1, TrValue>;
     using Tr22 = Util::Bits<Bits::k_addr, 22, 1, TrValue>;
-} // namespace Stm32f407::Apb2::Exti::Rtsr
+} // namespace Stm32f407::Bitapi::Apb2::Exti::Rtsr
 
 // EXTI Falling Trigger Selection Register
-namespace Stm32f407::Apb2::Exti::Ftsr
+namespace Stm32f407::Bitapi::Apb2::Exti::Ftsr
 {
     using Bits = Util::BitsRegister<k_addr, 0x0c, LineNumber, 1, TrValue>;
 
@@ -172,7 +172,7 @@ namespace Stm32f407::Apb2::Exti::Ftsr
     using Tr20 = Util::Bits<Bits::k_addr, 20, 1, TrValue>;
     using Tr21 = Util::Bits<Bits::k_addr, 21, 1, TrValue>;
     using Tr22 = Util::Bits<Bits::k_addr, 22, 1, TrValue>;
-} // namespace Stm32f407::Apb2::Exti::Ftsr
+} // namespace Stm32f407::Bitapi::Apb2::Exti::Ftsr
 
 // EXTI Software Interrupt Event Register
 //
@@ -180,7 +180,7 @@ namespace Stm32f407::Apb2::Exti::Ftsr
 // set at '0' sets the corresponding pending bit in the EXTI_PR register, thus resulting in an
 // interrupt request generation.
 // This bit is cleared by clearing the corresponding bit in EXTI_PR (by writing a 1 to the bit).
-namespace Stm32f407::Apb2::Exti::Swier
+namespace Stm32f407::Bitapi::Apb2::Exti::Swier
 {
     // Software Interrupt Event Register value.
     enum class SwierValue : Common::Word
@@ -213,7 +213,7 @@ namespace Stm32f407::Apb2::Exti::Swier
     using Swier20 = Util::Bits<Bits::k_addr, 20, 1, SwierValue>;
     using Swier21 = Util::Bits<Bits::k_addr, 21, 1, SwierValue>;
     using Swier22 = Util::Bits<Bits::k_addr, 22, 1, SwierValue>;
-} // namespace Stm32f407::Apb2::Exti::Swier
+} // namespace Stm32f407::Bitapi::Apb2::Exti::Swier
 
 // EXTI Pending Register
 //
@@ -221,7 +221,7 @@ namespace Stm32f407::Apb2::Exti::Swier
 // 1: selected trigger request occurred
 // This bit is set when the selected edge event arrives on the external interrupt line.
 // This bit is cleared by programming it to ‘1’.
-namespace Stm32f407::Apb2::Exti::Pr
+namespace Stm32f407::Bitapi::Apb2::Exti::Pr
 {
     // Pending Register value.
     enum class PrRead : Common::Word
@@ -261,4 +261,4 @@ namespace Stm32f407::Apb2::Exti::Pr
     using Pr20 = Util::Bits<Bits::k_addr, 20, 1, PrRead, PrWrite>;
     using Pr21 = Util::Bits<Bits::k_addr, 21, 1, PrRead, PrWrite>;
     using Pr22 = Util::Bits<Bits::k_addr, 22, 1, PrRead, PrWrite>;
-} // namespace Stm32f407::Apb2::Exti::Pr
+} // namespace Stm32f407::Bitapi::Apb2::Exti::Pr

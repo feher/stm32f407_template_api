@@ -8,7 +8,7 @@
 #include <utility>
 
 // Advanced High performance Bus 2.
-namespace Stm32f407::Core::Nvic
+namespace Stm32f407::Bitapi::Core::Nvic
 {
     static constexpr Common::Address k_addr = Mem::k_corePeripheralsBaseAddr + 0xe100U;
     static constexpr Common::Address k_endAddr = Mem::k_corePeripheralsBaseAddr + 0xe4efU;
@@ -38,12 +38,16 @@ namespace Stm32f407::Core::Nvic
         Dma1Stream6 = 17,
         Adc = 18,
         Exti9_5 = 23,
+        Tim2 = 28,
+        Tim3 = 29,
+        Tim4 = 30,
         Spi1 = 35,
         Spi2 = 36,
         Usart1 = 37,
         Usart2 = 38,
         Usart3 = 39,
         Exti15_10 = 40,
+        Tim5 = 50,
         Uart4 = 52,
         Uart5 = 53
     };
@@ -117,13 +121,36 @@ namespace Stm32f407::Core::Nvic
     // Interrupt Active-Bit Registers.
     using Iabr = Util::BitsRegister<k_addr, 0x300 - 0x100, IrqNumber, 1, IabrReadValue, void>;
 
-} // namespace Stm32f407::Core::Nvic
+    enum class IprValue : Common::Word
+    {
+        Priority0 = 0b0000 << 4,
+        Priority1 = 0b0001 << 4,
+        Priority2 = 0b0010 << 4,
+        Priority3 = 0b0011 << 4,
+        Priority4 = 0b0100 << 4,
+        Priority5 = 0b0101 << 4,
+        Priority6 = 0b0110 << 4,
+        Priority7 = 0b0111 << 4,
+        Priority8 = 0b1000 << 4,
+        Priority9 = 0b1001 << 4,
+        Priority10 = 0b1010 << 4,
+        Priority11 = 0b1011 << 4,
+        Priority12 = 0b1100 << 4,
+        Priority13 = 0b1101 << 4,
+        Priority14 = 0b1110 << 4,
+        Priority15 = 0b1111 << 4
+    };
 
-namespace Stm32f407::Util
+    // Interrupt Priority Registers.
+    using Ipr = Util::BitsRegister<k_addr, 0x400 - 0x100, IrqNumber, 8, IprValue>;
+
+} // namespace Stm32f407::Bitapi::Core::Nvic
+
+namespace Stm32f407::Bitapi::Util
 {
     template <>
     inline Core::Nvic::IrqNumber maxEnumValue<Core::Nvic::IrqNumber>()
     {
         return Core::Nvic::IrqNumber::Uart5;
     }
-} // namespace Stm32f407::Util
+} // namespace Stm32f407::Bitapi::Util

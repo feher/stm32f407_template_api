@@ -26,7 +26,7 @@
 #define STM32F407_MEM_ADDR_PERI_AHB3_START 0xa000'0000U
 #endif
 
-namespace Stm32f407::Mem
+namespace Stm32f407::Bitapi::Mem
 {
     static constexpr Common::Word k_flashSize = 1 * 1024 * 1024; // 1 MiB
     static constexpr Common::Address k_flashBaseAddr = STM32F407_MEM_ADDR_FLASH_START;
@@ -57,4 +57,4 @@ namespace Stm32f407::Mem
     static constexpr Common::Word k_periAhb3Size = 0x1000; // 4096 KiB
     static constexpr Common::Address k_periAhb3BaseAddr = STM32F407_MEM_ADDR_PERI_AHB3_START;
     static constexpr Common::Address k_periAhb3EndAddr = k_periAhb3BaseAddr + k_periAhb3Size - 1;
-} // namespace Stm32f407::Mem
+} // namespace Stm32f407::Bitapi::Mem

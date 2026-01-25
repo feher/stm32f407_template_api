@@ -5,7 +5,7 @@
 
 #include <cassert>
 
-namespace Stm32f407::Ahb1::Gpio
+namespace Stm32f407::Bitapi::Ahb1::Gpio
 {
     static constexpr int k_pinCount = 16;
 
@@ -527,8 +527,8 @@ namespace Stm32f407::Ahb1::Gpio
         };
 
         template <typename T0, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6,
-                  typename T7, typename T8, typename T9, typename T10, typename T11, typename T12, typename T13,
-                  typename T14, typename T15>
+                typename T7, typename T8, typename T9, typename T10, typename T11, typename T12, typename T13,
+                typename T14, typename T15>
         struct GpioAfValues
         {
             using Pin0 = T0;
@@ -551,19 +551,18 @@ namespace Stm32f407::Ahb1::Gpio
 
         // Generic alternate function values for GPIO ports.
         using GpioXAfValues = GpioAfValues<GpioAltFunc, GpioAltFunc, GpioAltFunc, GpioAltFunc, GpioAltFunc, GpioAltFunc,
-                                           GpioAltFunc, GpioAltFunc, GpioAltFunc, GpioAltFunc, GpioAltFunc, GpioAltFunc,
-                                           GpioAltFunc, GpioAltFunc, GpioAltFunc, GpioAltFunc>;
+                GpioAltFunc, GpioAltFunc, GpioAltFunc, GpioAltFunc, GpioAltFunc, GpioAltFunc, GpioAltFunc, GpioAltFunc,
+                GpioAltFunc, GpioAltFunc>;
 
         // Alternate function values for GPIO port A.
-        using GpioAAfValues =
-            GpioAfValues<GpioA0AltFunc, GpioAltFunc, GpioAltFunc, GpioAltFunc, GpioAltFunc, GpioAltFunc, GpioAltFunc,
-                         GpioAltFunc, GpioA8AltFunc, GpioAltFunc, GpioAltFunc, GpioAltFunc, GpioAltFunc, GpioAltFunc,
-                         GpioAltFunc, GpioAltFunc>;
+        using GpioAAfValues = GpioAfValues<GpioA0AltFunc, GpioAltFunc, GpioAltFunc, GpioAltFunc, GpioAltFunc,
+                GpioAltFunc, GpioAltFunc, GpioAltFunc, GpioA8AltFunc, GpioAltFunc, GpioAltFunc, GpioAltFunc,
+                GpioAltFunc, GpioAltFunc, GpioAltFunc, GpioAltFunc>;
 
         // Alternate function values for GPIO port C.
         using GpioCAfValues = GpioAfValues<GpioAltFunc, GpioAltFunc, GpioAltFunc, GpioAltFunc, GpioAltFunc, GpioAltFunc,
-                                           GpioC6AltFunc, GpioAltFunc, GpioAltFunc, GpioC9AltFunc, GpioAltFunc,
-                                           GpioAltFunc, GpioAltFunc, GpioAltFunc, GpioAltFunc, GpioAltFunc>;
+                GpioC6AltFunc, GpioAltFunc, GpioAltFunc, GpioC9AltFunc, GpioAltFunc, GpioAltFunc, GpioAltFunc,
+                GpioAltFunc, GpioAltFunc, GpioAltFunc>;
     } // namespace detail
 
     // GPIO port A.
@@ -598,4 +597,4 @@ namespace Stm32f407::Ahb1::Gpio
 
     // GPIO port K.
     using GpioK = detail::GpioX<10, k_addr + 0x2800U, detail::GpioXAfValues>;
-} // namespace Stm32f407::Ahb1::Gpio
+} // namespace Stm32f407::Bitapi::Ahb1::Gpio

@@ -3,7 +3,7 @@
 #include "stm32f407_apb1.hpp"
 #include "stm32f407_utils.hpp"
 
-namespace Stm32f407::Apb1::detail
+namespace Stm32f407::Bitapi::Apb1::detail
 {
     template <Common::Address TVBaseAddr, Common::Address TVEndAddr>
     struct UsartX
@@ -12,9 +12,9 @@ namespace Stm32f407::Apb1::detail
         static constexpr Common::Address k_endAddr = TVEndAddr;
         static constexpr Common::Word k_memSize = k_endAddr - k_addr + 1;
     };
-} // namespace Stm32f407::Apb1::detail
+} // namespace Stm32f407::Bitapi::Apb1::detail
 
-namespace Stm32f407::Apb1
+namespace Stm32f407::Bitapi::Apb1
 {
     // USART controller 2.
     using Usart2 = detail::UsartX<k_addr + 0x4400U, k_addr + 0x47ffU>;
@@ -27,4 +27,4 @@ namespace Stm32f407::Apb1
 
     // UART controller 5.
     using Uart5 = detail::UsartX<k_addr + 0x5000U, k_addr + 0x53ffU>;
-} // namespace Stm32f407::Apb1
+} // namespace Stm32f407::Bitapi::Apb1

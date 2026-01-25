@@ -44,6 +44,10 @@ set(cpu_PARAMS
 set(sources_SRCS
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/main.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/drivers/util.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/drivers/clocks.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/drivers/gpio.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/drivers/timer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/drivers/generic_irq_handlers.cpp
 )
 
 # Include directories for each compiler
