@@ -168,7 +168,8 @@ namespace Stm32f407::Bitapi::Util
                 std::enable_if_t<!std::is_void_v<TWriteValue> && std::is_same_v<T, TWriteValue>, bool> = true>
         static void set(TBitsEnum bitsNum, T value)
         {
-            const auto intBitsNum = std::to_underlying(bitsNum);
+            // We don't use to_underlying() because we want to support unsigned int as well, not just enums.
+            const auto intBitsNum = static_cast<unsigned int>(bitsNum);
             // assert(intIrq < k_irqCount);
             const auto bitPos = intBitsNum * TVBitCount;
             const auto index = bitPos & ~0b11111U;    // irq / 32 bits
@@ -182,7 +183,8 @@ namespace Stm32f407::Bitapi::Util
         static TReadValue get(TBitsEnum bitsNum)
             requires(!std::is_void_v<TReadValue>)
         {
-            const auto intBitsNum = std::to_underlying(bitsNum);
+            // We don't use to_underlying() because we want to support unsigned int as well, not just enums.
+            const auto intBitsNum = static_cast<unsigned int>(bitsNum);
             // assert(intIrq && intIrq < k_irqCount);
             const auto bitPos = intBitsNum * TVBitCount;
             const auto index = bitPos & ~0b11111U;    // irq / 32 bits

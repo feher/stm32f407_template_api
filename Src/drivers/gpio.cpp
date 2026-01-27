@@ -2,7 +2,7 @@
 
 namespace Stm32f407::Driver::detail
 {
-    std::array<GpioIrqHandler, Bitapi::Apb2::Exti::k_lineCount> g_gpioIrqHandlers;
+    std::array<IrqHandler, Bitapi::Apb2::Exti::k_lineCount> g_gpioIrqHandlers;
 
     void gpioIrqHandler(unsigned int extiLine)
     {

@@ -17,62 +17,107 @@ namespace Stm32f407::Driver
     {
         extern std::array<TimerIrqHandler, 5> g_timerIrqHandlers;
 
-        template <unsigned int TVIndex, typename TClockEnableBits, typename TPeripheralResetBits, typename TTimer,
-                Bitapi::Core::Nvic::IrqNumber TVIrqNum>
+        template <unsigned int TVTimerNumber>
+        struct TimerTraits
+        {
+        };
+
+        template <>
+        struct TimerTraits<2>
+        {
+            static constexpr auto k_irqNum = Bitapi::Core::Nvic::IrqNumber::Tim2;
+            using Type = Bitapi::Apb1::Tim2_5::Tim2;
+            using ClockEnableBits = Bitapi::Ahb1::Rcc::Apb1Enr::Tim2En;
+            using PeripheralResetBits = Bitapi::Ahb1::Rcc::Apb1Rstr::Tim2Rst;
+        };
+
+        template <>
+        struct TimerTraits<3>
+        {
+            static constexpr auto k_irqNum = Bitapi::Core::Nvic::IrqNumber::Tim3;
+            using Type = Bitapi::Apb1::Tim2_5::Tim3;
+            using ClockEnableBits = Bitapi::Ahb1::Rcc::Apb1Enr::Tim3En;
+            using PeripheralResetBits = Bitapi::Ahb1::Rcc::Apb1Rstr::Tim3Rst;
+        };
+
+        template <>
+        struct TimerTraits<4>
+        {
+            static constexpr auto k_irqNum = Bitapi::Core::Nvic::IrqNumber::Tim4;
+            using Type = Bitapi::Apb1::Tim2_5::Tim4;
+            using ClockEnableBits = Bitapi::Ahb1::Rcc::Apb1Enr::Tim4En;
+            using PeripheralResetBits = Bitapi::Ahb1::Rcc::Apb1Rstr::Tim4Rst;
+        };
+
+        template <>
+        struct TimerTraits<5>
+        {
+            static constexpr auto k_irqNum = Bitapi::Core::Nvic::IrqNumber::Tim5;
+            using Type = Bitapi::Apb1::Tim2_5::Tim5;
+            using ClockEnableBits = Bitapi::Ahb1::Rcc::Apb1Enr::Tim5En;
+            using PeripheralResetBits = Bitapi::Ahb1::Rcc::Apb1Rstr::Tim5Rst;
+        };
+
+        template <unsigned int TVTimerNumber>
         class TimerX final
         {
+        private:
+            using TimerType = TimerTraits<TVTimerNumber>::Type;
+            using ClockEnableBits = TimerTraits<TVTimerNumber>::ClockEnableBits;
+            using PeripheralResetBits = TimerTraits<TVTimerNumber>::PeripheralResetBits;
+
         public:
-            using ValueType = typename TTimer::ValueType;
+            using ValueType = typename TimerType::ValueType;
 
             TimerX()
             {
-                TClockEnableBits::set(Bitapi::Common::DiEn::Enabled);
+                ClockEnableBits::set(Bitapi::Common::DiEn::Enabled);
                 reset();
             }
 
             ~TimerX()
             {
                 reset();
-                TClockEnableBits::set(Bitapi::Common::DiEn::Disabled);
+                ClockEnableBits::set(Bitapi::Common::DiEn::Disabled);
             }
 
             void reset()
             {
-                TPeripheralResetBits::set(Bitapi::Common::ResetBit::Reset);
-                TPeripheralResetBits::set(Bitapi::Common::ResetBit::NoReset);
+                PeripheralResetBits::set(Bitapi::Common::ResetBit::Reset);
+                PeripheralResetBits::set(Bitapi::Common::ResetBit::NoReset);
             }
 
             void setDirection(TimerDirection direction)
             {
-                TTimer::Cr1::Dir::set(direction);
+                TimerType::Cr1::Dir::set(direction);
             }
 
             TimerDirection getDirection() const
             {
-                return TTimer::Cr1::Dir::get();
+                return TimerType::Cr1::Dir::get();
             }
 
             void setOneShot(bool oneShot)
             {
-                TTimer::Cr1::Opm::set(oneShot ? Bitapi::Apb1::Tim2_5::OpmValue::CounterStopped
-                                              : Bitapi::Apb1::Tim2_5::OpmValue::CounterNotStopped);
+                TimerType::Cr1::Opm::set(oneShot ? Bitapi::Apb1::Tim2_5::OpmValue::CounterStopped
+                                                 : Bitapi::Apb1::Tim2_5::OpmValue::CounterNotStopped);
             }
 
             bool isOneShot() const
             {
-                return TTimer::Cr1::Opm::get() == Bitapi::Apb1::Tim2_5::OpmValue::CounterStopped;
+                return TimerType::Cr1::Opm::get() == Bitapi::Apb1::Tim2_5::OpmValue::CounterStopped;
             }
 
             // Sets the upper limit for the counter of the timer.
             // The timer fires when the counter reaches this limit.
             void setCounterLimit(ValueType period)
             {
-                TTimer::Arr::set(period);
+                TimerType::Arr::set(period);
             }
 
             ValueType getCounterLimit() const
             {
-                return TTimer::Arr::get();
+                return TimerType::Arr::get();
             }
 
             // Sets the timer period in milliseconds.
@@ -88,7 +133,7 @@ namespace Stm32f407::Driver
             unsigned int getPeriod() const
             {
                 constexpr auto ticksPerMs = getTicksPerMs();
-                const auto counterTicks = TTimer::Arr::get();
+                const auto counterTicks = TimerType::Arr::get();
                 return counterTicks / ticksPerMs;
             }
 
@@ -96,36 +141,36 @@ namespace Stm32f407::Driver
             // Essentially, slows down the timer.
             void setPrescaler(Bitapi::Common::HalfWord prescaler)
             {
-                TTimer::Psc::set(prescaler);
+                TimerType::Psc::set(prescaler);
             }
 
             Bitapi::Common::HalfWord getPrescaler() const
             {
-                return TTimer::Psc::get();
+                return TimerType::Psc::get();
             }
 
             // Manually set the timer's counter value.
-            void setCounter(typename TTimer::ValueType value)
+            void setCounter(typename TimerType::ValueType value)
             {
-                TTimer::Cnt::set(value);
+                TimerType::Cnt::set(value);
             }
 
             // Get the timer's current counter value.
-            typename TTimer::ValueType getCounter() const
+            typename TimerType::ValueType getCounter() const
             {
-                return TTimer::Cnt::get();
+                return TimerType::Cnt::get();
             }
 
             // Start the timer.
             void start()
             {
-                TTimer::Cr1::Cen::set(Bitapi::Common::DiEn::Enabled);
+                TimerType::Cr1::Cen::set(Bitapi::Common::DiEn::Enabled);
             }
 
             // Stop the timer.
             void stop()
             {
-                TTimer::Cr1::Cen::set(Bitapi::Common::DiEn::Disabled);
+                TimerType::Cr1::Cen::set(Bitapi::Common::DiEn::Disabled);
             }
 
             // Restart the timer.
@@ -146,45 +191,42 @@ namespace Stm32f407::Driver
 
             void enableInterrupt(TimerIrqHandler irqHandler)
             {
-                g_timerIrqHandlers[TVIndex] = std::move(irqHandler);
+                g_timerIrqHandlers[TVTimerNumber - 1] = std::move(irqHandler);
 
                 // Enable NVIC interrupt for this timer.
-                Bitapi::Core::Nvic::Iser::set(TVIrqNum, Bitapi::Core::Nvic::IserWriteValue::Enable);
+                constexpr auto irqNum = TimerTraits<TVTimerNumber>::k_irqNum;
+                Bitapi::Core::Nvic::Iser::set(irqNum, Bitapi::Core::Nvic::IserWriteValue::Enable);
 
                 // Enable update interrupt.
-                TTimer::Dier::Uie::set(Bitapi::Common::DiEn::Enabled);
+                TimerType::Dier::Uie::set(Bitapi::Common::DiEn::Enabled);
             }
 
             void disableInterrupt()
             {
                 // Disable update interrupt to avoid spurious interrupts.
-                TTimer::Dier::Uie::set(Bitapi::Common::DiEn::Disabled);
+                TimerType::Dier::Uie::set(Bitapi::Common::DiEn::Disabled);
 
                 // Disable NVIC interrupt for this timer.
-                Bitapi::Core::Nvic::Icer::set(TVIrqNum, Bitapi::Core::Nvic::IcerWriteValue::Disable);
+                constexpr auto irqNum = TimerTraits<TVTimerNumber>::k_irqNum;
+                Bitapi::Core::Nvic::Icer::set(irqNum, Bitapi::Core::Nvic::IcerWriteValue::Disable);
 
-                g_timerIrqHandlers[TVIndex] = nullptr;
+                g_timerIrqHandlers[TVTimerNumber - 1] = nullptr;
             }
 
         private:
             static constexpr unsigned int getTicksPerMs()
             {
-                constexpr auto clockHz = (2 <= (TVIndex + 1) && (TVIndex + 1) <= 5)
-                                                 ? Stm32f407::Bitapi::Clocks::k_apb1Hz
-                                                 : Stm32f407::Bitapi::Clocks::k_apb2Hz;
+                constexpr auto clockHz = (2 <= TVTimerNumber && TVTimerNumber <= 5) ? Bitapi::Clocks::k_apb1Hz
+                                                                                    : Bitapi::Clocks::k_apb2Hz;
                 constexpr auto tickPerMs = clockHz / 1000;
                 return tickPerMs;
             }
         };
     } // namespace detail
 
-    using Tim2 = detail::TimerX<1, Bitapi::Ahb1::Rcc::Apb1Enr::Tim2En, Bitapi::Ahb1::Rcc::Apb1Rstr::Tim2Rst,
-            Bitapi::Apb1::Tim2_5::Tim2, Bitapi::Core::Nvic::IrqNumber::Tim2>;
-    using Tim3 = detail::TimerX<2, Bitapi::Ahb1::Rcc::Apb1Enr::Tim3En, Bitapi::Ahb1::Rcc::Apb1Rstr::Tim3Rst,
-            Bitapi::Apb1::Tim2_5::Tim3, Bitapi::Core::Nvic::IrqNumber::Tim3>;
-    using Tim4 = detail::TimerX<3, Bitapi::Ahb1::Rcc::Apb1Enr::Tim4En, Bitapi::Ahb1::Rcc::Apb1Rstr::Tim4Rst,
-            Bitapi::Apb1::Tim2_5::Tim4, Bitapi::Core::Nvic::IrqNumber::Tim4>;
-    using Tim5 = detail::TimerX<4, Bitapi::Ahb1::Rcc::Apb1Enr::Tim5En, Bitapi::Ahb1::Rcc::Apb1Rstr::Tim5Rst,
-            Bitapi::Apb1::Tim2_5::Tim5, Bitapi::Core::Nvic::IrqNumber::Tim5>;
+    using Tim2 = detail::TimerX<2>;
+    using Tim3 = detail::TimerX<3>;
+    using Tim4 = detail::TimerX<4>;
+    using Tim5 = detail::TimerX<5>;
 
 } // namespace Stm32f407::Driver

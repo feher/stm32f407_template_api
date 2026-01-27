@@ -236,6 +236,12 @@ namespace Stm32f407::Bitapi::Ahb1::Rcc
 
         // TIM5 reset bit.
         using Tim5Rst = Util::Bits<k_addr, 3, 1, Common::ResetBit>;
+
+        // SPI2 reset bit.
+        using Spi2Rst = Util::Bits<k_addr, 14, 1, Common::ResetBit>;
+
+        // SPI3 reset bit.
+        using Spi3Rst = Util::Bits<k_addr, 15, 1, Common::ResetBit>;
     } // namespace Apb1Rstr
 
     // Peripheral-enable register for Advanced High speed Bus #1.

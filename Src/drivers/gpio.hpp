@@ -1,5 +1,7 @@
 #pragma once
 
+#include "common.hpp"
+
 #include "Src/bitapi/stm32f407_ahb1_gpio.hpp"
 #include "Src/bitapi/stm32f407_ahb1_rcc.hpp"
 #include "Src/bitapi/stm32f407_apb2_exti.hpp"
@@ -13,15 +15,17 @@
 
 namespace Stm32f407::Driver
 {
+    using GpioPort = Bitapi::Ahb1::Gpio::GpioPort;
     using GpioPin = Bitapi::Ahb1::Gpio::GpioPin;
     using GpioMode = Bitapi::Ahb1::Gpio::GpioMode;
     using GpioOutputType = Bitapi::Ahb1::Gpio::GpioOutputType;
     using GpioOutputSpeed = Bitapi::Ahb1::Gpio::GpioOutputSpeed;
     using GpioPupd = Bitapi::Ahb1::Gpio::GpioPupd;
     using GpioAltFunc = Bitapi::Ahb1::Gpio::GpioAltFunc;
-    using GpioIrqHandler = std::function<void()>;
 
-    using IrqPriority = Bitapi::Core::Nvic::IprValue;
+    using GpioAltFuncA8 = Bitapi::Ahb1::Gpio::GpioPinTraits<GpioPort::PortA, GpioPin::Pin8>::AltFunc;
+    using GpioAltFuncB15 = Bitapi::Ahb1::Gpio::GpioPinTraits<GpioPort::PortB, GpioPin::Pin15>::AltFunc;
+    using GpioAltFuncC9 = Bitapi::Ahb1::Gpio::GpioPinTraits<GpioPort::PortC, GpioPin::Pin9>::AltFunc;
 
     enum class GpioInterruptMode : Bitapi::Common::Word
     {
@@ -32,84 +36,289 @@ namespace Stm32f407::Driver
 
     namespace detail
     {
-        extern std::array<GpioIrqHandler, Bitapi::Apb2::Exti::k_lineCount> g_gpioIrqHandlers;
+        extern std::array<IrqHandler, Bitapi::Apb2::Exti::k_lineCount> g_gpioIrqHandlers;
 
-        template <typename TGpioPort, GpioPin TVPin, typename TSyscfgExticrBits>
+        template <GpioPort TVPort>
+        struct GpioPortTraits
+        {
+        };
+
+        template <>
+        struct GpioPortTraits<GpioPort::PortA>
+        {
+            using Type = Bitapi::Ahb1::Gpio::GpioA;
+            using ClockEnableBits = Bitapi::Ahb1::Rcc::Ahb1Enr::GpioAEn;
+            using PeripheralResetBits = Bitapi::Ahb1::Rcc::Ahb1Rstr::GpioARst;
+        };
+
+        template <>
+        struct GpioPortTraits<GpioPort::PortB>
+        {
+            using Type = Bitapi::Ahb1::Gpio::GpioB;
+            using ClockEnableBits = Bitapi::Ahb1::Rcc::Ahb1Enr::GpioBEn;
+            using PeripheralResetBits = Bitapi::Ahb1::Rcc::Ahb1Rstr::GpioBRst;
+        };
+
+        template <>
+        struct GpioPortTraits<GpioPort::PortC>
+        {
+            using Type = Bitapi::Ahb1::Gpio::GpioC;
+            using ClockEnableBits = Bitapi::Ahb1::Rcc::Ahb1Enr::GpioCEn;
+            using PeripheralResetBits = Bitapi::Ahb1::Rcc::Ahb1Rstr::GpioCRst;
+        };
+
+        template <>
+        struct GpioPortTraits<GpioPort::PortD>
+        {
+            using Type = Bitapi::Ahb1::Gpio::GpioD;
+            using ClockEnableBits = Bitapi::Ahb1::Rcc::Ahb1Enr::GpioDEn;
+            using PeripheralResetBits = Bitapi::Ahb1::Rcc::Ahb1Rstr::GpioDRst;
+        };
+
+        template <>
+        struct GpioPortTraits<GpioPort::PortE>
+        {
+            using Type = Bitapi::Ahb1::Gpio::GpioE;
+            using ClockEnableBits = Bitapi::Ahb1::Rcc::Ahb1Enr::GpioEEn;
+            using PeripheralResetBits = Bitapi::Ahb1::Rcc::Ahb1Rstr::GpioERst;
+        };
+
+        template <>
+        struct GpioPortTraits<GpioPort::PortF>
+        {
+            using Type = Bitapi::Ahb1::Gpio::GpioF;
+            using ClockEnableBits = Bitapi::Ahb1::Rcc::Ahb1Enr::GpioFEn;
+            using PeripheralResetBits = Bitapi::Ahb1::Rcc::Ahb1Rstr::GpioFRst;
+        };
+
+        template <>
+        struct GpioPortTraits<GpioPort::PortG>
+        {
+            using Type = Bitapi::Ahb1::Gpio::GpioG;
+            using ClockEnableBits = Bitapi::Ahb1::Rcc::Ahb1Enr::GpioGEn;
+            using PeripheralResetBits = Bitapi::Ahb1::Rcc::Ahb1Rstr::GpioGRst;
+        };
+
+        template <>
+        struct GpioPortTraits<GpioPort::PortH>
+        {
+            using Type = Bitapi::Ahb1::Gpio::GpioH;
+            using ClockEnableBits = Bitapi::Ahb1::Rcc::Ahb1Enr::GpioHEn;
+            using PeripheralResetBits = Bitapi::Ahb1::Rcc::Ahb1Rstr::GpioHRst;
+        };
+
+        template <>
+        struct GpioPortTraits<GpioPort::PortI>
+        {
+            using Type = Bitapi::Ahb1::Gpio::GpioI;
+            using ClockEnableBits = Bitapi::Ahb1::Rcc::Ahb1Enr::GpioIEn;
+            using PeripheralResetBits = Bitapi::Ahb1::Rcc::Ahb1Rstr::GpioIRst;
+        };
+
+        template <>
+        struct GpioPortTraits<GpioPort::PortJ>
+        {
+            using Type = Bitapi::Ahb1::Gpio::GpioJ;
+            using ClockEnableBits = Bitapi::Ahb1::Rcc::Ahb1Enr::GpioJEn;
+            using PeripheralResetBits = Bitapi::Ahb1::Rcc::Ahb1Rstr::GpioJRst;
+        };
+
+        template <>
+        struct GpioPortTraits<GpioPort::PortK>
+        {
+            using Type = Bitapi::Ahb1::Gpio::GpioK;
+            using ClockEnableBits = Bitapi::Ahb1::Rcc::Ahb1Enr::GpioKEn;
+            using PeripheralResetBits = Bitapi::Ahb1::Rcc::Ahb1Rstr::GpioKRst;
+        };
+
+        template <GpioPin TVPin>
+        struct GpioPinTraits
+        {
+        };
+
+        template <>
+        struct GpioPinTraits<GpioPin::Pin0>
+        {
+            using SyscfgExticrBits = Bitapi::Apb2::Syscfg::Exticr1::Exit0;
+        };
+
+        template <>
+        struct GpioPinTraits<GpioPin::Pin1>
+        {
+            using SyscfgExticrBits = Bitapi::Apb2::Syscfg::Exticr1::Exit1;
+        };
+
+        template <>
+        struct GpioPinTraits<GpioPin::Pin2>
+        {
+            using SyscfgExticrBits = Bitapi::Apb2::Syscfg::Exticr1::Exit2;
+        };
+
+        template <>
+        struct GpioPinTraits<GpioPin::Pin3>
+        {
+            using SyscfgExticrBits = Bitapi::Apb2::Syscfg::Exticr1::Exit3;
+        };
+
+        template <>
+        struct GpioPinTraits<GpioPin::Pin4>
+        {
+            using SyscfgExticrBits = Bitapi::Apb2::Syscfg::Exticr2::Exit4;
+        };
+
+        template <>
+        struct GpioPinTraits<GpioPin::Pin5>
+        {
+            using SyscfgExticrBits = Bitapi::Apb2::Syscfg::Exticr2::Exit5;
+        };
+
+        template <>
+        struct GpioPinTraits<GpioPin::Pin6>
+        {
+            using SyscfgExticrBits = Bitapi::Apb2::Syscfg::Exticr2::Exit6;
+        };
+
+        template <>
+        struct GpioPinTraits<GpioPin::Pin7>
+        {
+            using SyscfgExticrBits = Bitapi::Apb2::Syscfg::Exticr2::Exit7;
+        };
+
+        template <>
+        struct GpioPinTraits<GpioPin::Pin8>
+        {
+            using SyscfgExticrBits = Bitapi::Apb2::Syscfg::Exticr3::Exit8;
+        };
+
+        template <>
+        struct GpioPinTraits<GpioPin::Pin9>
+        {
+            using SyscfgExticrBits = Bitapi::Apb2::Syscfg::Exticr3::Exit9;
+        };
+
+        template <>
+        struct GpioPinTraits<GpioPin::Pin10>
+        {
+            using SyscfgExticrBits = Bitapi::Apb2::Syscfg::Exticr3::Exit10;
+        };
+
+        template <>
+        struct GpioPinTraits<GpioPin::Pin11>
+        {
+            using SyscfgExticrBits = Bitapi::Apb2::Syscfg::Exticr3::Exit11;
+        };
+
+        template <>
+        struct GpioPinTraits<GpioPin::Pin12>
+        {
+            using SyscfgExticrBits = Bitapi::Apb2::Syscfg::Exticr4::Exit12;
+        };
+
+        template <>
+        struct GpioPinTraits<GpioPin::Pin13>
+        {
+            using SyscfgExticrBits = Bitapi::Apb2::Syscfg::Exticr4::Exit13;
+        };
+
+        template <>
+        struct GpioPinTraits<GpioPin::Pin14>
+        {
+            using SyscfgExticrBits = Bitapi::Apb2::Syscfg::Exticr4::Exit14;
+        };
+
+        template <>
+        struct GpioPinTraits<GpioPin::Pin15>
+        {
+            using SyscfgExticrBits = Bitapi::Apb2::Syscfg::Exticr4::Exit15;
+        };
+
+        template <GpioPort TVPort, GpioPin TVPin>
         class GpioXPinY final
         {
+        private:
+            using GpioPortType = GpioPortTraits<TVPort>::Type;
+            using SyscfgExticrBits = GpioPinTraits<TVPin>::SyscfgExticrBits;
+
         public:
             void setMode(GpioMode mode)
             {
-                TGpioPort::Moder::Bits::set(TVPin, mode);
+                GpioPortType::Moder::Bits::set(TVPin, mode);
             }
 
             GpioMode getMode() const
             {
-                return TGpioPort::Moder::Bits::get(TVPin);
+                return GpioPortType::Moder::Bits::get(TVPin);
             }
 
             void setOutputType(GpioOutputType outputType)
             {
-                TGpioPort::Otyper::Bits::set(TVPin, outputType);
+                GpioPortType::Otyper::Bits::set(TVPin, outputType);
             }
 
             GpioOutputType getOutputType() const
             {
-                return TGpioPort::Otyper::Bits::get(TVPin);
+                return GpioPortType::Otyper::Bits::get(TVPin);
             }
 
             void setOutputSpeed(GpioOutputSpeed outputSpeed)
             {
-                TGpioPort::Ospeedr::Bits::set(TVPin, outputSpeed);
+                GpioPortType::Ospeedr::Bits::set(TVPin, outputSpeed);
             }
 
             GpioOutputSpeed getOutputSpeed() const
             {
-                return TGpioPort::Ospeedr::Bits::get(TVPin);
+                return GpioPortType::Ospeedr::Bits::get(TVPin);
             }
 
             void setPupd(GpioPupd pupd)
             {
-                TGpioPort::Pupdr::Bits::set(TVPin, pupd);
+                GpioPortType::Pupdr::Bits::set(TVPin, pupd);
             }
 
             GpioPupd getPupd() const
             {
-                return TGpioPort::Pupdr::Bits::get(TVPin);
+                return GpioPortType::Pupdr::Bits::get(TVPin);
             }
 
-            void setAltFunc(GpioAltFunc altFunc)
+            void setAltFunc(Bitapi::Ahb1::Gpio::GpioPinTraits<GpioPortType::k_port, TVPin>::AltFunc altFunc)
             {
-                if (static_cast<int>(TVPin) < 16)
+                const auto genericAltFunc =
+                        static_cast<Bitapi::Ahb1::Gpio::GpioAltFunc>(static_cast<unsigned int>(altFunc));
+                if (static_cast<unsigned int>(TVPin) < 8)
                 {
-                    TGpioPort::Afrl::Bits::set(TVPin, altFunc);
+                    GpioPortType::Afrl::Bits::set(TVPin, genericAltFunc);
                 }
                 else
                 {
-                    TGpioPort::Afrh::Bits::set(TVPin, altFunc);
+                    const auto hpin = static_cast<GpioPin>(static_cast<unsigned int>(TVPin) - 8);
+                    GpioPortType::Afrh::Bits::set(hpin, genericAltFunc);
                 }
             }
 
-            GpioAltFunc getAltFunc() const
+            Bitapi::Ahb1::Gpio::GpioPinTraits<GpioPortType::k_port, TVPin>::AltFunc getAltFunc() const
             {
-                if (static_cast<int>(TVPin) < 16)
+                auto genericAltFunc = Bitapi::Ahb1::Gpio::GpioAltFunc::Af0;
+                if (static_cast<unsigned int>(TVPin) < 8)
                 {
-                    return TGpioPort::Afrl::Bits::get(TVPin);
+                    genericAltFunc = GpioPortType::Afrl::Bits::get(TVPin);
                 }
                 else
                 {
-                    return TGpioPort::Afrh::Bits::get(TVPin);
+                    const auto hpin = static_cast<GpioPin>(static_cast<unsigned int>(TVPin) - 8);
+                    genericAltFunc = GpioPortType::Afrh::Bits::get(hpin);
                 }
+                return static_cast<Bitapi::Ahb1::Gpio::GpioPinTraits<GpioPortType::k_port, TVPin>::AltFunc>(
+                        static_cast<unsigned int>(genericAltFunc));
             }
 
             void writeOutput(Bitapi::Common::PinState state)
             {
-                TGpioPort::Odr::set(TVPin, state);
+                GpioPortType::Odr::set(TVPin, state);
             }
 
             Bitapi::Common::PinState readOutput() const
             {
-                return TGpioPort::Odr::get(TVPin);
+                return GpioPortType::Odr::get(TVPin);
             }
 
             Bitapi::Common::PinState toggleOutput()
@@ -122,11 +331,11 @@ namespace Stm32f407::Driver
 
             Bitapi::Common::PinState readInput()
             {
-                return TGpioPort::Idr::get(TVPin);
+                return GpioPortType::Idr::get(TVPin);
             }
 
             void configureInterrupt(
-                    GpioInterruptMode mode, GpioPupd pupd, IrqPriority irqPriority, GpioIrqHandler irqHandler)
+                    GpioInterruptMode mode, GpioPupd pupd, IrqPriority irqPriority, IrqHandler irqHandler)
             {
                 constexpr auto line = extiLine();
 
@@ -156,8 +365,8 @@ namespace Stm32f407::Driver
                 }
 
                 // Configure our GPIO port as the input for the EXTI line.
-                TSyscfgExticrBits::set(
-                        static_cast<typename TSyscfgExticrBits::WriteValue>(static_cast<int>(TGpioPort::k_portIndex)));
+                SyscfgExticrBits::set(
+                        static_cast<typename SyscfgExticrBits::WriteValue>(static_cast<int>(GpioPortType::k_port)));
 
                 constexpr auto irqNumber = extiIrqNumber();
 
@@ -221,116 +430,123 @@ namespace Stm32f407::Driver
         };
 
         // GPIO driver
-        template <typename TClockEnableBits, typename TPeripheralResetBits, typename TGpioPort>
+        template <GpioPort TVPort>
         class GpioX final
         {
+        private:
+            using GpioPortType = GpioPortTraits<TVPort>::Type;
+            using ClockEnableBits = GpioPortTraits<TVPort>::ClockEnableBits;
+            using PeripheralResetBits = GpioPortTraits<TVPort>::PeripheralResetBits;
+
         public:
-            using Pin0 = GpioXPinY<TGpioPort, GpioPin::Pin0, Bitapi::Apb2::Syscfg::Exticr1::Exit0>;
-            using Pin1 = GpioXPinY<TGpioPort, GpioPin::Pin1, Bitapi::Apb2::Syscfg::Exticr1::Exit1>;
-            using Pin2 = GpioXPinY<TGpioPort, GpioPin::Pin2, Bitapi::Apb2::Syscfg::Exticr1::Exit2>;
-            using Pin3 = GpioXPinY<TGpioPort, GpioPin::Pin3, Bitapi::Apb2::Syscfg::Exticr1::Exit3>;
-            using Pin4 = GpioXPinY<TGpioPort, GpioPin::Pin4, Bitapi::Apb2::Syscfg::Exticr2::Exit4>;
-            using Pin5 = GpioXPinY<TGpioPort, GpioPin::Pin5, Bitapi::Apb2::Syscfg::Exticr2::Exit5>;
-            using Pin6 = GpioXPinY<TGpioPort, GpioPin::Pin6, Bitapi::Apb2::Syscfg::Exticr2::Exit6>;
-            using Pin7 = GpioXPinY<TGpioPort, GpioPin::Pin7, Bitapi::Apb2::Syscfg::Exticr2::Exit7>;
-            using Pin8 = GpioXPinY<TGpioPort, GpioPin::Pin8, Bitapi::Apb2::Syscfg::Exticr3::Exit8>;
-            using Pin9 = GpioXPinY<TGpioPort, GpioPin::Pin9, Bitapi::Apb2::Syscfg::Exticr3::Exit9>;
-            using Pin10 = GpioXPinY<TGpioPort, GpioPin::Pin10, Bitapi::Apb2::Syscfg::Exticr3::Exit10>;
-            using Pin11 = GpioXPinY<TGpioPort, GpioPin::Pin11, Bitapi::Apb2::Syscfg::Exticr3::Exit11>;
-            using Pin12 = GpioXPinY<TGpioPort, GpioPin::Pin12, Bitapi::Apb2::Syscfg::Exticr4::Exit12>;
-            using Pin13 = GpioXPinY<TGpioPort, GpioPin::Pin13, Bitapi::Apb2::Syscfg::Exticr4::Exit13>;
-            using Pin14 = GpioXPinY<TGpioPort, GpioPin::Pin14, Bitapi::Apb2::Syscfg::Exticr4::Exit14>;
-            using Pin15 = GpioXPinY<TGpioPort, GpioPin::Pin15, Bitapi::Apb2::Syscfg::Exticr4::Exit15>;
+            using Pin0 = GpioXPinY<TVPort, GpioPin::Pin0>;
+            using Pin1 = GpioXPinY<TVPort, GpioPin::Pin1>;
+            using Pin2 = GpioXPinY<TVPort, GpioPin::Pin2>;
+            using Pin3 = GpioXPinY<TVPort, GpioPin::Pin3>;
+            using Pin4 = GpioXPinY<TVPort, GpioPin::Pin4>;
+            using Pin5 = GpioXPinY<TVPort, GpioPin::Pin5>;
+            using Pin6 = GpioXPinY<TVPort, GpioPin::Pin6>;
+            using Pin7 = GpioXPinY<TVPort, GpioPin::Pin7>;
+            using Pin8 = GpioXPinY<TVPort, GpioPin::Pin8>;
+            using Pin9 = GpioXPinY<TVPort, GpioPin::Pin9>;
+            using Pin10 = GpioXPinY<TVPort, GpioPin::Pin10>;
+            using Pin11 = GpioXPinY<TVPort, GpioPin::Pin11>;
+            using Pin12 = GpioXPinY<TVPort, GpioPin::Pin12>;
+            using Pin13 = GpioXPinY<TVPort, GpioPin::Pin13>;
+            using Pin14 = GpioXPinY<TVPort, GpioPin::Pin14>;
+            using Pin15 = GpioXPinY<TVPort, GpioPin::Pin15>;
 
             GpioX()
             {
-                TClockEnableBits::set(Bitapi::Common::DiEn::Enabled);
+                ClockEnableBits::set(Bitapi::Common::DiEn::Enabled);
             }
 
             ~GpioX()
             {
                 reset();
-                TClockEnableBits::set(Bitapi::Common::DiEn::Disabled);
+                ClockEnableBits::set(Bitapi::Common::DiEn::Disabled);
             }
 
             void reset()
             {
-                TPeripheralResetBits::set(Bitapi::Common::ResetBit::Reset);
-                TPeripheralResetBits::set(Bitapi::Common::ResetBit::NoReset);
+                PeripheralResetBits::set(Bitapi::Common::ResetBit::Reset);
+                PeripheralResetBits::set(Bitapi::Common::ResetBit::NoReset);
             }
 
             void setMode(GpioPin pin, GpioMode mode)
             {
-                TGpioPort::Moder::set(pin, mode);
+                GpioPortType::Moder::set(pin, mode);
             }
 
             GpioMode getMode(GpioPin pin) const
             {
-                return TGpioPort::Moder::get(pin);
+                return GpioPortType::Moder::get(pin);
             }
 
             void setOutputType(GpioPin pin, GpioOutputType outputType)
             {
-                TGpioPort::Otyper::set(pin, outputType);
+                GpioPortType::Otyper::set(pin, outputType);
             }
 
             GpioOutputType getOutputType(GpioPin pin) const
             {
-                return TGpioPort::Otyper::get(pin);
+                return GpioPortType::Otyper::get(pin);
             }
 
             void setOutputSpeed(GpioPin pin, GpioOutputSpeed outputSpeed)
             {
-                TGpioPort::Ospeedr::set(pin, outputSpeed);
+                GpioPortType::Ospeedr::set(pin, outputSpeed);
             }
 
             GpioOutputSpeed getOutputSpeed(GpioPin pin) const
             {
-                return TGpioPort::Ospeedr::get(pin);
+                return GpioPortType::Ospeedr::get(pin);
             }
 
             void setPupd(GpioPin pin, GpioPupd pupd)
             {
-                TGpioPort::Pupdr::set(pin, pupd);
+                GpioPortType::Pupdr::set(pin, pupd);
             }
 
             GpioPupd getPupd(GpioPin pin) const
             {
-                return TGpioPort::Pupdr::get(pin);
+                return GpioPortType::Pupdr::get(pin);
             }
 
             void setAltFunc(GpioPin pin, GpioAltFunc altFunc)
             {
-                if (static_cast<int>(pin) < 16)
+                if (static_cast<unsigned int>(pin) < 8)
                 {
-                    TGpioPort::Afrl::set(pin, altFunc);
+                    GpioPortType::Afrl::Bits::set(pin, altFunc);
                 }
                 else
                 {
-                    TGpioPort::Afrh::set(pin, altFunc);
+                    const auto hpin = static_cast<GpioPin>(static_cast<unsigned int>(pin) - 8);
+                    GpioPortType::Afrh::Bits::set(hpin, altFunc);
                 }
             }
 
             GpioAltFunc getAltFunc(GpioPin pin) const
             {
-                if (static_cast<int>(pin) < 16)
+                if (static_cast<unsigned int>(pin) < 8)
                 {
-                    return TGpioPort::Afrl::get(pin);
+                    return GpioPortType::Afrl::Bits::get(pin);
                 }
                 else
                 {
-                    return TGpioPort::Afrh::get(pin);
+                    const auto hpin = static_cast<GpioPin>(static_cast<unsigned int>(pin) - 8);
+                    return GpioPortType::Afrh::Bits::get(hpin);
                 }
             }
 
             void writeOutput(GpioPin pin, Bitapi::Common::PinState state)
             {
-                TGpioPort::Odr::set(pin, state);
+                GpioPortType::Odr::set(pin, state);
             }
 
             Bitapi::Common::PinState readOutput(GpioPin pin) const
             {
-                return TGpioPort::Odr::get(pin);
+                return GpioPortType::Odr::get(pin);
             }
 
             Bitapi::Common::PinState toggleOutput(GpioPin pin)
@@ -343,7 +559,7 @@ namespace Stm32f407::Driver
 
             Bitapi::Common::PinState readInput(GpioPin pin)
             {
-                return TGpioPort::Idr::get(pin);
+                return GpioPortType::Idr::get(pin);
             }
 
             Pin0& pin0()
@@ -446,27 +662,16 @@ namespace Stm32f407::Driver
         };
     } // namespace detail
 
-    using GpioA = detail::GpioX<Bitapi::Ahb1::Rcc::Ahb1Enr::GpioAEn, Bitapi::Ahb1::Rcc::Ahb1Rstr::GpioARst,
-            Bitapi::Ahb1::Gpio::GpioA>;
-    using GpioB = detail::GpioX<Bitapi::Ahb1::Rcc::Ahb1Enr::GpioBEn, Bitapi::Ahb1::Rcc::Ahb1Rstr::GpioBRst,
-            Bitapi::Ahb1::Gpio::GpioB>;
-    using GpioC = detail::GpioX<Bitapi::Ahb1::Rcc::Ahb1Enr::GpioCEn, Bitapi::Ahb1::Rcc::Ahb1Rstr::GpioCRst,
-            Bitapi::Ahb1::Gpio::GpioC>;
-    using GpioD = detail::GpioX<Bitapi::Ahb1::Rcc::Ahb1Enr::GpioDEn, Bitapi::Ahb1::Rcc::Ahb1Rstr::GpioDRst,
-            Bitapi::Ahb1::Gpio::GpioD>;
-    using GpioE = detail::GpioX<Bitapi::Ahb1::Rcc::Ahb1Enr::GpioEEn, Bitapi::Ahb1::Rcc::Ahb1Rstr::GpioERst,
-            Bitapi::Ahb1::Gpio::GpioE>;
-    using GpioF = detail::GpioX<Bitapi::Ahb1::Rcc::Ahb1Enr::GpioFEn, Bitapi::Ahb1::Rcc::Ahb1Rstr::GpioFRst,
-            Bitapi::Ahb1::Gpio::GpioF>;
-    using GpioG = detail::GpioX<Bitapi::Ahb1::Rcc::Ahb1Enr::GpioGEn, Bitapi::Ahb1::Rcc::Ahb1Rstr::GpioGRst,
-            Bitapi::Ahb1::Gpio::GpioG>;
-    using GpioH = detail::GpioX<Bitapi::Ahb1::Rcc::Ahb1Enr::GpioHEn, Bitapi::Ahb1::Rcc::Ahb1Rstr::GpioHRst,
-            Bitapi::Ahb1::Gpio::GpioH>;
-    using GpioI = detail::GpioX<Bitapi::Ahb1::Rcc::Ahb1Enr::GpioIEn, Bitapi::Ahb1::Rcc::Ahb1Rstr::GpioIRst,
-            Bitapi::Ahb1::Gpio::GpioI>;
-    using GpioJ = detail::GpioX<Bitapi::Ahb1::Rcc::Ahb1Enr::GpioJEn, Bitapi::Ahb1::Rcc::Ahb1Rstr::GpioJRst,
-            Bitapi::Ahb1::Gpio::GpioJ>;
-    using GpioK = detail::GpioX<Bitapi::Ahb1::Rcc::Ahb1Enr::GpioKEn, Bitapi::Ahb1::Rcc::Ahb1Rstr::GpioKRst,
-            Bitapi::Ahb1::Gpio::GpioK>;
+    using GpioA = detail::GpioX<GpioPort::PortA>;
+    using GpioB = detail::GpioX<GpioPort::PortB>;
+    using GpioC = detail::GpioX<GpioPort::PortC>;
+    using GpioD = detail::GpioX<GpioPort::PortD>;
+    using GpioE = detail::GpioX<GpioPort::PortE>;
+    using GpioF = detail::GpioX<GpioPort::PortF>;
+    using GpioG = detail::GpioX<GpioPort::PortG>;
+    using GpioH = detail::GpioX<GpioPort::PortH>;
+    using GpioI = detail::GpioX<GpioPort::PortI>;
+    using GpioJ = detail::GpioX<GpioPort::PortJ>;
+    using GpioK = detail::GpioX<GpioPort::PortK>;
 
 } // namespace Stm32f407::Driver

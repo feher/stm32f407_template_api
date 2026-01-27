@@ -9,6 +9,22 @@ namespace Stm32f407::Bitapi::Ahb1::Gpio
 {
     static constexpr int k_pinCount = 16;
 
+    // GPIO port name.
+    enum class GpioPort : unsigned int
+    {
+        PortA = 0,
+        PortB = 1,
+        PortC = 2,
+        PortD = 3,
+        PortE = 4,
+        PortF = 5,
+        PortG = 6,
+        PortH = 7,
+        PortI = 8,
+        PortJ = 9,
+        PortK = 10,
+    };
+
     // GPIO pin number.
     enum class GpioPin : unsigned int
     {
@@ -28,27 +44,6 @@ namespace Stm32f407::Bitapi::Ahb1::Gpio
         Pin13 = 13,
         Pin14 = 14,
         Pin15 = k_pinCount - 1
-    };
-
-    // Generic alternate function values for GPIO port X pin Y.
-    enum class GpioAltFunc : Common::Word
-    {
-        Af0 = 0b0000,
-        Af1 = 0b0001,
-        Af2 = 0b0010,
-        Af3 = 0b0011,
-        Af4 = 0b0100,
-        Af5 = 0b0101,
-        Af6 = 0b0110,
-        Af7 = 0b0111,
-        Af8 = 0b1000,
-        Af9 = 0b1001,
-        Af10 = 0b1010,
-        Af11 = 0b1011,
-        Af12 = 0b1100,
-        Af13 = 0b1101,
-        Af14 = 0b1110,
-        Af15 = 0b1111
     };
 
     // GPIO pin mode values.
@@ -84,12 +79,177 @@ namespace Stm32f407::Bitapi::Ahb1::Gpio
         PullDown = 0b10
     };
 
+    // Generic alternate function values for GPIO port X pin Y.
+    enum class GpioAltFunc : Common::Word
+    {
+        Af0 = 0b0000,
+        Af1 = 0b0001,
+        Af2 = 0b0010,
+        Af3 = 0b0011,
+        Af4 = 0b0100,
+        Af5 = 0b0101,
+        Af6 = 0b0110,
+        Af7 = 0b0111,
+        Af8 = 0b1000,
+        Af9 = 0b1001,
+        Af10 = 0b1010,
+        Af11 = 0b1011,
+        Af12 = 0b1100,
+        Af13 = 0b1101,
+        Af14 = 0b1110,
+        Af15 = 0b1111
+    };
+
     namespace detail
     {
-        template <int TVIndex, Common::Address baseAddr, typename TAfValues>
+        // Alternate function values for GPIO port A pin 0.
+        enum class GpioA0AltFunc : Common::Word
+        {
+            Af0_Na = 0,
+            Af1_Tim2_Ch1_Etr = 1,
+            Af2_Tim5_Ch1 = 2,
+            Af3_Tim8_Etr = 3,
+            Af4_Na = 4,
+            Af5_Na = 5,
+            Af6_Na = 6,
+            Af7_Usart2_Cts = 7,
+            Af8_Usart4_Tx = 8,
+            Af9_Na = 9,
+            Af10_Na = 10,
+            Af11_Eth_Mii_Crs = 11,
+            Af12_Na = 12,
+            Af13_Na = 13,
+            Af14_Na = 14,
+            Af15_EventOut = 15
+        };
+
+        // Alternate function values for GPIO port A pin 8.
+        enum class GpioA8AltFunc : Common::Word
+        {
+            Af0_Mco1 = 0,
+            Af1_Tim1_Ch1 = 1,
+            Af2_Na = 2,
+            Af3_Na = 3,
+            Af4_I2c3_Scl = 4,
+            Af5_Na = 5,
+            Af6_Na = 6,
+            Af7_Usart1_Ck = 7,
+            Af8_Na = 8,
+            Af9_Na = 9,
+            Af10_Otg_Fs_Sof = 10,
+            Af11_Na = 11,
+            Af12_Na = 12,
+            Af13_Na = 13,
+            Af14_Na = 14,
+            Af15_EventOut = 15
+        };
+
+        // Alternate function values for GPIO port B pin 15.
+        enum class GpioB15AltFunc : Common::Word
+        {
+            Af0_Rtc_RefIn = 0,
+            Af1_Tim1_Ch3n = 1,
+            Af2_Na = 2,
+            Af3_Tim8_Ch3n = 3,
+            Af4_Na = 4,
+            Af5_Spi2_Mosi_I2s2_Sd = 5,
+            Af6_Na = 6,
+            Af7_Na = 7,
+            Af8_Na = 8,
+            Af9_Tim12_Ch2 = 9,
+            Af10_Na = 10,
+            Af11_Na = 11,
+            Af12_Otg_Hs_Dp = 12,
+            Af13_Na = 13,
+            Af14_Na = 14,
+            Af15_EventOut = 15
+        };
+
+        // Alternate function values for GPIO port C pin 6.
+        enum class GpioC6AltFunc : Common::Word
+        {
+            Af0_Na = 0,
+            Af1_Na = 1,
+            Af2_Tim3_Ch1 = 2,
+            Af3_Tim8_Ch1 = 3,
+            Af4_Na = 4,
+            Af5_I2s2_Mck = 5,
+            Af6_Na = 6,
+            Af7_Na = 7,
+            Af8_Usart6_Tx = 8,
+            Af9_Na = 9,
+            Af10_Na = 10,
+            Af11_Na = 11,
+            Af12_Sdio_D6 = 12,
+            Af13_Dcmi_D0 = 13,
+            Af14_Na = 14,
+            Af15_EventOut = 15
+        };
+
+        // Alternate function values for GPIO port C pin 9.
+        enum class GpioC9AltFunc : Common::Word
+        {
+            Af0_Mco2 = 0,
+            Af1_Na = 1,
+            Af2_Tim3_Ch4 = 2,
+            Af3_Tim8_Ch4 = 3,
+            Af4_I2c3_Sda = 4,
+            Af5_I2s_Ckin = 5,
+            Af6_Na = 6,
+            Af7_Na = 7,
+            Af8_Na = 8,
+            Af9_Na = 9,
+            Af10_Na = 10,
+            Af11_Na = 11,
+            Af12_Sdio_D1 = 12,
+            Af13_Dcmi_D3 = 13,
+            Af14_Na = 14,
+            Af15_EventOut = 15
+        };
+    } // namespace detail
+
+    template <GpioPort TVPort, GpioPin TVPin>
+    struct GpioPinTraits
+    {
+        using AltFunc = GpioAltFunc;
+    };
+
+    template <>
+    struct GpioPinTraits<GpioPort::PortA, GpioPin::Pin0>
+    {
+        using AltFunc = detail::GpioA0AltFunc;
+    };
+
+    template <>
+    struct GpioPinTraits<GpioPort::PortA, GpioPin::Pin8>
+    {
+        using AltFunc = detail::GpioA8AltFunc;
+    };
+
+    template <>
+    struct GpioPinTraits<GpioPort::PortB, GpioPin::Pin15>
+    {
+        using AltFunc = detail::GpioB15AltFunc;
+    };
+
+    template <>
+    struct GpioPinTraits<GpioPort::PortC, GpioPin::Pin6>
+    {
+        using AltFunc = detail::GpioC6AltFunc;
+    };
+
+    template <>
+    struct GpioPinTraits<GpioPort::PortC, GpioPin::Pin9>
+    {
+        using AltFunc = detail::GpioC9AltFunc;
+    };
+
+    namespace detail
+    {
+        template <GpioPort TVPort, Common::Address baseAddr>
         struct GpioX
         {
-            static constexpr int k_portIndex = TVIndex;
+            static constexpr GpioPort k_port = TVPort;
             static constexpr Common::Address k_baseAddr = baseAddr;
 
             // Mode Register.
@@ -392,38 +552,19 @@ namespace Stm32f407::Bitapi::Ahb1::Gpio
                 using Lck15 = Util::RoBits<k_addr, 15, 1, Common::Word>;
             };
 
-            // Pin0 alternate function values.
-            using Pin0AfValues = typename TAfValues::Pin0;
-            // Pin1 alternate function values.
-            using Pin1AfValues = typename TAfValues::Pin1;
-            using Pin2AfValues = typename TAfValues::Pin2;
-            using Pin3AfValues = typename TAfValues::Pin3;
-            using Pin4AfValues = typename TAfValues::Pin4;
-            using Pin5AfValues = typename TAfValues::Pin5;
-            using Pin6AfValues = typename TAfValues::Pin6;
-            using Pin7AfValues = typename TAfValues::Pin7;
-            using Pin8AfValues = typename TAfValues::Pin8;
-            using Pin9AfValues = typename TAfValues::Pin9;
-            using Pin10AfValues = typename TAfValues::Pin10;
-            using Pin11AfValues = typename TAfValues::Pin11;
-            using Pin12AfValues = typename TAfValues::Pin12;
-            using Pin13AfValues = typename TAfValues::Pin13;
-            using Pin14AfValues = typename TAfValues::Pin14;
-            using Pin15AfValues = typename TAfValues::Pin15;
-
             // Alternate function register, low word.
             struct Afrl
             {
                 using Bits = Util::BitsRegister<k_baseAddr, 0x20, GpioPin, 4, GpioAltFunc>;
 
-                using Afrl0 = Util::Bits<Bits::k_addr, 0, 4, Pin0AfValues>;
-                using Afrl1 = Util::Bits<Bits::k_addr, 4, 4, Pin1AfValues>;
-                using Afrl2 = Util::Bits<Bits::k_addr, 8, 4, Pin2AfValues>;
-                using Afrl3 = Util::Bits<Bits::k_addr, 12, 4, Pin3AfValues>;
-                using Afrl4 = Util::Bits<Bits::k_addr, 16, 4, Pin4AfValues>;
-                using Afrl5 = Util::Bits<Bits::k_addr, 20, 4, Pin5AfValues>;
-                using Afrl6 = Util::Bits<Bits::k_addr, 24, 4, Pin6AfValues>;
-                using Afrl7 = Util::Bits<Bits::k_addr, 28, 4, Pin7AfValues>;
+                using Afrl0 = Util::Bits<Bits::k_addr, 0, 4, typename GpioPinTraits<TVPort, GpioPin::Pin0>::AltFunc>;
+                using Afrl1 = Util::Bits<Bits::k_addr, 4, 4, typename GpioPinTraits<TVPort, GpioPin::Pin1>::AltFunc>;
+                using Afrl2 = Util::Bits<Bits::k_addr, 8, 4, typename GpioPinTraits<TVPort, GpioPin::Pin2>::AltFunc>;
+                using Afrl3 = Util::Bits<Bits::k_addr, 12, 4, typename GpioPinTraits<TVPort, GpioPin::Pin3>::AltFunc>;
+                using Afrl4 = Util::Bits<Bits::k_addr, 16, 4, typename GpioPinTraits<TVPort, GpioPin::Pin4>::AltFunc>;
+                using Afrl5 = Util::Bits<Bits::k_addr, 20, 4, typename GpioPinTraits<TVPort, GpioPin::Pin5>::AltFunc>;
+                using Afrl6 = Util::Bits<Bits::k_addr, 24, 4, typename GpioPinTraits<TVPort, GpioPin::Pin6>::AltFunc>;
+                using Afrl7 = Util::Bits<Bits::k_addr, 28, 4, typename GpioPinTraits<TVPort, GpioPin::Pin7>::AltFunc>;
             };
 
             // Alternate function register, high word.
@@ -431,170 +572,48 @@ namespace Stm32f407::Bitapi::Ahb1::Gpio
             {
                 using Bits = Util::BitsRegister<k_baseAddr, 0x24, GpioPin, 4, GpioAltFunc>;
 
-                using Afrh8 = Util::Bits<Bits::k_addr, 0, 4, Pin8AfValues>;
-                using Afrh9 = Util::Bits<Bits::k_addr, 4, 4, Pin9AfValues>;
-                using Afrh10 = Util::Bits<Bits::k_addr, 8, 4, Pin10AfValues>;
-                using Afrh11 = Util::Bits<Bits::k_addr, 12, 4, Pin11AfValues>;
-                using Afrh12 = Util::Bits<Bits::k_addr, 16, 4, Pin12AfValues>;
-                using Afrh13 = Util::Bits<Bits::k_addr, 20, 4, Pin13AfValues>;
-                using Afrh14 = Util::Bits<Bits::k_addr, 24, 4, Pin14AfValues>;
-                using Afrh15 = Util::Bits<Bits::k_addr, 28, 4, Pin15AfValues>;
+                using Afrh8 = Util::Bits<Bits::k_addr, 0, 4, typename GpioPinTraits<TVPort, GpioPin::Pin8>::AltFunc>;
+                using Afrh9 = Util::Bits<Bits::k_addr, 4, 4, typename GpioPinTraits<TVPort, GpioPin::Pin9>::AltFunc>;
+                using Afrh10 = Util::Bits<Bits::k_addr, 8, 4, typename GpioPinTraits<TVPort, GpioPin::Pin10>::AltFunc>;
+                using Afrh11 = Util::Bits<Bits::k_addr, 12, 4, typename GpioPinTraits<TVPort, GpioPin::Pin11>::AltFunc>;
+                using Afrh12 = Util::Bits<Bits::k_addr, 16, 4, typename GpioPinTraits<TVPort, GpioPin::Pin12>::AltFunc>;
+                using Afrh13 = Util::Bits<Bits::k_addr, 20, 4, typename GpioPinTraits<TVPort, GpioPin::Pin13>::AltFunc>;
+                using Afrh14 = Util::Bits<Bits::k_addr, 24, 4, typename GpioPinTraits<TVPort, GpioPin::Pin14>::AltFunc>;
+                using Afrh15 = Util::Bits<Bits::k_addr, 28, 4, typename GpioPinTraits<TVPort, GpioPin::Pin15>::AltFunc>;
             };
         };
-
-        // Alternate function values for GPIO port A pin 0.
-        enum class GpioA0AltFunc : Common::Word
-        {
-            Af0_Na = 0,
-            Af1_Tim2_Ch1_Etr = 1,
-            Af2_Tim5_Ch1 = 2,
-            Af3_Tim8_Etr = 3,
-            Af4_Na = 4,
-            Af5_Na = 5,
-            Af6_Na = 6,
-            Af7_Usart2_Cts = 7,
-            Af8_Usart4_Tx = 8,
-            Af9_Na = 9,
-            Af10_Na = 10,
-            Af11_Eth_Mii_Crs = 11,
-            Af12_Na = 12,
-            Af13_Na = 13,
-            Af14_Na = 14,
-            Af15_EventOut = 15
-        };
-
-        // Alternate function values for GPIO port A pin 8.
-        enum class GpioA8AltFunc : Common::Word
-        {
-            Af0_Mco1 = 0,
-            Af1_Tim1_Ch1 = 1,
-            Af2_Na = 2,
-            Af3_Na = 3,
-            Af4_I2c3_Scl = 4,
-            Af5_Na = 5,
-            Af6_Na = 6,
-            Af7_Usart1_Ck = 7,
-            Af8_Na = 8,
-            Af9_Na = 9,
-            Af10_Otg_Fs_Sof = 10,
-            Af11_Na = 11,
-            Af12_Na = 12,
-            Af13_Na = 13,
-            Af14_Na = 14,
-            Af15_EventOut = 15
-        };
-
-        // Alternate function values for GPIO port C pin 6.
-        enum class GpioC6AltFunc : Common::Word
-        {
-            Af0_Na = 0,
-            Af1_Na = 1,
-            Af2_Tim3_Ch1 = 2,
-            Af3_Tim8_Ch1 = 3,
-            Af4_Na = 4,
-            Af5_I2s2_Mck = 5,
-            Af6_Na = 6,
-            Af7_Na = 7,
-            Af8_Usart6_Tx = 8,
-            Af9_Na = 9,
-            Af10_Na = 10,
-            Af11_Na = 11,
-            Af12_Sdio_D6 = 12,
-            Af13_Dcmi_D0 = 13,
-            Af14_Na = 14,
-            Af15_EventOut = 15
-        };
-
-        // Alternate function values for GPIO port C pin 9.
-        enum class GpioC9AltFunc : Common::Word
-        {
-            Af0_Mco2 = 0,
-            Af1_Na = 1,
-            Af2_Tim3_Ch4 = 2,
-            Af3_Tim8_Ch4 = 3,
-            Af4_I2c3_Sda = 4,
-            Af5_I2s_Ckin = 5,
-            Af6_Na = 6,
-            Af7_Na = 7,
-            Af8_Na = 8,
-            Af9_Na = 9,
-            Af10_Na = 10,
-            Af11_Na = 11,
-            Af12_Sdio_D1 = 12,
-            Af13_Dcmi_D3 = 13,
-            Af14_Na = 14,
-            Af15_EventOut = 15
-        };
-
-        template <typename T0, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6,
-                typename T7, typename T8, typename T9, typename T10, typename T11, typename T12, typename T13,
-                typename T14, typename T15>
-        struct GpioAfValues
-        {
-            using Pin0 = T0;
-            using Pin1 = T1;
-            using Pin2 = T2;
-            using Pin3 = T3;
-            using Pin4 = T4;
-            using Pin5 = T5;
-            using Pin6 = T6;
-            using Pin7 = T7;
-            using Pin8 = T8;
-            using Pin9 = T9;
-            using Pin10 = T10;
-            using Pin11 = T11;
-            using Pin12 = T12;
-            using Pin13 = T13;
-            using Pin14 = T14;
-            using Pin15 = T15;
-        };
-
-        // Generic alternate function values for GPIO ports.
-        using GpioXAfValues = GpioAfValues<GpioAltFunc, GpioAltFunc, GpioAltFunc, GpioAltFunc, GpioAltFunc, GpioAltFunc,
-                GpioAltFunc, GpioAltFunc, GpioAltFunc, GpioAltFunc, GpioAltFunc, GpioAltFunc, GpioAltFunc, GpioAltFunc,
-                GpioAltFunc, GpioAltFunc>;
-
-        // Alternate function values for GPIO port A.
-        using GpioAAfValues = GpioAfValues<GpioA0AltFunc, GpioAltFunc, GpioAltFunc, GpioAltFunc, GpioAltFunc,
-                GpioAltFunc, GpioAltFunc, GpioAltFunc, GpioA8AltFunc, GpioAltFunc, GpioAltFunc, GpioAltFunc,
-                GpioAltFunc, GpioAltFunc, GpioAltFunc, GpioAltFunc>;
-
-        // Alternate function values for GPIO port C.
-        using GpioCAfValues = GpioAfValues<GpioAltFunc, GpioAltFunc, GpioAltFunc, GpioAltFunc, GpioAltFunc, GpioAltFunc,
-                GpioC6AltFunc, GpioAltFunc, GpioAltFunc, GpioC9AltFunc, GpioAltFunc, GpioAltFunc, GpioAltFunc,
-                GpioAltFunc, GpioAltFunc, GpioAltFunc>;
     } // namespace detail
 
     // GPIO port A.
-    using GpioA = detail::GpioX<0, k_addr + 0x0000U, detail::GpioAAfValues>;
+    using GpioA = detail::GpioX<GpioPort::PortA, k_addr + 0x0000U>;
 
     // GPIO port B.
-    using GpioB = detail::GpioX<1, k_addr + 0x0400U, detail::GpioXAfValues>;
+    using GpioB = detail::GpioX<GpioPort::PortB, k_addr + 0x0400U>;
 
     // GPIO port C.
-    using GpioC = detail::GpioX<2, k_addr + 0x0800U, detail::GpioCAfValues>;
+    using GpioC = detail::GpioX<GpioPort::PortC, k_addr + 0x0800U>;
 
     // GPIO port D.
-    using GpioD = detail::GpioX<3, k_addr + 0x0c00U, detail::GpioXAfValues>;
+    using GpioD = detail::GpioX<GpioPort::PortD, k_addr + 0x0c00U>;
 
     // GPIO port E.
-    using GpioE = detail::GpioX<4, k_addr + 0x1000U, detail::GpioXAfValues>;
+    using GpioE = detail::GpioX<GpioPort::PortE, k_addr + 0x1000U>;
 
     // GPIO port F.
-    using GpioF = detail::GpioX<5, k_addr + 0x1400U, detail::GpioXAfValues>;
+    using GpioF = detail::GpioX<GpioPort::PortF, k_addr + 0x1400U>;
 
     // GPIO port G.
-    using GpioG = detail::GpioX<6, k_addr + 0x1800U, detail::GpioXAfValues>;
+    using GpioG = detail::GpioX<GpioPort::PortG, k_addr + 0x1800U>;
 
     // GPIO port H.
-    using GpioH = detail::GpioX<7, k_addr + 0x1c00U, detail::GpioXAfValues>;
+    using GpioH = detail::GpioX<GpioPort::PortH, k_addr + 0x1c00U>;
 
     // GPIO port I.
-    using GpioI = detail::GpioX<8, k_addr + 0x2000U, detail::GpioXAfValues>;
+    using GpioI = detail::GpioX<GpioPort::PortI, k_addr + 0x2000U>;
 
     // GPIO port J.
-    using GpioJ = detail::GpioX<9, k_addr + 0x2400U, detail::GpioXAfValues>;
+    using GpioJ = detail::GpioX<GpioPort::PortJ, k_addr + 0x2400U>;
 
     // GPIO port K.
-    using GpioK = detail::GpioX<10, k_addr + 0x2800U, detail::GpioXAfValues>;
+    using GpioK = detail::GpioX<GpioPort::PortK, k_addr + 0x2800U>;
 } // namespace Stm32f407::Bitapi::Ahb1::Gpio

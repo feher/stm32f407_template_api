@@ -5,6 +5,7 @@
 #include "Src/bitapi/stm32f407_utils.hpp"
 #include "drivers/clocks.hpp"
 #include "drivers/gpio.hpp"
+#include "drivers/spi.hpp"
 #include "drivers/timer.hpp"
 #include "drivers/util.hpp"
 
@@ -22,11 +23,11 @@ void configureMco(GpioA& gpioA, GpioC& gpioC)
     Stm32f407::Bitapi::Ahb1::Rcc::Cfgr::Mco2::set(Stm32f407::Bitapi::Ahb1::Rcc::Cfgr::Mco2Value::SysClk);
 
     auto& pinA8 = gpioA.pin8();
-    pinA8.setAltFunc(GpioAltFunc::Af0);
+    pinA8.setAltFunc(GpioAltFuncA8::Af0_Mco1);
     pinA8.setMode(GpioMode::AltFunc);
 
     auto& pinC9 = gpioC.pin9();
-    pinC9.setAltFunc(GpioAltFunc::Af0);
+    pinC9.setAltFunc(GpioAltFuncC9::Af0_Mco2);
     pinC9.setMode(GpioMode::AltFunc);
 }
 
@@ -35,9 +36,11 @@ int main(void)
     Clocks::initClocks();
 
     auto gpioA = GpioA{};
+    auto gpioB = GpioB{};
     auto gpioC = GpioC{};
     auto gpioD = GpioD{};
     auto tim2 = Tim2{};
+    auto spi2 = Spi2{};
 
     configureMco(gpioA, gpioC);
 
@@ -70,6 +73,13 @@ int main(void)
                     greenLed.toggleOutput();
                 }
             });
+
+    gpioB.pin15().setAltFunc(GpioAltFuncB15::Af5_Spi2_Mosi_I2s2_Sd);
+    spi2.setMode(SpiMode::Master);
+    spi2.setBusMode(SpiBusMode::FullDuplex);
+    spi2.setDataFrameFormat(SpiDataFrameFormat::Bits8);
+    const auto data = std::array<Stm32f407::Bitapi::Common::Byte, 5>{'H', 'e', 'l', 'l', 'o'};
+    spi2.send<Stm32f407::Bitapi::Common::Byte>(data);
 
     while (true)
     {

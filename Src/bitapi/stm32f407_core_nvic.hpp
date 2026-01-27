@@ -48,6 +48,7 @@ namespace Stm32f407::Bitapi::Core::Nvic
         Usart3 = 39,
         Exti15_10 = 40,
         Tim5 = 50,
+        Spi3 = 51,
         Uart4 = 52,
         Uart5 = 53
     };
