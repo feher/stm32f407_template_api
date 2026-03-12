@@ -1,5 +1,6 @@
-#include "spi.hpp"
-#include "Src/bitapi/stm32f407_common_spi.hpp"
+#include "stm32f407_drivers/spi.hpp"
+
+#include <stm32f407_bitapi/stm32f407_common_spi.hpp>
 
 namespace Stm32f407::Driver::detail
 {

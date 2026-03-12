@@ -156,9 +156,12 @@ namespace Stm32f407::Bitapi::Apb1::Spi::details
             // Disabled: Output disabled (receive-only mode).
             // Enabled: Output enabled (transmit-only mode).
             // - This bit combined with the BIDImode bit selects the direction of transfer in bidirectional mode.
+            // - This bit is not used in I2S mode.
+            // - In master mode, the MOSI pin is used while the MISO pin is used in slave mode.
             using Bidioe = Util::Bits<k_addr, 14, 1, Common::DiEn>;
 
             // Bidirectional data mode enable.
+            // - This bit is not used in I2S mode.
             using BidiMode = Util::Bits<k_addr, 15, 1, BidiModeValue>;
         };
 

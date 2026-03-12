@@ -1,21 +1,22 @@
 #pragma once
 
-#include "Src/bitapi/stm32f407_ahb1_rcc.hpp"
-#include "Src/bitapi/stm32f407_apb1_tim2_5.hpp"
-#include "Src/bitapi/stm32f407_clocks.hpp"
-#include "Src/bitapi/stm32f407_core_nvic.hpp"
-#include "Src/bitapi/stm32f407_utils.hpp"
+#include "common.hpp"
+
+#include <stm32f407_bitapi/stm32f407_ahb1_rcc.hpp>
+#include <stm32f407_bitapi/stm32f407_apb1_tim2_5.hpp>
+#include <stm32f407_bitapi/stm32f407_clocks.hpp>
+#include <stm32f407_bitapi/stm32f407_core_nvic.hpp>
+#include <stm32f407_bitapi/stm32f407_utils.hpp>
 
 #include <functional>
 
 namespace Stm32f407::Driver
 {
     using TimerDirection = Bitapi::Apb1::Tim2_5::DirValue;
-    using TimerIrqHandler = std::function<void()>;
 
     namespace detail
     {
-        extern std::array<TimerIrqHandler, 5> g_timerIrqHandlers;
+        extern std::array<IrqHandler, 5> g_timerIrqHandlers;
 
         template <unsigned int TVTimerNumber>
         struct TimerTraits
@@ -189,12 +190,16 @@ namespace Stm32f407::Driver
                 start();
             }
 
-            void enableInterrupt(TimerIrqHandler irqHandler)
+            void enableInterrupt(IrqPriority irqPriority, IrqHandler irqHandler)
             {
                 g_timerIrqHandlers[TVTimerNumber - 1] = std::move(irqHandler);
 
-                // Enable NVIC interrupt for this timer.
                 constexpr auto irqNum = TimerTraits<TVTimerNumber>::k_irqNum;
+
+                // Set NVIC interrupt priority.
+                Bitapi::Core::Nvic::Ipr::set(irqNum, irqPriority);
+
+                // Enable NVIC interrupt for this timer.
                 Bitapi::Core::Nvic::Iser::set(irqNum, Bitapi::Core::Nvic::IserWriteValue::Enable);
 
                 // Enable update interrupt.

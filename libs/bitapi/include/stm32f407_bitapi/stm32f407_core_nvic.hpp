@@ -122,6 +122,8 @@ namespace Stm32f407::Bitapi::Core::Nvic
     // Interrupt Active-Bit Registers.
     using Iabr = Util::BitsRegister<k_addr, 0x300 - 0x100, IrqNumber, 1, IabrReadValue, void>;
 
+    // Interrupt priority value.
+    // A higher level corresponds to a lower priority, so level 0 is the highest interrupt priority.
     enum class IprValue : Common::Word
     {
         Priority0 = 0b0000 << 4,

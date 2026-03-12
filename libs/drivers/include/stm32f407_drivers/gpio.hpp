@@ -2,12 +2,12 @@
 
 #include "common.hpp"
 
-#include "Src/bitapi/stm32f407_ahb1_gpio.hpp"
-#include "Src/bitapi/stm32f407_ahb1_rcc.hpp"
-#include "Src/bitapi/stm32f407_apb2_exti.hpp"
-#include "Src/bitapi/stm32f407_apb2_syscfg.hpp"
-#include "Src/bitapi/stm32f407_core_nvic.hpp"
-#include "Src/bitapi/stm32f407_utils.hpp"
+#include <stm32f407_bitapi/stm32f407_ahb1_gpio.hpp>
+#include <stm32f407_bitapi/stm32f407_ahb1_rcc.hpp>
+#include <stm32f407_bitapi/stm32f407_apb2_exti.hpp>
+#include <stm32f407_bitapi/stm32f407_apb2_syscfg.hpp>
+#include <stm32f407_bitapi/stm32f407_core_nvic.hpp>
+#include <stm32f407_bitapi/stm32f407_utils.hpp>
 
 #include <array>
 #include <functional>
@@ -24,6 +24,9 @@ namespace Stm32f407::Driver
     using GpioAltFunc = Bitapi::Ahb1::Gpio::GpioAltFunc;
 
     using GpioAltFuncA8 = Bitapi::Ahb1::Gpio::GpioPinTraits<GpioPort::PortA, GpioPin::Pin8>::AltFunc;
+    using GpioAltFuncB12 = Bitapi::Ahb1::Gpio::GpioPinTraits<GpioPort::PortB, GpioPin::Pin12>::AltFunc;
+    using GpioAltFuncB13 = Bitapi::Ahb1::Gpio::GpioPinTraits<GpioPort::PortB, GpioPin::Pin13>::AltFunc;
+    using GpioAltFuncB14 = Bitapi::Ahb1::Gpio::GpioPinTraits<GpioPort::PortB, GpioPin::Pin14>::AltFunc;
     using GpioAltFuncB15 = Bitapi::Ahb1::Gpio::GpioPinTraits<GpioPort::PortB, GpioPin::Pin15>::AltFunc;
     using GpioAltFuncC9 = Bitapi::Ahb1::Gpio::GpioPinTraits<GpioPort::PortC, GpioPin::Pin9>::AltFunc;
 

@@ -1,7 +1,8 @@
-#include "clocks.hpp"
-#include "Src/bitapi/stm32f407_ahb1_rcc.hpp"
-#include "Src/bitapi/stm32f407_clocks.hpp"
-#include "Src/bitapi/stm32f407_utils.hpp"
+#include "stm32f407_drivers/clocks.hpp"
+
+#include <stm32f407_bitapi/stm32f407_ahb1_rcc.hpp>
+#include <stm32f407_bitapi/stm32f407_clocks.hpp>
+#include <stm32f407_bitapi/stm32f407_utils.hpp>
 
 namespace Stm32Clocks = Stm32f407::Bitapi::Clocks;
 

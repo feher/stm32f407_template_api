@@ -144,6 +144,69 @@ namespace Stm32f407::Bitapi::Ahb1::Gpio
             Af15_EventOut = 15
         };
 
+        // Alternate function values for GPIO port B pin 12.
+        enum class GpioB12AltFunc : Common::Word
+        {
+            Af0_Na = 0,
+            Af1_Tim1_Bkin = 1,
+            Af2_Na = 2,
+            Af3_Na = 3,
+            Af4_I2c2_Smba = 4,
+            Af5_Spi2_Nss_I2s2_Ws = 5,
+            Af6_Na = 6,
+            Af7_Usart3_Ck = 7,
+            Af8_Na = 8,
+            Af9_Can2_Rx = 9,
+            Af10_Otg_Hs_Ulpi_D5 = 10,
+            Af11_Eth_Mii_Txd0_Eth_Rmii_Txd0 = 11,
+            Af12_Otg_Hs_Id = 12,
+            Af13_Na = 13,
+            Af14_Na = 14,
+            Af15_EventOut = 15
+        };
+
+        // Alternate function values for GPIO port B pin 13.
+        enum class GpioB13AltFunc : Common::Word
+        {
+            Af0_Na = 0,
+            Af1_Tim2_Ch1n = 1,
+            Af2_Na = 2,
+            Af3_Na = 3,
+            Af4_Na = 4,
+            Af5_Spi2_Sck_I2s2_Ck = 5,
+            Af6_Na = 6,
+            Af7_Usart3_Cts = 7,
+            Af8_Na = 8,
+            Af9_Can2_Tx = 9,
+            Af10_Otg_Hs_Ulpi_D6 = 10,
+            Af11_Eth_Mii_Txd1_Eth_Rmii_Txd1 = 11,
+            Af12_Na = 12,
+            Af13_Na = 13,
+            Af14_Na = 14,
+            Af15_EventOut = 15
+        };
+
+        // Alternate function values for GPIO port B pin 14.
+        enum class GpioB14AltFunc : Common::Word
+        {
+            Af0_Na = 0,
+            Af1_Tim1_Ch2n = 1,
+            Af2_Na = 2,
+            Af3_Tim8_Ch2n = 3,
+            Af4_Na = 4,
+            Af5_Spi2_Miso = 5,
+            Af6_I2s2ext_Sd = 6,
+            Af7_Usart3_Rts = 7,
+            Af8_Na = 8,
+            Af9_Tim12_Ch1 = 9,
+            Af10_Na = 10,
+            Af11_Na = 11,
+            Af12_Otg_Hs_Dm = 12,
+            Af13_Na = 13,
+            Af14_Na = 14,
+            Af15_EventOut = 15
+        };
+
         // Alternate function values for GPIO port B pin 15.
         enum class GpioB15AltFunc : Common::Word
         {
@@ -224,6 +287,24 @@ namespace Stm32f407::Bitapi::Ahb1::Gpio
     struct GpioPinTraits<GpioPort::PortA, GpioPin::Pin8>
     {
         using AltFunc = detail::GpioA8AltFunc;
+    };
+
+    template <>
+    struct GpioPinTraits<GpioPort::PortB, GpioPin::Pin12>
+    {
+        using AltFunc = detail::GpioB12AltFunc;
+    };
+
+    template <>
+    struct GpioPinTraits<GpioPort::PortB, GpioPin::Pin13>
+    {
+        using AltFunc = detail::GpioB13AltFunc;
+    };
+
+    template <>
+    struct GpioPinTraits<GpioPort::PortB, GpioPin::Pin14>
+    {
+        using AltFunc = detail::GpioB14AltFunc;
     };
 
     template <>

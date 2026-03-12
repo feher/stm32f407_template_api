@@ -1,5 +1,5 @@
-#include "Src/bitapi/stm32f407_apb1_tim2_5.hpp"
-#include "Src/bitapi/stm32f407_apb2_exti.hpp"
+#include <stm32f407_bitapi/stm32f407_apb1_tim2_5.hpp>
+#include <stm32f407_bitapi/stm32f407_apb2_exti.hpp>
 
 namespace Stm32f407::Driver::detail
 {

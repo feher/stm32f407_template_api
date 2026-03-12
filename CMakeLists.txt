@@ -42,13 +42,15 @@ set(cpu_PARAMS
 
 # Sources
 set(sources_SRCS
+#    ${CMAKE_CURRENT_SOURCE_DIR}/Src/drivers/util.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/Src/drivers/clocks.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/Src/drivers/gpio.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/Src/drivers/timer.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/Src/drivers/spi.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/Src/drivers/generic_irq_handlers.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/Src/circular_queue.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/Src/active_object.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/main.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/Src/drivers/util.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/Src/drivers/clocks.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/Src/drivers/gpio.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/Src/drivers/timer.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/Src/drivers/spi.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/Src/drivers/generic_irq_handlers.cpp
 )
 
 # Include directories for each compiler
@@ -66,7 +68,7 @@ set(symbols_asm_SYMB)
 
 # Link directories and names of libraries
 set(link_DIRS)
-set(link_LIBS)
+set(link_LIBS active_object stm32f407_drivers)
 
 # Linker script
 set(linker_script_SRC)
@@ -85,6 +87,31 @@ include("cmake/vscode_generated.cmake")
 # Link directories setup
 # Must be before executable is added
 link_directories(${CMAKE_PROJECT_NAME} ${link_DIRS})
+
+# feketga: Add local lib projects
+set(myCompileOptions
+    ${cpu_PARAMS}
+    ${compiler_OPTS}
+    -Wall
+    -Wextra
+    -Wpedantic
+    -Wno-unused-parameter
+    $<$<COMPILE_LANGUAGE:C>: >
+    $<$<COMPILE_LANGUAGE:CXX>:
+
+    # -Wno-volatile
+    # -Wold-style-cast
+    # -Wuseless-cast
+    # -Wsuggest-override
+    >
+    $<$<COMPILE_LANGUAGE:ASM>:-x assembler-with-cpp -MMD -MP>
+    $<$<CONFIG:Debug>:-O0 -g3 -ggdb>
+    $<$<CONFIG:Release>:-Os>
+)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libs/data_struct)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libs/active_object)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libs/bitapi)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libs/drivers)
 
 # Create an executable object type
 add_executable(${CMAKE_PROJECT_NAME})
@@ -120,23 +147,7 @@ target_link_libraries(${CMAKE_PROJECT_NAME} ${link_LIBS})
 
 # Compiler options
 target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE
-    ${cpu_PARAMS}
-    ${compiler_OPTS}
-    -Wall
-    -Wextra
-    -Wpedantic
-    -Wno-unused-parameter
-    $<$<COMPILE_LANGUAGE:C>: >
-    $<$<COMPILE_LANGUAGE:CXX>:
-
-    # -Wno-volatile
-    # -Wold-style-cast
-    # -Wuseless-cast
-    # -Wsuggest-override
-    >
-    $<$<COMPILE_LANGUAGE:ASM>:-x assembler-with-cpp -MMD -MP>
-    $<$<CONFIG:Debug>:-O0 -g3 -ggdb>
-    $<$<CONFIG:Release>:-Os>
+    ${myCompileOptions}
 )
 
 # Linker options

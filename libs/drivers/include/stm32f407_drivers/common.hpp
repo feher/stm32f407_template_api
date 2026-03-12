@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Src/bitapi/stm32f407_core_nvic.hpp"
+#include <stm32f407_bitapi/stm32f407_core_nvic.hpp>
 
 #include <functional>
 
