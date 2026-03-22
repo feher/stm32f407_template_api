@@ -1,6 +1,10 @@
 set(MY_NAME stm32f407_drivers)
 
-add_library(${MY_NAME})
+# TODO: Figure out another way to make the IRQ handlers visible in the main app.
+# This is an OBJECT library because otherwise
+# the linker does not see/use the IRQ handler functions
+# that are defined in this library.
+add_library(${MY_NAME} OBJECT)
 
 target_include_directories(${MY_NAME}
     INTERFACE
