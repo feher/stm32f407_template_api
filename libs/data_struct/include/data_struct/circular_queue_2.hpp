@@ -9,7 +9,7 @@
 #include <optional>
 #include <utility> // move
 
-namespace Ao
+namespace Ds
 {
     //
     // h = head
@@ -34,14 +34,12 @@ namespace Ao
     // d............dddd
     //
 
-    static constexpr auto k_debugQueueEatenItem = 555555555;
-
     // Circular queue (thread-safe, lock free).
     // - fixed size
     // - multi producer
     // - multi consumer
-    template <typename TItem, std::size_t TVSize>
-        requires(TVSize >= 1 && PowerOfTwo<TVSize>)
+    template <typename TItem, std::size_t TVSize, int TVDebugEatenItem = 0>
+        requires(TVSize >= 1 && IsPowerOfTwo<TVSize>)
     class CircularQueueMpMcLf2
     {
     public:
@@ -54,7 +52,7 @@ namespace Ao
         bool add(TItem item)
         {
             // 1: Reserve
-            const auto maybeReservedTail = detail::atomicCalcIf(
+            const auto maybeReservedTail = Internal::atomicCalcIf(
                     m_reservedTail, [](auto rtail) { return incPos(rtail); },
                     [this](auto rtail) { return !isFull(m_head.load(), rtail); });
             if (maybeReservedTail.first == false)
@@ -70,7 +68,7 @@ namespace Ao
             // std::atomic_thread_fence(std::memory_order_seq_cst);
 
             // 3: Update the tail.
-            detail::atomicWaitAndSet(m_tail, myReservedTail, [pos](auto tail) { return tail == pos; });
+            Internal::atomicWaitAndSet(m_tail, myReservedTail, [pos](auto tail) { return tail == pos; });
 
             return true;
         }
@@ -78,7 +76,7 @@ namespace Ao
         std::optional<TItem> take()
         {
             // 1: Reserve
-            const auto maybeReservedHead = detail::atomicCalcIf(
+            const auto maybeReservedHead = Internal::atomicCalcIf(
                     m_reservedHead, [](auto rhead) { return incPos(rhead); },
                     [this](auto rhead) { return !isEmpty(rhead, m_tail.load()); });
             if (maybeReservedHead.first == false)
@@ -91,15 +89,21 @@ namespace Ao
             // 2: Take data
             const auto pos = decPos(myReservedHead);
             auto item = m_queue[pos];
+
+            // This is used only for testing and debugging.
+            if constexpr (TVDebugEatenItem != 0)
+            {
+                m_queue[pos] = TVDebugEatenItem;
+            }
             // if (item == k_debugQueueEatenItem)
             // {
             //     item = k_debugQueueEatenItem + 1;
             // }
-            m_queue[pos] = k_debugQueueEatenItem; // std::numeric_limits<TItem>::max(); // Needed for debugging only.
+            // m_queue[pos] = k_debugQueueEatenItem; // std::numeric_limits<TItem>::max(); // Needed for debugging only.
             // std::atomic_thread_fence(std::memory_order_seq_cst);
 
             // 3: Update the head.
-            detail::atomicWaitAndSet(m_head, myReservedHead, [pos](auto head) { return head == pos; });
+            Internal::atomicWaitAndSet(m_head, myReservedHead, [pos](auto head) { return head == pos; });
 
             return item;
         }
@@ -173,4 +177,4 @@ namespace Ao
         std::atomic_size_t m_consumerCount = 0;
     };
 
-} // namespace Ao
+} // namespace Ds

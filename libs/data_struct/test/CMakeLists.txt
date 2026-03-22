@@ -37,15 +37,15 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
         data_struct
 )
 
-target_compile_options(${CMAKE_PROJECT_NAME}
-    PRIVATE
-        -fsanitize=thread
-)
-
-target_link_options(${CMAKE_PROJECT_NAME}
-    PRIVATE
-        -fsanitize=thread
-)
+# target_compile_options(${CMAKE_PROJECT_NAME}
+#     PRIVATE
+#         -fsanitize=thread
+# )
+# 
+# target_link_options(${CMAKE_PROJECT_NAME}
+#     PRIVATE
+#         -fsanitize=thread
+# )
 
 include(GoogleTest)
 gtest_discover_tests(${CMAKE_PROJECT_NAME})

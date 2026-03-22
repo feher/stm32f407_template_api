@@ -42,15 +42,11 @@ set(cpu_PARAMS
 
 # Sources
 set(sources_SRCS
-#    ${CMAKE_CURRENT_SOURCE_DIR}/Src/drivers/util.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/Src/drivers/clocks.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/Src/drivers/gpio.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/Src/drivers/timer.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/Src/drivers/spi.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/Src/drivers/generic_irq_handlers.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/Src/circular_queue.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/Src/active_object.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/main.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/app_blink_led.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/app_button_irq.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/app_irq_and_timer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/app_active_objects.cpp
 )
 
 # Include directories for each compiler

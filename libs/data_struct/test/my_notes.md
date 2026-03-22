@@ -1,3 +1,7 @@
+# References
+
+https://github.com/erez-strauss/lockfree_mpmc_queue/blob/master/mpmc_queue.h
+
 # Debugging
 
 ```
@@ -100,3 +104,22 @@ Value of: isFailed
 Expected: false
 
 ABA problem?
+
+-----------------------------
+
+CircularQueueMpMcLf2<int, 1> --> k_internalCapacity == 2
+
+1 consumer, 2 producers:
+
+c1: h=0, t=0, rh=0, rt=0, d=[0,0]
+p1: h=0, t=0, rh=0, rt=0, d=[0,0]
+p2: h=0, t=0, rh=0, rt=0, d=[0,0]
+
+1. p1 reads h and rt --> p1.h=0, p1.rt=0
+2. p2 writes d[0] --> h=0, rh=0, t=1, rt=1, d=[p2,0]
+3. c1 reads d[0] --> h=1, rh=1, t=1, rt=1, d=[x,0]
+4. p2 writes d[1] --> h=1, rh=1, t=0, rt=0, d=[x,p2]
+5. p1 continues
+   p1.h=0, p1.rt!=p1.h-1 --> not full (empty) --> p1.rt==rt==0 --> can take reserve rt
+   --> __overwrites__ p2 data
+   --> h=1, rh=1, t=0, rt=1, d=[x,p1]

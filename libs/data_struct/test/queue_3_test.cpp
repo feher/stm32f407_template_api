@@ -11,8 +11,10 @@
 #include <thread>
 #include <unordered_set>
 
+static constexpr auto k_debugQueueEatenItem = 555555555;
+
 template <typename TItem, std::size_t TVSize>
-using QueueType = Ao::CircularQueueMpMcLf3<TItem, TVSize>;
+using QueueType = Ds::CircularQueueMpMcLf3<TItem, TVSize, std::size_t, k_debugQueueEatenItem>;
 
 namespace
 {
@@ -60,7 +62,7 @@ namespace
         }
         for (auto i = 0u; i < sortedItems.size() - 1; ++i)
         {
-            if (sortedItems[i + 1] == Ao::k_debugQueueEatenItem)
+            if (sortedItems[i + 1] == k_debugQueueEatenItem)
             {
                 continue;
             }
@@ -81,7 +83,7 @@ namespace
         }
         for (auto i = 0u; i < sortedItems.size() - 1; ++i)
         {
-            if (sortedItems[i + 1] == Ao::k_debugQueueEatenItem)
+            if (sortedItems[i + 1] == k_debugQueueEatenItem)
             {
                 continue;
             }
@@ -426,9 +428,9 @@ TEST(CircularQueue_3, Concurrency_N_Producer_M_Consumer)
 
     constexpr auto producerItemCount = 300;
     constexpr auto producerThreadCount = 2;
-    constexpr auto consumerThreadCount = 1;
+    constexpr auto consumerThreadCount = 2;
     constexpr auto itemCount = producerThreadCount * producerItemCount;
-    constexpr auto workItemCount = 4;
+    constexpr auto workItemCount = 2;
 
     std::vector<std::vector<int>> inputItems(producerThreadCount);
     for (int i = 0, p = 0; p < producerThreadCount; ++p)

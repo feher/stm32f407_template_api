@@ -11,8 +11,10 @@
 #include <thread>
 #include <unordered_set>
 
+static constexpr auto k_debugQueueEatenItem = 555555555;
+
 template <typename TItem, std::size_t TVSize>
-using QueueType = Ao::CircularQueueMpMcLf<TItem, TVSize>;
+using QueueType = Ds::CircularQueueMpMcLf<TItem, TVSize, k_debugQueueEatenItem>;
 
 namespace
 {
@@ -60,7 +62,7 @@ namespace
         }
         for (auto i = 0u; i < sortedItems.size() - 1; ++i)
         {
-            if (sortedItems[i + 1] == Ao::k_debugQueueEatenItem)
+            if (sortedItems[i + 1] == k_debugQueueEatenItem)
             {
                 continue;
             }
@@ -81,7 +83,7 @@ namespace
         }
         for (auto i = 0u; i < sortedItems.size() - 1; ++i)
         {
-            if (sortedItems[i + 1] == Ao::k_debugQueueEatenItem)
+            if (sortedItems[i + 1] == k_debugQueueEatenItem)
             {
                 continue;
             }

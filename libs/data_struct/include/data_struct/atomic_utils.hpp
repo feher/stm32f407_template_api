@@ -7,12 +7,12 @@
 #include <optional>
 #include <utility> // move
 
-namespace Ao
+namespace Ds
 {
     template <std::size_t N>
-    concept PowerOfTwo = (N & (N - 1)) == 0;
+    concept IsPowerOfTwo = (N & (N - 1)) == 0;
 
-    namespace detail
+    namespace Internal
     {
         // Sets atomicVar to the result of newValueFunc if the predicate is true.
         // Returns (true, new value) if the predicate was true.
@@ -60,83 +60,6 @@ namespace Ao
                 }
             } while (atomicVar.compare_exchange_weak(value, newValue) == false);
         }
-    } // namespace detail
+    } // namespace Internal
 
-    //
-    // h = head
-    // t = tail
-    //
-    // Empty (h == t):
-    //
-    // h == t
-    // |
-    // .................
-    //
-    // Not empty (h != t, h < t)
-    //
-    //    h         t
-    //    |         |
-    // ...dddddddddd....
-    //
-    // Not empty (h != t, t < h)
-    //
-    //  t           h
-    //  |           |
-    // d............dddd
-    //
-
-    // Circular queue.
-    // - fixed size
-    // - not thread safe
-    template <typename TItem, std::size_t TVSize>
-        requires(TVSize >= 2)
-    class CircularQueue
-    {
-    public:
-        void add(TItem item)
-        {
-            m_buffer[m_tail] = item;
-            m_tail = incPos(m_tail);
-            if (m_tail == m_head)
-            {
-                m_head = incPos(m_head);
-            }
-        }
-
-        std::optional<TItem> take()
-        {
-            if (isEmpty())
-            {
-                return {};
-            }
-            const auto itemPos = m_head;
-            m_head = incPos(m_head);
-            return m_buffer[itemPos];
-        }
-
-        bool isEmpty() const
-        {
-            return m_head == m_tail;
-        }
-
-        std::size_t count() const
-        {
-            if (m_head <= m_tail)
-            {
-                return m_tail - m_head;
-            }
-            return (TVSize - m_head) + m_tail;
-        }
-
-    private:
-        std::size_t incPos(std::size_t pos)
-        {
-            return (pos + 1) % TVSize;
-        }
-
-        std::array<TItem, TVSize> m_buffer;
-        std::size_t m_head = 0;
-        std::size_t m_tail = 0;
-    };
-
-} // namespace Ao
+} // namespace Ds

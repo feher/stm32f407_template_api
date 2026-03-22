@@ -39,11 +39,16 @@
                 //"--gtest_filter=*Concurrency_N_Producer"
                 //"--gtest_filter=*Concurrency_N_Consumer"
                 //"--gtest_filter=*Concurrency_N_Producer_M_Consumer"
-                "--gtest_filter=*Concurrency_N_Producer_M_Consumer"
+                "--gtest_filter=CircularQueue_2.Concurrency_N_Producer_M_Consumer"
             ],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
-            "environment": [],
+            "environment": [
+                {
+                    "name": "TSAN_OPTIONS",
+                    "value": "history_size=7 halt_on_error=1 abort_on_error=1"
+                }
+            ],
             "externalConsole": false,
             "MIMode": "gdb",
             "setupCommands": [

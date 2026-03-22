@@ -1,6 +1,6 @@
 #pragma once
 
-#include <data_struct/circular_queue.hpp>
+#include <data_struct/circular_queue_3.hpp>
 
 namespace Ao
 {
@@ -15,9 +15,20 @@ namespace Ao
     class EventSender
     {
     public:
-        void registerReceiver(EventReceiver<TEvent>* receiver)
+        EventSender()
         {
-            m_receivers[m_count++] = receiver;
+            std::ranges::fill(m_receivers, nullptr);
+        }
+
+        bool connect(EventReceiver<TEvent>* receiver)
+        {
+            if (m_receiverCount == k_maxReceiverCount)
+            {
+                return false;
+            }
+            m_receivers[m_receiverCount] = receiver;
+            ++m_receiverCount;
+            return true;
         }
 
         void send(const TEvent& event)
@@ -32,8 +43,9 @@ namespace Ao
         }
 
     private:
-        std::array<EventReceiver<TEvent>*, 10> m_receivers;
-        std::size_t m_count = 0;
+        static constexpr auto k_maxReceiverCount = 10;
+        std::array<EventReceiver<TEvent>*, k_maxReceiverCount> m_receivers;
+        std::size_t m_receiverCount = 0;
     };
 
     template <typename TEvent, std::size_t TVQueueSize>
@@ -59,7 +71,7 @@ namespace Ao
         virtual void handleEvent(const TEvent& event) = 0;
 
     private:
-        CircularQueueMpMcLf<TEvent, TVQueueSize> m_queue;
+        Ds::CircularQueueMpMcLf3<TEvent, TVQueueSize> m_queue;
     };
 
 } // namespace Ao

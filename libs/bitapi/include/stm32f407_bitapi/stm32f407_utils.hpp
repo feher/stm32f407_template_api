@@ -11,6 +11,10 @@ namespace Stm32f407::Bitapi::Common
     using Word = std::uint32_t;
     using Address = std::uint32_t;
 
+    static constexpr unsigned int k_halfWordBits = 32;
+    static constexpr unsigned int k_wordBits = 32;
+    static constexpr unsigned int k_addressBits = 32;
+
     enum class NoYes : Word
     {
         No = 0,
@@ -172,9 +176,9 @@ namespace Stm32f407::Bitapi::Util
             const auto intBitsNum = static_cast<unsigned int>(bitsNum);
             // assert(intIrq < k_irqCount);
             const auto bitPos = intBitsNum * TVBitCount;
-            const auto index = bitPos & ~0b11111U;    // irq / 32 bits
-            const auto bitOffset = bitPos & 0b11111U; // irq % 32 bits
-            const auto wordOffset = index << 2;       // index * 4 bytes
+            const auto wordIndex = bitPos & ~(Common::k_wordBits - 1); // div by 32 bits
+            const auto bitOffset = bitPos & (Common::k_wordBits - 1); // mod by 32 bits
+            const auto wordOffset = wordIndex * sizeof(Common::Word); // mul by 4 bytes
             const auto addr = k_addr + wordOffset;
             volatile Common::Word* p = reinterpret_cast<Common::Word*>(addr);
             *p = set_bits(*p, bitOffset, TVBitCount, value);
@@ -187,9 +191,9 @@ namespace Stm32f407::Bitapi::Util
             const auto intBitsNum = static_cast<unsigned int>(bitsNum);
             // assert(intIrq && intIrq < k_irqCount);
             const auto bitPos = intBitsNum * TVBitCount;
-            const auto index = bitPos & ~0b11111U;    // irq / 32 bits
-            const auto bitOffset = bitPos & 0b11111U; // irq % 32 bits
-            const auto wordOffset = index << 2;       // index * 4 bytes
+            const auto wordIndex = bitPos & ~(Common::k_wordBits - 1); // div by 32 bits
+            const auto bitOffset = bitPos & (Common::k_wordBits - 1); // mod by 32 bits
+            const auto wordOffset = wordIndex * sizeof(Common::Word); // mul by 4 bytes
             const auto addr = k_addr + wordOffset;
             volatile Common::Word* p = reinterpret_cast<Common::Word*>(addr);
             return extract_bits_as<TReadValue>(*p, bitOffset, TVBitCount);

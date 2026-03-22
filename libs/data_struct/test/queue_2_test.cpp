@@ -11,8 +11,10 @@
 #include <thread>
 #include <unordered_set>
 
+static constexpr auto k_debugQueueEatenItem = 555555555;
+
 template <typename TItem, std::size_t TVSize>
-using QueueType = Ao::CircularQueueMpMcLf2<TItem, TVSize>;
+using QueueType = Ds::CircularQueueMpMcLf2<TItem, TVSize, k_debugQueueEatenItem>;
 
 namespace
 {
@@ -60,7 +62,7 @@ namespace
         }
         for (auto i = 0u; i < sortedItems.size() - 1; ++i)
         {
-            if (sortedItems[i + 1] == Ao::k_debugQueueEatenItem)
+            if (sortedItems[i + 1] == k_debugQueueEatenItem)
             {
                 continue;
             }
@@ -81,7 +83,7 @@ namespace
         }
         for (auto i = 0u; i < sortedItems.size() - 1; ++i)
         {
-            if (sortedItems[i + 1] == Ao::k_debugQueueEatenItem)
+            if (sortedItems[i + 1] == k_debugQueueEatenItem)
             {
                 continue;
             }
@@ -428,7 +430,7 @@ TEST(CircularQueue_2, Concurrency_N_Producer_M_Consumer)
     constexpr auto producerThreadCount = 2;
     constexpr auto consumerThreadCount = 1;
     constexpr auto itemCount = producerThreadCount * producerItemCount;
-    constexpr auto workItemCount = 2;
+    constexpr auto workItemCount = 1;
 
     std::vector<std::vector<int>> inputItems(producerThreadCount);
     for (int i = 0, p = 0; p < producerThreadCount; ++p)
@@ -467,6 +469,7 @@ TEST(CircularQueue_2, Concurrency_N_Producer_M_Consumer)
         // std::random_device randDev;
         // std::mt19937 randEngine{randDev()};
         // std::uniform_int_distribution randDist{1, 100};
+        int ending = 0;
         while (true)
         {
             const auto item = workQueue.take();
@@ -481,6 +484,10 @@ TEST(CircularQueue_2, Concurrency_N_Producer_M_Consumer)
             else if (shouldConsumersStop && workQueue.isEmpty())
             {
                 break;
+                // if (ending++ == 3)
+                //     break;
+                // else
+                //     std::this_thread::sleep_for(std::chrono::milliseconds{100});
             }
             // std::this_thread::sleep_for(std::chrono::milliseconds{randDist(randEngine)});
         }

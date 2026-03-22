@@ -9,7 +9,7 @@
 #include <optional>
 #include <utility> // move
 
-namespace Ao
+namespace Ds
 {
     //
     // h = head
@@ -34,13 +34,11 @@ namespace Ao
     // d............dddd
     //
 
-    static constexpr auto k_debugQueueEatenItem = 555555555;
-
     // Circular queue (thread-safe, lock free).
     // - fixed size
     // - multi producer
     // - multi consumer
-    template <typename TItem, std::size_t TVSize>
+    template <typename TItem, std::size_t TVSize, int TVDebugEatenItem = 0>
         requires(TVSize >= 1)
     class CircularQueueMpMcLf
     {
@@ -68,7 +66,7 @@ namespace Ao
             ++m_producerCount;
 
             // 1: Reserve
-            const auto maybeReservedTail = detail::atomicCalcIf(
+            const auto maybeReservedTail = Internal::atomicCalcIf(
                     m_reservedTail, [](auto rtail) { return incPos(rtail); },
                     [this](auto rtail) { return !isFull(m_head.load(), rtail); });
             if (maybeReservedTail.first == false)
@@ -84,7 +82,7 @@ namespace Ao
                     // We detected that the producer-count became zero (or was zero for a moment).
                     // So, we can safely update m_tail up to the current snapshot of m_reservedTail.
                     // This operation is guaranteed to never decrease the value in m_tail.
-                    detail::atomicSetIf(m_tail, reservedTail,
+                    Internal::atomicSetIf(m_tail, reservedTail,
                             [this, reservedTail](auto tail)
                             {
                                 return reservedTail == m_reservedTail.load() &&
@@ -119,7 +117,7 @@ namespace Ao
                 // So, we can safely update m_tail up to myReservedTail, but not to any larger value!
                 // Reserved tails larger than myReservedTail belong to unfinished active producers
                 // that just started "as we speak".
-                detail::atomicSetIf(m_tail, myReservedTail,
+                Internal::atomicSetIf(m_tail, myReservedTail,
                         [this, myReservedTail](auto tail)
                         {
                             return myReservedTail == m_reservedTail.load() &&
@@ -135,7 +133,7 @@ namespace Ao
             ++m_consumerCount;
 
             // 1: Reserve
-            const auto maybeReservedHead = detail::atomicCalcIf(
+            const auto maybeReservedHead = Internal::atomicCalcIf(
                     m_reservedHead, [](auto rhead) { return incPos(rhead); },
                     [this](auto rhead) { return !isEmpty(rhead, m_tail.load()); });
             if (maybeReservedHead.first == false)
@@ -151,7 +149,7 @@ namespace Ao
                     // We detected that the consumer-count became zero (or was zero for a moment).
                     // So, we can safely update m_head up to the current snapshot of m_reservedHead.
                     // This operation is guaranteed to never decrease the value of m_head.
-                    detail::atomicSetIf(m_head, reservedHead,
+                    Internal::atomicSetIf(m_head, reservedHead,
                             [this, reservedHead](auto head)
                             {
                                 return reservedHead == m_reservedHead.load() &&
@@ -166,11 +164,17 @@ namespace Ao
             // 2: Take data
             const auto pos = decPos(myReservedHead);
             auto item = m_queue[pos];
+
+            // This is used only for testing and debugging.
+            if constexpr (TVDebugEatenItem != 0)
+            {
+                m_queue[pos] = TVDebugEatenItem;
+            }
             // if (item == k_debugQueueEatenItem)
             // {
             //     item = k_debugQueueEatenItem + 1;
             // }
-            m_queue[pos] = k_debugQueueEatenItem; // std::numeric_limits<TItem>::max(); // Needed for debugging only.
+            // m_queue[pos] = k_debugQueueEatenItem; // std::numeric_limits<TItem>::max(); // Needed for debugging only.
             // std::atomic_thread_fence(std::memory_order_seq_cst);
 
             // 3: Update the head.
@@ -192,7 +196,7 @@ namespace Ao
                 // So, we can safely update m_head up to myReservedHead, but not to any larger value!
                 // Reserved heads larger than myReservedHead belong to unfinished active consumers
                 // that just started "as we speak".
-                detail::atomicSetIf(m_head, myReservedHead,
+                Internal::atomicSetIf(m_head, myReservedHead,
                         [this, myReservedHead](auto head)
                         {
                             return myReservedHead == m_reservedHead.load() &&
@@ -311,4 +315,4 @@ namespace Ao
         std::atomic_size_t m_consumerCount = 0;
     };
 
-} // namespace Ao
+} // namespace Ds
