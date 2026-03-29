@@ -236,7 +236,7 @@ namespace Stm32f407::Driver
                 requires std::is_same_v<TData, Bitapi::Common::Byte> || std::is_same_v<TData, Bitapi::Common::HalfWord>
             void sendToSlave(std::span<const TData> data)
             {
-                setEnabled(true);
+                //setEnabled(true);
 
                 for (const auto d : data)
                 {
@@ -249,7 +249,7 @@ namespace Stm32f407::Driver
                 }
 
                 Util::busyWaitFor([]() { return SpiType::Sr::Bsy::get() == Bitapi::Common::NoYes::No; });
-                setEnabled(false);
+                //setEnabled(false);
             }
 
             // Receive data in blocking mode.
@@ -257,7 +257,7 @@ namespace Stm32f407::Driver
                 requires std::is_same_v<TData, Bitapi::Common::Byte> || std::is_same_v<TData, Bitapi::Common::HalfWord>
             void receiveFromSlave(std::span<TData> data)
             {
-                setEnabled(true);
+                //setEnabled(true);
 
                 // Empty our current Rx buffer. It may contain some stale data.
                 while (SpiType::Sr::Rxne::get() == Bitapi::Common::NotEmptyFlag::NotEmpty)
@@ -269,14 +269,14 @@ namespace Stm32f407::Driver
                 for (auto& d : data)
                 {
                     // Send a dummy data frame. This is needed to trigger the slave to send the data from its Tx buffer.
-                    sendOneToSlave(0);
+                    sendOneToSlave(TData{});
 
                     // Read the received data frame from our Rx buffer.
                     d = receiveOneFromSlave<TData>();
                 }
 
                 Util::busyWaitFor([]() { return SpiType::Sr::Bsy::get() == Bitapi::Common::NoYes::No; });
-                setEnabled(false);
+                //setEnabled(false);
             }
 
             void configureInterrupt(IrqPriority irqPriority, IrqHandler irqHandler)

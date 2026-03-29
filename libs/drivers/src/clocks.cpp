@@ -42,7 +42,7 @@ namespace Stm32f407::Driver::Clocks
             Bitapi::Ahb1::Rcc::Cr::HseOn::set(Bitapi::Common::OffOn::Off);
             while (Bitapi::Ahb1::Rcc::Cr::HseRdy::get() == Bitapi::Common::ReadyFlag::Ready)
             {
-                // Wait for HSI to become not ready.
+                // Wait for HSE to become not ready.
             }
         }
         else
@@ -50,7 +50,7 @@ namespace Stm32f407::Driver::Clocks
             Bitapi::Ahb1::Rcc::Cr::HseOn::set(Bitapi::Common::OffOn::On);
             while (Bitapi::Ahb1::Rcc::Cr::HseRdy::get() != Bitapi::Common::ReadyFlag::Ready)
             {
-                // Wait for HSI to become ready.
+                // Wait for HSE to become ready.
             }
         }
 

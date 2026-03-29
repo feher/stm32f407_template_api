@@ -2,7 +2,7 @@
 
 namespace Stm32f407::Driver::Util
 {
-    void busyWait(int ms);
+    void busyWait(unsigned int ms);
 
     template <typename TPredicate>
     void busyWaitFor(TPredicate predicate)
